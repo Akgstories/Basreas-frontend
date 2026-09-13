@@ -6,8 +6,38 @@
   <title>Basera - Student Housing & Mess Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* ─── TOAST POPUP ANIMATIONS ─── */
+    @keyframes toastSlideIn {
+      from { transform: translateX(110%) scale(0.9); opacity: 0; }
+      to   { transform: translateX(0) scale(1); opacity: 1; }
+    }
+    @keyframes toastFadeOut {
+      from { transform: translateY(0) scale(1); opacity: 1; }
+      to   { transform: translateY(-20px) scale(0.9); opacity: 0; }
+    }
+    .toast-enter { animation: toastSlideIn 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards; }
+    .toast-leave { animation: toastFadeOut 0.3s ease forwards; }
+
+    /* ─── MEAL CANCEL & UNCANCEL PULSE ANIMATIONS ─── */
+    @keyframes pulseCancel {
+      0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      50%  { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+    @keyframes pulseRestore {
+      0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      50%  { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .anim-pulse-cancel  { animation: pulseCancel 0.5s ease-in-out; }
+    .anim-pulse-restore { animation: pulseRestore 0.5s ease-in-out; }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
   <!-- HEADER -->
   <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
@@ -17,11 +47,11 @@
           Basera<span class="text-gray-900">.</span>
         </span>
         <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
-          <i class="fa-solid fa-bolt text-xs"></i> Local Engine Active
+          <i class="fa-solid fa-bolt text-xs"></i> Live Cloud Active
         </span>
       </div>
       <div id="userHeaderBox">
-        <button onclick="scrollToAuth()" class="bg-orange-600 text-white font-bold text-xs px-4 py-2 rounded-xl">Sign In / Register</button>
+        <button onclick="scrollToAuth()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Sign In / Register</button>
       </div>
     </div>
     <nav id="mainNav" class="hidden bg-gray-900 text-white border-t">
@@ -35,8 +65,8 @@
       <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">Find PGs & Manage Mess Subscriptions</h1>
       <p class="text-orange-100 max-w-2xl mx-auto mb-6">Complete local solution with Google Maps location tracking and automated email alerts.</p>
       <div class="flex justify-center gap-4">
-        <button onclick="scrollToAuth('register')" class="bg-gray-900 text-white font-bold text-sm px-6 py-3 rounded-xl">Get Started Free</button>
-        <button onclick="scrollToAuth('login')" class="bg-white text-orange-600 font-bold text-sm px-6 py-3 rounded-xl">Sign In</button>
+        <button onclick="scrollToAuth('register')" class="bg-gray-900 hover:bg-black text-white font-bold text-sm px-6 py-3 rounded-xl transition">Get Started Free</button>
+        <button onclick="scrollToAuth('login')" class="bg-white hover:bg-gray-100 text-orange-600 font-bold text-sm px-6 py-3 rounded-xl transition">Sign In</button>
       </div>
     </section>
   </div>
@@ -62,46 +92,58 @@
           </div>
         </div>
 
-        <div id="nameField" class="hidden"><input type="text" id="authName" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="Full Name"></div>
+        <div id="nameField" class="hidden"><input type="text" id="authName" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="Full Name"></div>
 
         <div id="phoneField" class="hidden">
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">MOBILE NUMBER (10 DIGITS ONLY)</label>
-          <input type="text" id="authPhone" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="9155118661">
+          <input type="text" id="authPhone" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="9155118661">
         </div>
 
         <div id="addressField" class="hidden space-y-3">
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-0.5">FOOD DELIVERY ADDRESS / HOSTEL ROOM</label>
-            <input type="text" id="authAddress" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="GEC Bokaro Hostel, Room 101">
+            <input type="text" id="authAddress" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="GEC Bokaro Hostel, Room 101">
           </div>
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-0.5">GOOGLE MAPS LOCATION LINK</label>
-            <input type="url" id="authMapUrl" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="https://maps.google.com/?q=GEC+Bokaro">
+            <input type="url" id="authMapUrl" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="https://maps.google.com/?q=GEC+Bokaro">
           </div>
         </div>
 
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">EMAIL ADDRESS (RECEIVES INSTANT NOTIFICATIONS)</label>
-          <input type="email" id="authEmail" required class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="student@gecbokaro.ac.in">
+          <input type="email" id="authEmail" required class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="student@gecbokaro.ac.in">
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-1">
             <label class="text-xs font-bold text-gray-600">PASSWORD</label>
-            <button type="button" onclick="toggleForgotPasswordView()" class="text-[11px] text-orange-600 font-bold">Forgot Password?</button>
+            <button type="button" onclick="toggleForgotPasswordView()" class="text-[11px] text-orange-600 font-bold hover:underline">Forgot Password?</button>
           </div>
-          <input type="password" id="authPassword" required class="w-full border rounded-xl p-2.5 text-sm bg-gray-50" placeholder="••••••••">
+          <!-- PASSWORD INPUT WITH EYE TOGGLE ICON -->
+          <div class="relative">
+            <input type="password" id="authPassword" required class="w-full border rounded-xl p-2.5 pr-10 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="••••••••">
+            <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeAuthIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
+              <i id="eyeAuthIcon" class="fa-solid fa-eye"></i>
+            </button>
+          </div>
         </div>
 
-        <button type="submit" id="authBtn" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl text-sm">Sign In</button>
+        <button type="submit" id="authBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition">Sign In</button>
       </form>
 
+      <!-- FORGOT PASSWORD FORM -->
       <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)" class="hidden space-y-4">
         <input type="email" id="forgotEmail" required placeholder="Registered Email" class="w-full border rounded-xl p-2.5 text-sm">
         <input type="text" id="forgotPhone" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Registered 10-Digit Phone" class="w-full border rounded-xl p-2.5 text-sm">
-        <input type="password" id="forgotNewPassword" required placeholder="New Password" class="w-full border rounded-xl p-2.5 text-sm">
-        <button type="submit" class="w-full bg-orange-600 text-white font-bold py-3 rounded-xl text-sm">Reset Password</button>
-        <button type="button" onclick="toggleForgotPasswordView()" class="w-full text-xs text-gray-500 pt-2 block text-center">← Back to Sign In</button>
+        <div class="relative">
+          <input type="password" id="forgotNewPassword" required placeholder="New Password" class="w-full border rounded-xl p-2.5 pr-10 text-sm">
+          <button type="button" onclick="togglePasswordVisibility('forgotNewPassword', 'eyeForgotIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
+            <i id="eyeForgotIcon" class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition">Reset Password</button>
+        <button type="button" onclick="toggleForgotPasswordView()" class="w-full text-xs text-gray-500 pt-2 block text-center hover:underline">← Back to Sign In</button>
       </form>
     </div>
   </div>
@@ -111,9 +153,8 @@
     <div id="dashboard" class="hidden space-y-6">
 
       <!-- STUDENT PORTAL VIEWS -->
-
       <div id="view-student-profile" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center border-b pb-4">
             <div>
               <h2 class="text-xl font-bold text-gray-900" id="profileNameDisplay">Student Profile</h2>
@@ -138,14 +179,14 @@
                 <input type="url" id="profileMapInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold" placeholder="https://maps.google.com/?q=...">
               </div>
             </div>
-            <button type="submit" class="bg-orange-600 text-white font-bold px-4 py-2 rounded-xl text-xs">Update Profile & Location</button>
+            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition">Update Profile & Location</button>
           </form>
         </div>
       </div>
 
       <!-- Student: Explore Mess Providers Section -->
       <div id="view-student-explore-mess" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div>
             <h2 class="text-xl font-bold text-gray-900">Explore Nearby Mess Providers</h2>
             <p class="text-xs text-gray-500">Compare meal plans, diet options, and Google Maps directions</p>
@@ -156,7 +197,7 @@
 
       <!-- Student: Explore PGs -->
       <div id="view-student-pgs" class="hidden space-y-6">
-        <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
           <div>
             <h2 class="text-xl font-bold">Explore Student PGs</h2>
             <p class="text-xs text-gray-500">Filter accommodations with precise Google Map locations</p>
@@ -173,13 +214,13 @@
 
       <!-- Student: Mess Opt-Out / Restoration with Specific Date Selection -->
       <div id="view-student-mess" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
             <div>
               <h2 class="text-xl font-bold">Weekly Mess Menu & Advance Date Opt-Out / Restoration</h2>
               <p class="text-xs text-gray-500">Select any specific date to cancel or restore future meals</p>
             </div>
-            <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1 rounded-xl border border-red-200">Unsubscribe Mess</button>
+            <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1 rounded-xl border border-red-200 hover:bg-red-100 transition">Unsubscribe Mess</button>
           </div>
 
           <!-- Specific Date Selector for Meal Cancellation -->
@@ -191,32 +232,33 @@
                 <span class="text-[10px] text-gray-500">Pick present or future date for opt-out/restoration</span>
               </div>
             </div>
-            <input type="date" id="mealCancelDatePicker" class="border border-orange-300 rounded-xl px-4 py-2 text-xs font-bold bg-white text-gray-800 focus:ring-2 focus:ring-orange-500 outline-none">
+            <input type="date" id="mealCancelDatePicker" class="border border-orange-300 rounded-xl px-4 py-2 text-xs font-bold bg-white text-gray-800 focus:ring-2 focus:ring-orange-500 outline-none cursor-pointer">
           </div>
 
+          <!-- MEAL ACTION BUTTONS WITH ANIMATED PULSE EFFECTS -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-orange-50/30 p-4 rounded-2xl border border-orange-100">
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2">
+            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Breakfast (₹30 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 07:00 AM</span>
               <div class="flex gap-1">
-                <button onclick="cancelMeal('Breakfast')" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded-lg text-xs">Cancel</button>
-                <button onclick="uncancelMeal('Breakfast')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 rounded-lg text-xs">Un-cancel</button>
+                <button onclick="cancelMeal('Breakfast', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Breakfast', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
               </div>
             </div>
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2">
+            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Lunch (₹50 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 10:00 AM</span>
               <div class="flex gap-1">
-                <button onclick="cancelMeal('Lunch')" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded-lg text-xs">Cancel</button>
-                <button onclick="uncancelMeal('Lunch')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 rounded-lg text-xs">Un-cancel</button>
+                <button onclick="cancelMeal('Lunch', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Lunch', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
               </div>
             </div>
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2">
+            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Dinner (₹50 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 06:00 PM</span>
               <div class="flex gap-1">
-                <button onclick="cancelMeal('Dinner')" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 rounded-lg text-xs">Cancel</button>
-                <button onclick="uncancelMeal('Dinner')" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-1.5 rounded-lg text-xs">Un-cancel</button>
+                <button onclick="cancelMeal('Dinner', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Dinner', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
               </div>
             </div>
           </div>
@@ -225,7 +267,7 @@
       </div>
 
       <div id="view-student-calendar" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold">30-Day Attendance & Refund Ledger</h2>
           <div id="ledgerSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
           <div id="calendarGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"></div>
@@ -233,7 +275,7 @@
       </div>
 
       <div id="view-student-bookings" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border">
+        <div class="bg-white p-6 rounded-2xl border shadow-sm">
           <h2 class="text-xl font-bold mb-4">My Bookings</h2>
           <div id="bookingsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
@@ -241,7 +283,7 @@
 
       <!-- MESS OWNER PORTAL VIEWS -->
       <div id="view-mess-prep" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
             <h2 class="text-xl font-bold text-gray-900">Today's Kitchen Counter & Food Delivery Dispatch</h2>
             <span class="text-xs bg-orange-100 text-orange-800 font-bold px-3 py-1 rounded-full" id="messPrepDateTag">Today</span>
@@ -255,7 +297,7 @@
       </div>
 
       <div id="view-mess-subscribers-ledger" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
             <div>
               <h2 class="text-xl font-bold text-gray-900">Subscribers & Food Delivery Directory</h2>
@@ -268,7 +310,7 @@
       </div>
 
       <div id="view-mess-menu-manager" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold text-gray-900">Publish 7-Day Weekly Menu</h2>
           <div id="weeklyMenuEditorGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
@@ -276,10 +318,10 @@
 
       <!-- PG OWNER PORTAL VIEWS -->
       <div id="view-owner-rooms" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
             <h2 class="text-xl font-bold">Room Directory</h2>
-            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl">+ Add Room</button>
+            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
           </div>
           <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
           <div class="pt-4 border-t">
@@ -291,7 +333,7 @@
 
       <!-- ADMIN PORTAL VIEWS -->
       <div id="view-admin-overview" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold">Admin Analytics</h2>
           <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
           <div class="pt-4 border-t">
@@ -304,7 +346,7 @@
 
       <!-- OWNER NOTIFICATIONS INBOX VIEW -->
       <div id="view-notifications-inbox" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Gmail Alerts</h2>
           <div id="notificationsList" class="space-y-3"></div>
         </div>
@@ -312,13 +354,13 @@
 
       <!-- ROLE-SEGREGATED COMPLAINTS VIEW -->
       <div id="view-complaints" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6">
+        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
             <div>
               <h2 class="text-xl font-bold" id="complaintsTitle">Complaints Inbox</h2>
               <p class="text-xs text-gray-500" id="complaintsSubtitle">Role-filtered complaint resolution center with email feedback</p>
             </div>
-            <button onclick="openComplaintModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl">+ Raise Complaint</button>
+            <button onclick="openComplaintModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl hover:bg-orange-700 transition">+ Raise Complaint</button>
           </div>
           <div id="complaintsTable" class="overflow-x-auto"></div>
         </div>
@@ -394,13 +436,62 @@
 
   <!-- JAVASCRIPT ENGINE -->
   <script>
-    const API_BASE = "https://basera-backend-bidu.onrender.com/api";
+    const API_BASE = "https://basera-backend-bfdu.onrender.com/api";
     let authMode = "login";
     let selectedRole = "student";
     let activeGenderFilter = "All";
     let authToken = localStorage.getItem("basera_token");
     let currentUser = null;
     let activePgForBooking = null;
+
+    // ─── ANIMATED TOAST NOTIFICATION SYSTEM ───
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto flex items-center justify-between gap-3 min-w-[280px] max-w-md px-4 py-3 rounded-xl shadow-xl text-xs font-bold text-white toast-enter ${
+        type === 'success' ? 'bg-emerald-600' :
+        type === 'error'   ? 'bg-red-600' :
+        type === 'warning' ? 'bg-amber-600' : 'bg-blue-600'
+      }`;
+
+      const icon = type === 'success' ? 'fa-circle-check' :
+                   type === 'error'   ? 'fa-circle-xmark' :
+                   type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info';
+
+      toast.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid ${icon} text-sm"></i>
+          <span>${message}</span>
+        </div>
+        <button onclick="dismissToast(this.parentElement)" class="text-white/80 hover:text-white text-sm font-bold ml-2">&times;</button>
+      `;
+
+      container.appendChild(toast);
+      setTimeout(() => dismissToast(toast), 4000);
+    }
+
+    function dismissToast(el) {
+      if (!el || el.classList.contains('toast-leave')) return;
+      el.classList.add('toast-leave');
+      setTimeout(() => el.remove(), 300);
+    }
+
+    // ─── PASSWORD VISIBILITY EYE TOGGLE ───
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (!input || !icon) return;
+
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash text-orange-600';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye text-gray-400 hover:text-gray-600';
+      }
+    }
 
     async function init() {
       // Set default date in date picker to Today
@@ -417,7 +508,7 @@
             showLoggedInUI(data.user);
             return;
           }
-        } catch (e) { console.log("Local server offline"); }
+        } catch (e) { console.log("Backend offline or connecting..."); }
       }
       showLandingPage();
     }
@@ -451,7 +542,7 @@
 
     function setRegisterRole(role) {
       if (authMode === "register" && role === "admin") {
-        alert("Admin account creation is disabled. Please sign in with admin credentials.");
+        showToast("Admin account creation is disabled. Please sign in with admin credentials.", "warning");
         return;
       }
       selectedRole = role;
@@ -479,7 +570,8 @@
         body: JSON.stringify({ email: document.getElementById("forgotEmail").value, phone: document.getElementById("forgotPhone").value, new_password: document.getElementById("forgotNewPassword").value })
       });
       const data = await res.json();
-      if (res.ok) { alert(data.message); toggleForgotPasswordView(); } else alert(data.detail || "Reset failed.");
+      if (res.ok) { showToast(data.message, "success"); toggleForgotPasswordView(); } 
+      else showToast(data.detail || "Reset failed.", "error");
     }
 
     async function handleAuthSubmit(e) {
@@ -506,9 +598,10 @@
         if (res.ok && data.status === "success") {
           localStorage.setItem("basera_token", data.token);
           authToken = data.token; currentUser = data.user;
+          showToast(`Welcome back, ${data.user.full_name}!`, "success");
           showLoggedInUI(data.user);
-        } else alert(data.detail || "Authentication failed.");
-      } catch (err) { alert("Cannot connect to local backend server."); }
+        } else showToast(data.detail || "Authentication failed.", "error");
+      } catch (err) { showToast("Cannot connect to live backend server.", "error"); }
     }
 
     function showLoggedInUI(user) {
@@ -518,11 +611,13 @@
       document.getElementById("mainNav").classList.remove("hidden");
 
       document.getElementById("userHeaderBox").innerHTML = `
-        <div class="text-right">
-          <span class="block text-xs font-bold text-gray-900">${user.full_name}</span>
-          <span class="text-[10px] text-orange-600 font-bold uppercase">${user.role} Portal</span>
+        <div class="flex items-center gap-3">
+          <div class="text-right">
+            <span class="block text-xs font-bold text-gray-900">${user.full_name}</span>
+            <span class="text-[10px] text-orange-600 font-bold uppercase">${user.role} Portal</span>
+          </div>
+          <button onclick="logout()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-xl font-bold text-gray-700 transition">Logout</button>
         </div>
-        <button onclick="logout()" class="text-xs bg-gray-100 px-3 py-1.5 rounded-xl font-bold text-gray-700">Logout</button>
       `;
 
       renderRoleNav(user.role);
@@ -605,7 +700,9 @@
 
     function logout() {
       localStorage.removeItem("basera_token");
-      authToken = null; currentUser = null; showLandingPage();
+      authToken = null; currentUser = null; 
+      showToast("Signed out successfully.", "info");
+      showLandingPage();
     }
 
     async function loadStudentProfile() {
@@ -652,7 +749,7 @@
             </div>
             <p class="text-xs text-gray-500 mb-2">${m.address}</p>
             <p class="text-xs text-gray-600 mb-3">${m.description}</p>
-            <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+            <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
               <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
             </a>
             <div class="mt-3 text-xs font-bold text-orange-600"><i class="fa-solid fa-clock"></i> Plan: ${m.meals_per_day}</div>
@@ -662,7 +759,7 @@
               <span class="text-lg font-black text-orange-600">₹${m.monthly_price}/mo</span>
               <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
             </div>
-            <button onclick="alert('Successfully subscribed to ${m.name} plan!')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl">Subscribe Plan</button>
+            <button onclick="showToast('Subscribed to ${m.name} plan!', 'success')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Subscribe Plan</button>
           </div>
         </div>
       `).join('');
@@ -680,11 +777,11 @@
       });
       const data = await res.json();
       if (res.ok) {
-        alert(data.message);
+        showToast(data.message, "success");
         currentUser.phone = document.getElementById("profilePhoneInput").value;
         currentUser.address = document.getElementById("profileAddressInput").value;
         currentUser.google_map_url = document.getElementById("profileMapInput").value;
-      } else alert(data.detail || "Update failed.");
+      } else showToast(data.detail || "Update failed.", "error");
     }
 
     function filterPGGender(gender) {
@@ -708,13 +805,13 @@
               <span class="bg-orange-100 text-orange-800 font-bold text-[10px] px-2 py-0.5 rounded">${pg.gender_pref}</span>
             </div>
             <p class="text-xs text-gray-500 mb-2">${pg.address}</p>
-            <a href="${pg.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+            <a href="${pg.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
               <i class="fa-solid fa-map-location-dot"></i> View Location
             </a>
           </div>
           <div class="flex justify-between items-center pt-3 border-t">
             <span class="text-lg font-black text-orange-600">₹${pg.monthly_price}/mo</span>
-            <button onclick="openBookingModal('${pg.name}', ${pg.monthly_price})" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl">Book Room</button>
+            <button onclick="openBookingModal('${pg.name}', ${pg.monthly_price})" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition">Book Room</button>
           </div>
         </div>
       `).join('');
@@ -740,7 +837,8 @@
         })
       });
       const data = await res.json();
-      if (res.ok) { alert(data.message); closeBookingModal(); switchNavTab('student-bookings'); }
+      if (res.ok) { showToast(data.message, "success"); closeBookingModal(); switchNavTab('student-bookings'); }
+      else showToast(data.detail || "Booking failed.", "error");
     }
 
     async function loadStudentMessView() {
@@ -756,36 +854,51 @@
       `).join('');
     }
 
-    async function cancelMeal(type) {
+    // ─── ANIMATED MEAL CANCELLATION & RESTORATION HANDLERS ───
+    async function cancelMeal(type, btnElem) {
       const selectedDate = document.getElementById("mealCancelDatePicker").value;
       if (!selectedDate) {
-        alert("Please select a date first.");
+        showToast("Please select a date first.", "warning");
         return;
       }
+
+      if (btnElem) {
+        btnElem.classList.add("anim-pulse-cancel");
+        setTimeout(() => btnElem.classList.remove("anim-pulse-cancel"), 500);
+      }
+
       try {
         const res = await fetch(`${API_BASE}/mess/cancel-meal`, {
           method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
           body: JSON.stringify({ meal_type: type, date: selectedDate })
         });
         const data = await res.json();
-        if (res.ok) alert(data.message); else alert(data.detail || "Cancellation failed.");
-      } catch (e) { alert("Error communicating with backend."); }
+        if (res.ok) showToast(data.message || `${type} cancelled for ${selectedDate}! Refund credited.`, "success");
+        else showToast(data.detail || "Cancellation failed.", "error");
+      } catch (e) { showToast("Error communicating with backend server.", "error"); }
     }
 
-    async function uncancelMeal(type) {
+    async function uncancelMeal(type, btnElem) {
       const selectedDate = document.getElementById("mealCancelDatePicker").value;
       if (!selectedDate) {
-        alert("Please select a date first.");
+        showToast("Please select a date first.", "warning");
         return;
       }
+
+      if (btnElem) {
+        btnElem.classList.add("anim-pulse-restore");
+        setTimeout(() => btnElem.classList.remove("anim-pulse-restore"), 500);
+      }
+
       try {
         const res = await fetch(`${API_BASE}/mess/uncancel-meal`, {
           method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
           body: JSON.stringify({ meal_type: type, date: selectedDate })
         });
         const data = await res.json();
-        if (res.ok) alert(data.message); else alert(data.detail || "Restoration failed.");
-      } catch (e) { alert("Error communicating with backend."); }
+        if (res.ok) showToast(data.message || `${type} restored for ${selectedDate}!`, "info");
+        else showToast(data.detail || "Restoration failed.", "error");
+      } catch (e) { showToast("Error communicating with backend server.", "error"); }
     }
 
     async function loadMessPrepStats() {
@@ -848,7 +961,7 @@
               <td class="p-2.5 font-bold text-red-600">${s.total_cancellations} Meals</td>
               <td class="p-2.5 font-black text-orange-600">₹${s.final_verified_bill}</td>
               <td class="p-2.5">
-                <button onclick="inspectStudentCalendar('${s.name}')" class="bg-gray-900 text-white font-bold px-2.5 py-1 rounded text-[10px]">Inspect 30-Day</button>
+                <button onclick="inspectStudentCalendar('${s.name}')" class="bg-gray-900 hover:bg-black text-white font-bold px-2.5 py-1 rounded text-[10px] transition">Inspect 30-Day</button>
               </td>
             </tr>
           `).join('')}</tbody>
@@ -893,12 +1006,12 @@
       const res = await fetch(`${API_BASE}/mess/weekly-menu`);
       const menu = await res.json();
       document.getElementById("weeklyMenuEditorGrid").innerHTML = menu.map(m => `
-        <div class="bg-white p-4 rounded-2xl border space-y-3">
+        <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
           <h4 class="font-bold text-orange-600 border-b pb-1 text-sm">${m.day_name} Menu</h4>
           <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">BREAKFAST</label><input type="text" id="bf-${m.day_name}" value="${m.breakfast}" class="w-full border rounded-lg p-2 text-xs"></div>
           <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">LUNCH</label><input type="text" id="lu-${m.day_name}" value="${m.lunch}" class="w-full border rounded-lg p-2 text-xs"></div>
           <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">DINNER</label><input type="text" id="dn-${m.day_name}" value="${m.dinner}" class="w-full border rounded-lg p-2 text-xs"></div>
-          <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 text-white font-bold py-1.5 rounded-lg text-xs">Save ${m.day_name}</button>
+          <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-1.5 rounded-lg text-xs transition">Save ${m.day_name}</button>
         </div>
       `).join('');
     }
@@ -911,7 +1024,7 @@
           lunch: document.getElementById(`lu-${day}`).value, dinner: document.getElementById(`dn-${day}`).value
         })
       });
-      alert(`Updated ${day}'s menu!`);
+      showToast(`Updated ${day}'s menu!`, "success");
     }
 
     async function loadCalendarLedger() {
@@ -939,12 +1052,12 @@
       const res = await fetch(`${API_BASE}/bookings/my`, { headers: { "Authorization": `Bearer ${authToken}` } });
       const bList = await res.json();
       document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => `
-        <div class="bg-white p-4 rounded-2xl border space-y-3">
+        <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
           <div class="flex justify-between items-start">
             <div><h4 class="font-bold text-sm">${b.item_name}</h4><p class="text-xs text-gray-500">Rent: ₹${b.monthly_amount}/mo</p></div>
             <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
           </div>
-          ${b.status === 'Active' ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200">Request Room Vacate</button>` : ''}
+          ${b.status === 'Active' ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>` : ''}
         </div>
       `).join('') : `<p class="text-xs text-gray-400">No active bookings.</p>`;
     }
@@ -954,14 +1067,16 @@
         method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
         body: JSON.stringify({ booking_id: bookingId })
       });
-      const data = await res.json(); alert(data.message); loadBookings();
+      const data = await res.json(); 
+      showToast(data.message, "info"); 
+      loadBookings();
     }
 
     async function loadOwnerRooms() {
       const res = await fetch(`${API_BASE}/rooms`);
       const rooms = await res.json();
       document.getElementById("ownerRoomsGrid").innerHTML = rooms.map(r => `
-        <div class="bg-white p-4 rounded-2xl border flex justify-between items-center">
+        <div class="bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm">
           <div>
             <h4 class="font-bold text-sm">Room ${r.room_number} (${r.room_type})</h4>
             <p class="text-xs text-gray-500">Tenant: ${r.tenant_name} (${r.tenant_phone})</p>
@@ -983,7 +1098,7 @@
             <tr class="border-b">
               <td class="p-2 font-bold">Room ${vr.room_number}</td><td class="p-2">${vr.student_name}</td>
               <td class="p-2">${vr.status}</td>
-              <td class="p-2">${vr.status === 'Pending' ? `<button onclick="approveVacate('${vr.id}')" class="bg-green-600 text-white font-bold text-[10px] px-2 py-1 rounded">Approve</button>` : 'Approved'}</td>
+              <td class="p-2">${vr.status === 'Pending' ? `<button onclick="approveVacate('${vr.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2 py-1 rounded transition">Approve</button>` : 'Approved'}</td>
             </tr>
           `).join('')}</tbody>
         </table>
@@ -995,7 +1110,8 @@
         method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
         body: JSON.stringify({ request_id: requestId })
       });
-      const data = await res.json(); alert(data.message);
+      const data = await res.json(); 
+      showToast(data.message, "success");
       if (currentUser.role === 'pg_owner') loadOwnerRooms(); else loadAdminOverview();
     }
 
@@ -1003,10 +1119,10 @@
       const mRes = await fetch(`${API_BASE}/admin/metrics`);
       const m = await mRes.json();
       document.getElementById("adminMetricsGrid").innerHTML = `
-        <div class="bg-gray-50 p-3 rounded-xl text-center"><span class="block text-[10px] text-gray-400 font-bold">STUDENTS</span><strong class="text-lg">${m.active_students}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center"><span class="block text-[10px] text-gray-400 font-bold">PGS</span><strong class="text-lg">${m.pg_listings}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center"><span class="block text-[10px] text-gray-400 font-bold">VACANT ROOMS</span><strong class="text-lg">${m.vacant_rooms}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center"><span class="block text-[10px] text-gray-400 font-bold">VACATE REQS</span><strong class="text-lg text-orange-600">${m.pending_vacate_requests}</strong></div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">STUDENTS</span><strong class="text-lg">${m.active_students}</strong></div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">PGS</span><strong class="text-lg">${m.pg_listings}</strong></div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACANT ROOMS</span><strong class="text-lg">${m.vacant_rooms}</strong></div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACATE REQS</span><strong class="text-lg text-orange-600">${m.pending_vacate_requests}</strong></div>
         <div class="bg-orange-50 p-3 rounded-xl text-center border border-orange-200"><span class="block text-[10px] text-orange-600 font-bold">GMV</span><strong class="text-lg text-orange-600">${m.monthly_gmv}</strong></div>
       `;
       loadVacateRequestsTable("adminVacateRequestsTable");
@@ -1066,7 +1182,7 @@
               <td class="p-2 font-bold">${c.title}</td>
               <td class="p-2">${c.user_name} (${c.user_phone})</td>
               <td class="p-2"><span class="px-2 py-0.5 rounded font-bold ${c.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${c.status}</span></td>
-              <td class="p-2">${c.status === 'Pending' && canResolve(c) ? `<button onclick="resolveComplaint('${c.id}')" class="bg-green-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg">Resolve Complaint</button>` : '-'}</td>
+              <td class="p-2">${c.status === 'Pending' && canResolve(c) ? `<button onclick="resolveComplaint('${c.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg transition">Resolve Complaint</button>` : '-'}</td>
             </tr>
           `).join('')}</tbody>
         </table>
@@ -1081,7 +1197,9 @@
         method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
         body: JSON.stringify({ category: document.getElementById("compCategory").value, title: document.getElementById("compTitle").value, description: document.getElementById("compDesc").value })
       });
-      closeComplaintModal(); loadComplaints();
+      closeComplaintModal(); 
+      showToast("Complaint submitted successfully.", "info");
+      loadComplaints();
     }
 
     async function resolveComplaint(id) {
@@ -1090,28 +1208,30 @@
         body: JSON.stringify({ complaint_id: id })
       });
       const data = await res.json();
-      if (res.ok) alert(data.message); else alert(data.detail || "Resolution failed.");
+      if (res.ok) showToast(data.message, "success"); 
+      else showToast(data.detail || "Resolution failed.", "error");
       loadComplaints();
     }
 
     async function unsubscribeMess() {
       if (!confirm("Pause mess plan and meal billing?")) return;
-      alert("Mess subscription paused.");
+      showToast("Mess subscription paused.", "info");
     }
 
     function openAddRoomModal() { document.getElementById("addRoomModal").classList.remove("hidden"); }
     function closeAddRoomModal() { document.getElementById("addRoomModal").classList.add("hidden"); }
+
     async function submitAddRoom() {
       await fetch(`${API_BASE}/pg/add-room`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ room_number: document.getElementById("addRoomNum").value, room_type: document.getElementById("addRoomType").value, monthly_rent: parseInt(document.getElementById("addRoomRent").value) })
       });
-      closeAddRoomModal(); loadOwnerRooms();
+      closeAddRoomModal(); 
+      showToast("Room added successfully!", "success");
+      loadOwnerRooms();
     }
 
     init();
   </script>
 </body>
 </html>
-
-
