@@ -6,6 +6,8 @@
   <title>Basera - Student Housing & Mess Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- RAZORPAY CHECKOUT SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     @keyframes toastSlideIn {
       from { transform: translateX(110%) scale(0.9); opacity: 0; }
@@ -228,7 +230,6 @@
 
         <div id="pgList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 
-        <!-- Student Room Photo Showcase Section -->
         <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
           <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-images text-orange-600"></i> Room Photos & Interior Previews</h3>
           <div id="studentRoomsPhotoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
@@ -337,7 +338,7 @@
         </div>
       </div>
 
-      <!-- PG OWNER PORTAL VIEWS (WITH PHOTO MANAGER) -->
+      <!-- PG OWNER PORTAL VIEWS -->
       <div id="view-owner-rooms" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -394,7 +395,6 @@
   </main>
 
   <!-- MODALS -->
-  <!-- HOTEL-STYLE PG DETAIL & PHOTO LIGHTBOX MODAL -->
   <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[92vh] overflow-y-auto space-y-5 relative">
       <div class="flex justify-between items-start border-b pb-3">
@@ -440,7 +440,6 @@
     </div>
   </div>
 
-  <!-- ROOM PHOTO MANAGER MODAL FOR PG OWNERS -->
   <div id="roomPhotoModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
       <div class="flex justify-between items-center border-b pb-3">
@@ -483,22 +482,31 @@
     </div>
   </div>
 
+  <!-- BOOKING & RAZORPAY PAYMENT MODAL -->
   <div id="bookingPaymentModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
       <h3 class="text-lg font-bold mb-1" id="modalPgName">Book Room</h3>
       <p class="text-xs text-orange-600 font-bold mb-4" id="modalPgPrice"></p>
       <div class="space-y-3 mb-6">
-        <input type="date" id="modalMoveIn" value="2026-10-01" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50">
-        <textarea id="modalRequests" class="w-full border rounded-xl p-2 text-sm bg-gray-50" placeholder="Special requests..."></textarea>
-        <select id="modalPayMethod" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 font-bold">
-          <option value="UPI / PhonePe / GPay">UPI / PhonePe / GPay</option>
-          <option value="Net Banking">Net Banking</option>
-          <option value="Cash at Counter">Cash at Counter</option>
-        </select>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">ESTIMATED MOVE-IN DATE</label>
+          <input type="date" id="modalMoveIn" value="2026-10-01" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">SPECIAL REQUESTS / NOTES</label>
+          <textarea id="modalRequests" class="w-full border rounded-xl p-2 text-sm bg-gray-50" placeholder="Ground floor room, early check-in..."></textarea>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">PAYMENT METHOD</label>
+          <div class="bg-orange-50 border border-orange-200 p-3 rounded-xl flex items-center justify-between">
+            <span class="text-xs font-bold text-orange-800"><i class="fa-solid fa-shield-halved text-orange-600"></i> Razorpay Secure Gateway</span>
+            <span class="text-[10px] font-bold bg-orange-600 text-white px-2 py-0.5 rounded">UPI / Cards / NetBanking</span>
+          </div>
+        </div>
       </div>
       <div class="flex gap-2">
         <button onclick="closeBookingModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="submitBookingWithPayment()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl">Pay & Confirm</button>
+        <button onclick="submitBookingWithPayment()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition">Proceed to Pay</button>
       </div>
     </div>
   </div>
@@ -546,7 +554,7 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    // ─── GEOLOCATION / PIN LOCATION ACCESS ENGINE ─────────────────────────
+    // GEOLOCATION ENGINE
     function fetchCurrentLocation(targetInputId, btnElem) {
       if (!navigator.geolocation) {
         showToast("Geolocation is not supported by your browser.", "error");
@@ -593,7 +601,92 @@
       );
     }
 
-    // Helper to safely open Base64 images in browser tabs
+    // RAZORPAY PAYMENT GATEWAY INTEGRATION
+    async function submitBookingWithPayment() {
+      const moveInDate = document.getElementById("modalMoveIn").value;
+      const specialRequests = document.getElementById("modalRequests").value;
+
+      if (!activePgForBooking) return;
+
+      showToast("Initiating secure payment gateway...", "info");
+
+      try {
+        const orderRes = await fetch(`${API_BASE}/payments/create-order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            amount: activePgForBooking.price,
+            item_name: activePgForBooking.name
+          })
+        });
+
+        const orderData = await orderRes.json();
+        if (!orderRes.ok) {
+          showToast(orderData.detail || "Could not create payment order.", "error");
+          return;
+        }
+
+        const options = {
+          "key": orderData.key_id,
+          "amount": orderData.amount,
+          "currency": orderData.currency,
+          "name": "Basera Student Services",
+          "description": `Monthly Rent - ${activePgForBooking.name}`,
+          "image": "https://cdn-icons-png.flaticon.com/512/6009/6009864.png",
+          "order_id": orderData.order_id,
+          "handler": async function (response) {
+            showToast("Verifying payment...", "info");
+
+            const verifyRes = await fetch(`${API_BASE}/payments/verify`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${authToken}`
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                item_name: activePgForBooking.name,
+                monthly_amount: activePgForBooking.price,
+                move_in_date: moveInDate,
+                special_requests: specialRequests
+              })
+            });
+
+            const verifyData = await verifyRes.json();
+            if (verifyRes.ok) {
+              showToast(verifyData.message, "success");
+              closeBookingModal();
+              switchNavTab('student-bookings');
+            } else {
+              showToast(verifyData.detail || "Payment verification failed.", "error");
+            }
+          },
+          "prefill": {
+            "name": currentUser ? currentUser.full_name : "",
+            "email": currentUser ? currentUser.email : "",
+            "contact": currentUser ? currentUser.phone : ""
+          },
+          "theme": {
+            "color": "#ea580c"
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          showToast(`Payment Failed: ${response.error.description}`, "error");
+        });
+        rzp.open();
+
+      } catch (err) {
+        showToast("Error connecting to payment gateway.", "error");
+      }
+    }
+
     function viewFullImage(dataUrl) {
       if (!dataUrl) return;
       fetch(dataUrl)
@@ -1108,22 +1201,6 @@
     }
     function closeBookingModal() { document.getElementById("bookingPaymentModal").classList.add("hidden"); }
 
-    async function submitBookingWithPayment() {
-      const res = await fetch(`${API_BASE}/bookings`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({
-          target_type: "PG Room", item_name: activePgForBooking.name,
-          move_in_date: document.getElementById("modalMoveIn").value,
-          special_requests: document.getElementById("modalRequests").value,
-          monthly_amount: activePgForBooking.price,
-          payment_method: document.getElementById("modalPayMethod").value
-        })
-      });
-      const data = await res.json();
-      if (res.ok) { showToast(data.message, "success"); closeBookingModal(); switchNavTab('student-bookings'); }
-      else showToast(data.detail || "Booking failed.", "error");
-    }
-
     async function loadStudentMessView() {
       const res = await fetch(`${API_BASE}/mess/weekly-menu`);
       const menu = await res.json();
@@ -1336,7 +1413,11 @@
       document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => `
         <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
           <div class="flex justify-between items-start">
-            <div><h4 class="font-bold text-sm">${b.item_name}</h4><p class="text-xs text-gray-500">Rent: ₹${b.monthly_amount}/mo</p></div>
+            <div>
+              <h4 class="font-bold text-sm">${b.item_name}</h4>
+              <p class="text-xs text-gray-500">Rent: ₹${b.monthly_amount}/mo</p>
+              <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
+            </div>
             <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
           </div>
           ${b.status === 'Active' ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>` : ''}
@@ -1602,4 +1683,3 @@
   </script>
 </body>
 </html>
-
