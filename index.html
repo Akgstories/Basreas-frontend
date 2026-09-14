@@ -103,8 +103,18 @@
             <input type="text" id="authAddress" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="GEC Bokaro Hostel, Room 101">
           </div>
           <div>
-            <label class="block text-[10px] font-bold text-gray-500 mb-0.5">GOOGLE MAPS LOCATION LINK</label>
-            <input type="url" id="authMapUrl" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="https://maps.google.com/?q=GEC+Bokaro">
+            <div class="flex justify-between items-center mb-0.5">
+              <label class="block text-[10px] font-bold text-gray-500">GOOGLE MAPS LOCATION LINK</label>
+              <button type="button" onclick="fetchCurrentLocation('authMapUrl', this)" class="text-[10px] font-bold text-orange-600 hover:underline flex items-center gap-1">
+                <i class="fa-solid fa-location-crosshairs"></i> Use GPS
+              </button>
+            </div>
+            <div class="relative">
+              <input type="url" id="authMapUrl" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition pr-28" placeholder="https://maps.google.com/?q=GEC+Bokaro">
+              <button type="button" onclick="fetchCurrentLocation('authMapUrl', this)" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                <i class="fa-solid fa-location-arrow"></i> Auto-Pin
+              </button>
+            </div>
           </div>
         </div>
 
@@ -171,8 +181,18 @@
                 <input type="text" id="profileAddressInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold">
               </div>
               <div class="md:col-span-2">
-                <label class="block text-[10px] font-bold text-gray-500 mb-1">GOOGLE MAPS LOCATION LINK</label>
-                <input type="url" id="profileMapInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold" placeholder="https://maps.google.com/?q=...">
+                <div class="flex justify-between items-center mb-1">
+                  <label class="block text-[10px] font-bold text-gray-500">GOOGLE MAPS LOCATION LINK</label>
+                  <button type="button" onclick="fetchCurrentLocation('profileMapInput', this)" class="text-[10px] font-bold text-orange-600 hover:underline flex items-center gap-1">
+                    <i class="fa-solid fa-location-crosshairs"></i> Use GPS Location
+                  </button>
+                </div>
+                <div class="relative">
+                  <input type="url" id="profileMapInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold pr-28" placeholder="https://maps.google.com/?q=...">
+                  <button type="button" onclick="fetchCurrentLocation('profileMapInput', this)" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                    <i class="fa-solid fa-location-arrow"></i> Auto-Pin
+                  </button>
+                </div>
               </div>
             </div>
             <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition">Update Profile & Location</button>
@@ -377,8 +397,6 @@
   <!-- HOTEL-STYLE PG DETAIL & PHOTO LIGHTBOX MODAL -->
   <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[92vh] overflow-y-auto space-y-5 relative">
-      
-      <!-- Modal Header -->
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <div class="flex items-center gap-2">
@@ -390,27 +408,21 @@
         <button onclick="closePGDetailModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- Main Hero Image Viewer & Carousel Thumbnails -->
       <div class="space-y-3">
         <div class="relative w-full h-64 md:h-80 bg-gray-900 rounded-2xl overflow-hidden border shadow-inner flex items-center justify-center">
           <img id="detailHeroImage" src="" class="w-full h-full object-cover transition-all duration-300">
           <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full" id="detailPhotoBadge">1 / 5 Photos</span>
         </div>
-
-        <!-- Thumbnail Selector Row -->
         <div id="detailThumbnailRow" class="flex gap-2.5 overflow-x-auto pb-1"></div>
       </div>
 
-      <!-- Tags & Badges Row -->
       <div class="flex flex-wrap items-center gap-2" id="detailBadgesRow"></div>
 
-      <!-- Amenities Grid -->
       <div>
         <h4 class="font-bold text-xs text-gray-400 uppercase tracking-wider mb-2">Included Amenities</h4>
         <div class="flex flex-wrap gap-2" id="detailAmenitiesRow"></div>
       </div>
 
-      <!-- Action Bar & Book Button -->
       <div class="pt-4 border-t flex items-center justify-between gap-4">
         <div>
           <span class="text-2xl font-black text-orange-600" id="detailPgRent">₹4,200</span>
@@ -425,7 +437,6 @@
           </button>
         </div>
       </div>
-
     </div>
   </div>
 
@@ -532,11 +543,57 @@
     let activePgForBooking = null;
     let currentFetchedPGs = [];
 
-    // Active room photo state management
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    // Helper to safely open Base64 images in browser tabs without top-frame security block
+    // ─── GEOLOCATION / PIN LOCATION ACCESS ENGINE ─────────────────────────
+    function fetchCurrentLocation(targetInputId, btnElem) {
+      if (!navigator.geolocation) {
+        showToast("Geolocation is not supported by your browser.", "error");
+        return;
+      }
+
+      const originalHtml = btnElem ? btnElem.innerHTML : '';
+      if (btnElem) {
+        btnElem.disabled = true;
+        btnElem.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Locating...`;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          const mapUrl = `https://maps.google.com/?q=${lat},${lng}`;
+
+          const inputField = document.getElementById(targetInputId);
+          if (inputField) inputField.value = mapUrl;
+
+          showToast("GPS Location pinned successfully!", "success");
+          if (btnElem) {
+            btnElem.disabled = false;
+            btnElem.innerHTML = originalHtml;
+          }
+        },
+        (error) => {
+          let msg = "Unable to access location.";
+          if (error.code === error.PERMISSION_DENIED) {
+            msg = "Location permission denied. Please allow GPS location access in your browser.";
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+            msg = "Location information is unavailable.";
+          } else if (error.code === error.TIMEOUT) {
+            msg = "GPS location request timed out.";
+          }
+          showToast(msg, "error");
+          if (btnElem) {
+            btnElem.disabled = false;
+            btnElem.innerHTML = originalHtml;
+          }
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
+    }
+
+    // Helper to safely open Base64 images in browser tabs
     function viewFullImage(dataUrl) {
       if (!dataUrl) return;
       fetch(dataUrl)
@@ -899,7 +956,6 @@
       loadPGs();
     }
 
-    // Load PG listings with Hotel-Style visual cards and click handlers
     async function loadPGs() {
       const search = document.getElementById("pgSearch").value;
       const res = await fetch(`${API_BASE}/pgs?gender_pref=${activeGenderFilter}${search ? '&search=' + search : ''}`);
@@ -911,7 +967,6 @@
         return `
           <div class="bg-white rounded-3xl border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group" onclick="openPGDetailModal('${pg.id}')">
             <div>
-              <!-- Card Image Header -->
               <div class="relative h-44 w-full bg-gray-100 overflow-hidden">
                 ${coverPhoto ? `
                   <img src="${coverPhoto}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -934,7 +989,6 @@
                 ` : ''}
               </div>
 
-              <!-- Card Info -->
               <div class="p-5 space-y-2">
                 <h3 class="font-bold text-gray-900 text-base group-hover:text-orange-600 transition-colors">${pg.name}</h3>
                 <p class="text-xs text-gray-500 line-clamp-1">${pg.address}</p>
@@ -945,7 +999,6 @@
               </div>
             </div>
 
-            <!-- Card Footer -->
             <div class="px-5 pb-5 pt-2 flex justify-between items-center border-t border-gray-100">
               <div>
                 <span class="text-lg font-black text-orange-600">₹${pg.monthly_price}</span>
@@ -960,7 +1013,6 @@
       }).join('');
     }
 
-    // ─── HOTEL DETAIL & PHOTO LIGHTBOX MODAL CONTROLLERS ─────────────────
     function openPGDetailModal(pgId) {
       const pg = currentFetchedPGs.find(item => item.id === pgId);
       if (!pg) return;
@@ -971,7 +1023,6 @@
       document.getElementById("detailPgRent").innerText = `₹${pg.monthly_price}`;
       document.getElementById("detailMapBtn").href = pg.google_map_url || "https://maps.google.com";
 
-      // Render Badges
       document.getElementById("detailBadgesRow").innerHTML = `
         <span class="bg-orange-100 text-orange-800 font-bold text-xs px-3 py-1 rounded-full">${pg.gender_pref}</span>
         <span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full">${pg.sharing}</span>
@@ -979,7 +1030,6 @@
         <span class="bg-gray-100 text-gray-700 font-bold text-xs px-3 py-1 rounded-full">📍 ${pg.distance_km} km from campus</span>
       `;
 
-      // Render Amenities
       const amenitiesList = Array.isArray(pg.amenities) ? pg.amenities : [];
       document.getElementById("detailAmenitiesRow").innerHTML = amenitiesList.map(a => `
         <span class="bg-gray-50 border text-gray-700 text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
@@ -987,7 +1037,6 @@
         </span>
       `).join('');
 
-      // Setup Photos Gallery
       const images = pg.images && pg.images.length > 0 ? pg.images : [];
       const heroImg = document.getElementById("detailHeroImage");
       const badge = document.getElementById("detailPhotoBadge");
@@ -1006,7 +1055,6 @@
         thumbRow.innerHTML = `<p class="text-xs text-gray-400 py-2">No photos uploaded by PG owner yet.</p>`;
       }
 
-      // Set Book Button Handler
       document.getElementById("detailBookBtn").onclick = () => {
         closePGDetailModal();
         openBookingModal(pg.name, pg.monthly_price);
@@ -1031,7 +1079,6 @@
       document.getElementById("pgDetailModal").classList.add("hidden");
     }
 
-    // Load student room photos gallery using safe Blob viewer
     async function loadStudentRoomsPhotos() {
       const res = await fetch(`${API_BASE}/rooms`);
       const rooms = await res.json();
@@ -1307,7 +1354,6 @@
       loadBookings();
     }
 
-    // PG Owner Rooms Directory with Photo Gallery trigger buttons
     async function loadOwnerRooms() {
       const res = await fetch(`${API_BASE}/rooms`);
       const rooms = await res.json();
@@ -1322,7 +1368,6 @@
             <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">${r.status.toUpperCase()}</span>
           </div>
 
-          <!-- Room Photo Thumbnails -->
           <div class="flex items-center gap-2 pt-2">
             ${r.images && r.images.length > 0 ? r.images.map(img => `
               <img src="${img}" class="w-12 h-12 object-cover rounded-xl border">
@@ -1337,7 +1382,6 @@
       loadVacateRequestsTable("ownerVacateRequestsTable");
     }
 
-    // Photo Modal Handlers for PG Owners
     function openRoomPhotoModal(roomNumber, existingImages = []) {
       activeRoomForPhotos = roomNumber;
       currentRoomImages = [...existingImages];
