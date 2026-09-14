@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    /* ─── TOAST POPUP ANIMATIONS ─── */
     @keyframes toastSlideIn {
       from { transform: translateX(110%) scale(0.9); opacity: 0; }
       to   { transform: translateX(0) scale(1); opacity: 1; }
@@ -19,7 +18,6 @@
     .toast-enter { animation: toastSlideIn 0.35s cubic-bezier(0.21, 1.02, 0.73, 1) forwards; }
     .toast-leave { animation: toastFadeOut 0.3s ease forwards; }
 
-    /* ─── MEAL CANCEL & UNCANCEL PULSE ANIMATIONS ─── */
     @keyframes pulseCancel {
       0%   { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
       50%  { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
@@ -120,7 +118,6 @@
             <label class="text-xs font-bold text-gray-600">PASSWORD</label>
             <button type="button" onclick="toggleForgotPasswordView()" class="text-[11px] text-orange-600 font-bold hover:underline">Forgot Password?</button>
           </div>
-          <!-- PASSWORD INPUT WITH EYE TOGGLE ICON -->
           <div class="relative">
             <input type="password" id="authPassword" required class="w-full border rounded-xl p-2.5 pr-10 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="••••••••">
             <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeAuthIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
@@ -132,7 +129,6 @@
         <button type="submit" id="authBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition">Sign In</button>
       </form>
 
-      <!-- FORGOT PASSWORD FORM -->
       <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)" class="hidden space-y-4">
         <input type="email" id="forgotEmail" required placeholder="Registered Email" class="w-full border rounded-xl p-2.5 text-sm">
         <input type="text" id="forgotPhone" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Registered 10-Digit Phone" class="w-full border rounded-xl p-2.5 text-sm">
@@ -184,7 +180,7 @@
         </div>
       </div>
 
-      <!-- Student: Explore Mess Providers Section -->
+      <!-- Student: Explore Mess -->
       <div id="view-student-explore-mess" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div>
@@ -195,12 +191,12 @@
         </div>
       </div>
 
-      <!-- Student: Explore PGs -->
+      <!-- Student: Explore PGs & View Room Photos -->
       <div id="view-student-pgs" class="hidden space-y-6">
         <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
           <div>
-            <h2 class="text-xl font-bold">Explore Student PGs</h2>
-            <p class="text-xs text-gray-500">Filter accommodations with precise Google Map locations</p>
+            <h2 class="text-xl font-bold">Explore Student PGs & Available Rooms</h2>
+            <p class="text-xs text-gray-500">Filter accommodations and view photo galleries (up to 5 images per room)</p>
           </div>
           <div class="flex items-center gap-2">
             <button onclick="filterPGGender('All')" id="genderBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white">All PGs</button>
@@ -209,10 +205,17 @@
             <input type="text" id="pgSearch" oninput="loadPGs()" placeholder="Search location..." class="border rounded-xl px-3 py-1.5 text-xs bg-gray-50">
           </div>
         </div>
+
         <div id="pgList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+
+        <!-- Student Room Photo Showcase Section -->
+        <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
+          <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-images text-orange-600"></i> Room Photos & Interior Previews</h3>
+          <div id="studentRoomsPhotoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
       </div>
 
-      <!-- Student: Mess Opt-Out / Restoration with Specific Date Selection -->
+      <!-- Student: Mess Opt-Out -->
       <div id="view-student-mess" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
@@ -223,7 +226,6 @@
             <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1 rounded-xl border border-red-200 hover:bg-red-100 transition">Unsubscribe Mess</button>
           </div>
 
-          <!-- Specific Date Selector for Meal Cancellation -->
           <div class="bg-orange-50/70 p-4 rounded-2xl border border-orange-200 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
               <i class="fa-solid fa-calendar-day text-orange-600 text-xl"></i>
@@ -235,7 +237,6 @@
             <input type="date" id="mealCancelDatePicker" class="border border-orange-300 rounded-xl px-4 py-2 text-xs font-bold bg-white text-gray-800 focus:ring-2 focus:ring-orange-500 outline-none cursor-pointer">
           </div>
 
-          <!-- MEAL ACTION BUTTONS WITH ANIMATED PULSE EFFECTS -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-orange-50/30 p-4 rounded-2xl border border-orange-100">
             <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Breakfast (₹30 Refund)</span>
@@ -316,14 +317,17 @@
         </div>
       </div>
 
-      <!-- PG OWNER PORTAL VIEWS -->
+      <!-- PG OWNER PORTAL VIEWS (WITH PHOTO MANAGER) -->
       <div id="view-owner-rooms" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
-            <h2 class="text-xl font-bold">Room Directory</h2>
-            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
+            <div>
+              <h2 class="text-xl font-bold">Room Directory & Photo Management</h2>
+              <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & optimized to WebP)</p>
+            </div>
+            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
           </div>
-          <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+          <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
           <div class="pt-4 border-t">
             <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
             <div id="ownerVacateRequestsTable" class="overflow-x-auto"></div>
@@ -344,7 +348,7 @@
         </div>
       </div>
 
-      <!-- OWNER NOTIFICATIONS INBOX VIEW -->
+      <!-- NOTIFICATIONS INBOX -->
       <div id="view-notifications-inbox" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Gmail Alerts</h2>
@@ -352,7 +356,7 @@
         </div>
       </div>
 
-      <!-- ROLE-SEGREGATED COMPLAINTS VIEW -->
+      <!-- COMPLAINTS -->
       <div id="view-complaints" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -370,6 +374,34 @@
   </main>
 
   <!-- MODALS -->
+  <!-- ROOM PHOTO MANAGER MODAL FOR PG OWNERS -->
+  <div id="roomPhotoModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-gray-900" id="photoModalTitle">Manage Room Photos</h3>
+          <p class="text-xs text-gray-500">Max 5 pictures per room • Auto WebP Compression</p>
+        </div>
+        <button onclick="closeRoomPhotoModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-700 mb-2">Upload New Photos (Select up to 5 files)</label>
+        <input type="file" id="roomPhotoFileInput" accept="image/*" multiple onchange="handlePhotoSelection(event)" class="w-full text-xs text-gray-500 border rounded-xl p-2 bg-gray-50 cursor-pointer">
+      </div>
+
+      <div>
+        <span class="block text-xs font-bold text-gray-700 mb-2">Current Photo Gallery (<span id="photoCountTag">0</span>/5)</span>
+        <div id="photoPreviewGrid" class="grid grid-cols-3 gap-3"></div>
+      </div>
+
+      <div class="flex gap-2 pt-3 border-t">
+        <button onclick="closeRoomPhotoModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+        <button onclick="saveRoomPhotos()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition">Save & Optimize Photos</button>
+      </div>
+    </div>
+  </div>
+
   <div id="inspectCalendarModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
       <div class="flex justify-between items-start border-b pb-3">
@@ -444,7 +476,10 @@
     let currentUser = null;
     let activePgForBooking = null;
 
-    // ─── ANIMATED TOAST NOTIFICATION SYSTEM ───
+    // Active room photo state management
+    let activeRoomForPhotos = null;
+    let currentRoomImages = [];
+
     function showToast(message, type = 'success') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
@@ -478,7 +513,6 @@
       setTimeout(() => el.remove(), 300);
     }
 
-    // ─── PASSWORD VISIBILITY EYE TOGGLE ───
     function togglePasswordVisibility(inputId, iconId) {
       const input = document.getElementById(inputId);
       const icon = document.getElementById(iconId);
@@ -494,7 +528,6 @@
     }
 
     async function init() {
-      // Set default date in date picker to Today
       const todayStr = new Date().toISOString().split('T')[0];
       const datePicker = document.getElementById("mealCancelDatePicker");
       if (datePicker) datePicker.value = todayStr;
@@ -631,7 +664,7 @@
         tabs = [
           { key: 'student-profile', label: '👤 Profile & Expiry Banners', icon: 'fa-user' },
           { key: 'student-explore-mess', label: '🍲 Explore Mess', icon: 'fa-utensils' },
-          { key: 'student-pgs', label: '🏠 Explore PGs', icon: 'fa-house' },
+          { key: 'student-pgs', label: '🏠 Explore PGs & Photos', icon: 'fa-house' },
           { key: 'student-mess', label: '🍱 Weekly Menu & Date Opt-Out', icon: 'fa-calendar-check' },
           { key: 'student-calendar', label: '📅 30-Day Attendance', icon: 'fa-calendar-days' },
           { key: 'student-bookings', label: '🔖 Bookings & Vacate', icon: 'fa-bookmark' },
@@ -647,7 +680,7 @@
         ];
       } else if (role === 'pg_owner') {
         tabs = [
-          { key: 'owner-rooms', label: '🏢 Rooms & Vacate Approvals', icon: 'fa-building' },
+          { key: 'owner-rooms', label: '🏢 Rooms & Photo Manager', icon: 'fa-building' },
           { key: 'notifications-inbox', label: '🔔 Booking & Vacate Alerts', icon: 'fa-bell' },
           { key: 'complaints', label: '⚠️ PG Repairs Inbox', icon: 'fa-wrench' }
         ];
@@ -685,7 +718,7 @@
 
       if (viewKey === 'student-profile') loadStudentProfile();
       if (viewKey === 'student-explore-mess') loadExploreMess();
-      if (viewKey === 'student-pgs') loadPGs();
+      if (viewKey === 'student-pgs') { loadPGs(); loadStudentRoomsPhotos(); }
       if (viewKey === 'student-mess') loadStudentMessView();
       if (viewKey === 'student-calendar') loadCalendarLedger();
       if (viewKey === 'student-bookings') loadBookings();
@@ -817,6 +850,28 @@
       `).join('');
     }
 
+    // Load student room photos gallery
+    async function loadStudentRoomsPhotos() {
+      const res = await fetch(`${API_BASE}/rooms`);
+      const rooms = await res.json();
+      document.getElementById("studentRoomsPhotoGrid").innerHTML = rooms.map(r => `
+        <div class="bg-gray-50 p-4 rounded-2xl border space-y-3 shadow-sm">
+          <div class="flex justify-between items-center">
+            <div>
+              <h4 class="font-bold text-gray-900 text-sm">Room ${r.room_number} (${r.room_type})</h4>
+              <span class="text-xs font-bold text-orange-600">₹${r.monthly_rent}/month</span>
+            </div>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'vacant' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'}">${r.status.toUpperCase()}</span>
+          </div>
+          <div class="grid grid-cols-5 gap-2">
+            ${r.images && r.images.length > 0 ? r.images.map(img => `
+              <img src="${img}" class="w-full h-16 object-cover rounded-xl border border-gray-200 hover:scale-105 transition cursor-pointer" onclick="window.open('${img}')">
+            `).join('') : '<p class="col-span-5 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No room photos uploaded by owner yet.</p>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
     function openBookingModal(name, price) {
       activePgForBooking = { name, price };
       document.getElementById("modalPgName").innerText = `Book ${name}`;
@@ -854,7 +909,6 @@
       `).join('');
     }
 
-    // ─── ANIMATED MEAL CANCELLATION & RESTORATION HANDLERS ───
     async function cancelMeal(type, btnElem) {
       const selectedDate = document.getElementById("mealCancelDatePicker").value;
       if (!selectedDate) {
@@ -1072,20 +1126,108 @@
       loadBookings();
     }
 
+    // PG Owner Rooms Directory with Photo Gallery trigger buttons
     async function loadOwnerRooms() {
       const res = await fetch(`${API_BASE}/rooms`);
       const rooms = await res.json();
       document.getElementById("ownerRoomsGrid").innerHTML = rooms.map(r => `
-        <div class="bg-white p-4 rounded-2xl border flex justify-between items-center shadow-sm">
-          <div>
-            <h4 class="font-bold text-sm">Room ${r.room_number} (${r.room_type})</h4>
-            <p class="text-xs text-gray-500">Tenant: ${r.tenant_name} (${r.tenant_phone})</p>
-            <p class="text-[10px] text-gray-400">Address: ${r.tenant_address}</p>
+        <div class="bg-white p-5 rounded-2xl border space-y-3 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="font-bold text-base text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
+              <p class="text-xs text-gray-500">Tenant: ${r.tenant_name} (${r.tenant_phone})</p>
+              <p class="text-[10px] text-gray-400">Address: ${r.tenant_address}</p>
+            </div>
+            <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">${r.status.toUpperCase()}</span>
           </div>
-          <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">${r.status.toUpperCase()}</span>
+
+          <!-- Room Photo Thumbnails -->
+          <div class="flex items-center gap-2 pt-2">
+            ${r.images && r.images.length > 0 ? r.images.map(img => `
+              <img src="${img}" class="w-12 h-12 object-cover rounded-xl border">
+            `).join('') : '<span class="text-[11px] text-gray-400 font-medium">No photos uploaded</span>'}
+          </div>
+
+          <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs py-2 rounded-xl border border-orange-200 transition">
+            <i class="fa-solid fa-camera"></i> Manage Photos (${r.images ? r.images.length : 0}/5)
+          </button>
         </div>
       `).join('');
       loadVacateRequestsTable("ownerVacateRequestsTable");
+    }
+
+    // Photo Modal Handlers for PG Owners
+    function openRoomPhotoModal(roomNumber, existingImages = []) {
+      activeRoomForPhotos = roomNumber;
+      currentRoomImages = [...existingImages];
+      document.getElementById("photoModalTitle").innerText = `Manage Room ${roomNumber} Photos`;
+      document.getElementById("roomPhotoFileInput").value = "";
+      renderPhotoPreviews();
+      document.getElementById("roomPhotoModal").classList.remove("hidden");
+    }
+
+    function closeRoomPhotoModal() {
+      document.getElementById("roomPhotoModal").classList.add("hidden");
+    }
+
+    function renderPhotoPreviews() {
+      document.getElementById("photoCountTag").innerText = currentRoomImages.length;
+      document.getElementById("photoPreviewGrid").innerHTML = currentRoomImages.map((img, idx) => `
+        <div class="relative group">
+          <img src="${img}" class="w-full h-20 object-cover rounded-xl border">
+          <button onclick="removePhoto(${idx})" class="absolute top-1 right-1 bg-red-600 text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center shadow hover:bg-red-700">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    function removePhoto(index) {
+      currentRoomImages.splice(index, 1);
+      renderPhotoPreviews();
+    }
+
+    function handlePhotoSelection(e) {
+      const files = Array.from(e.target.files);
+      if (currentRoomImages.length + files.length > 5) {
+        showToast("Maximum 5 photos allowed per room.", "warning");
+        return;
+      }
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (currentRoomImages.length < 5) {
+            currentRoomImages.push(event.target.result);
+            renderPhotoPreviews();
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function saveRoomPhotos() {
+      if (!activeRoomForPhotos) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/pg/update-room-images`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+          body: JSON.stringify({
+            room_number: activeRoomForPhotos,
+            images: currentRoomImages
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          showToast(data.message, "success");
+          closeRoomPhotoModal();
+          loadOwnerRooms();
+        } else {
+          showToast(data.detail || "Failed to save photos.", "error");
+        }
+      } catch (err) {
+        showToast("Error updating photos.", "error");
+      }
     }
 
     async function loadVacateRequestsTable(containerId) {
@@ -1235,3 +1377,4 @@
   </script>
 </body>
 </html>
+
