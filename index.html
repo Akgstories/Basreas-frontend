@@ -37,7 +37,7 @@
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
   <!-- TOAST NOTIFICATION CONTAINER -->
-<div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+  <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
   <!-- HEADER -->
   <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
@@ -798,12 +798,17 @@
         try {
           const res = await fetch(`${API_BASE}/auth/me`, { headers: { "Authorization": `Bearer ${authToken}` } });
           const data = await res.json();
-          if (data.status === "success") {
+          if (res.ok && data.status === "success") {
             currentUser = data.user;
             showLoggedInUI(data.user);
             return;
+          } else {
+            localStorage.removeItem("basera_token");
+            authToken = null;
           }
-        } catch (e) { console.log("Backend offline or connecting..."); }
+        } catch (e) { 
+          console.log("Backend offline or connecting..."); 
+        }
       }
       showLandingPage();
     }
@@ -1720,4 +1725,3 @@
   </script>
 </body>
 </html>
-
