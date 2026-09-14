@@ -170,7 +170,10 @@
             </div>
             <span class="bg-orange-100 text-orange-800 font-bold text-xs px-3 py-1 rounded-full uppercase">Student Portal</span>
           </div>
+
+          <!-- EXPIRY & PAYMENT SLIDE BANNERS -->
           <div id="paymentReminderBanners" class="space-y-3"></div>
+
           <form onsubmit="updateProfileInfo(event)" class="bg-gray-50 p-4 rounded-xl border space-y-4">
             <h3 class="font-bold text-sm text-gray-900"><i class="fa-solid fa-location-dot text-orange-600"></i> Food Delivery Address & Google Maps Location</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -207,7 +210,7 @@
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div>
             <h2 class="text-xl font-bold text-gray-900">Explore Nearby Mess Providers</h2>
-            <p class="text-xs text-gray-500">Compare meal plans, diet options, and Google Maps directions</p>
+            <p class="text-xs text-gray-500">Compare meal plans, diet options, and launch instant payment checkout</p>
           </div>
           <div id="messProvidersList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </div>
@@ -218,7 +221,7 @@
         <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
           <div>
             <h2 class="text-xl font-bold">Explore Student PGs & Available Rooms</h2>
-            <p class="text-xs text-gray-500">Filter accommodations and view photo galleries (up to 5 images per room)</p>
+            <p class="text-xs text-gray-500">Filter accommodations, view photo galleries, and review pricing before payment</p>
           </div>
           <div class="flex items-center gap-2">
             <button onclick="filterPGGender('All')" id="genderBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white">All PGs</button>
@@ -372,7 +375,7 @@
       <!-- NOTIFICATIONS INBOX -->
       <div id="view-notifications-inbox" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Gmail Alerts</h2>
+          <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Email Alerts</h2>
           <div id="notificationsList" class="space-y-3"></div>
         </div>
       </div>
@@ -394,7 +397,53 @@
     </div>
   </main>
 
-  <!-- MODALS -->
+  <!-- UNIVERSAL SERVICE PAYMENT REVIEW SLIDE MODAL -->
+  <div id="paymentSlideModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
+      <div class="flex justify-between items-start border-b pb-3">
+        <div>
+          <h3 class="text-lg font-black text-gray-900" id="paymentSlideTitle">Service Checkout Review</h3>
+          <p class="text-xs text-gray-500">Review details before launching Razorpay payment gateway</p>
+        </div>
+        <button onclick="closePaymentSlideModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
+      </div>
+
+      <div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center justify-between">
+        <div>
+          <span class="block text-xs font-bold text-gray-800" id="paymentSlideItemName">PG / Mess Service</span>
+          <span class="text-[10px] text-orange-700 font-bold">30 Days Full Access Included</span>
+        </div>
+        <div class="text-right">
+          <span class="text-2xl font-black text-orange-600" id="paymentSlideAmount">₹0</span>
+          <span class="block text-[10px] text-gray-400 font-bold">INR</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1" id="paymentDateLabel">EFFECTIVE / MOVE-IN DATE</label>
+          <input type="date" id="paymentSlideDate" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-gray-50">
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">DIET PREFERENCE / SPECIAL REQUESTS</label>
+          <textarea id="paymentSlideRequests" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50" placeholder="Non-Veg diet preference, ground floor room request..."></textarea>
+        </div>
+
+        <div class="bg-gray-50 border p-3 rounded-xl flex items-center justify-between text-xs">
+          <span class="font-bold text-gray-700"><i class="fa-solid fa-shield-halved text-green-600"></i> Razorpay Gateway</span>
+          <span class="font-bold text-orange-600 text-[10px] bg-orange-100 px-2 py-0.5 rounded">UPI / Cards / NetBanking</span>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="closePaymentSlideModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
+        <button onclick="executePaymentSlideCheckout()" class="flex-1 py-3 text-xs font-black bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow-lg shadow-orange-600/30">Proceed to Pay</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER MODALS -->
   <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[92vh] overflow-y-auto space-y-5 relative">
       <div class="flex justify-between items-start border-b pb-3">
@@ -482,35 +531,6 @@
     </div>
   </div>
 
-  <!-- BOOKING & RAZORPAY PAYMENT MODAL -->
-  <div id="bookingPaymentModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-      <h3 class="text-lg font-bold mb-1" id="modalPgName">Book Room</h3>
-      <p class="text-xs text-orange-600 font-bold mb-4" id="modalPgPrice"></p>
-      <div class="space-y-3 mb-6">
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">ESTIMATED MOVE-IN DATE</label>
-          <input type="date" id="modalMoveIn" value="2026-10-01" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">SPECIAL REQUESTS / NOTES</label>
-          <textarea id="modalRequests" class="w-full border rounded-xl p-2 text-sm bg-gray-50" placeholder="Ground floor room, early check-in..."></textarea>
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">PAYMENT METHOD</label>
-          <div class="bg-orange-50 border border-orange-200 p-3 rounded-xl flex items-center justify-between">
-            <span class="text-xs font-bold text-orange-800"><i class="fa-solid fa-shield-halved text-orange-600"></i> Razorpay Secure Gateway</span>
-            <span class="text-[10px] font-bold bg-orange-600 text-white px-2 py-0.5 rounded">UPI / Cards / NetBanking</span>
-          </div>
-        </div>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="closeBookingModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="submitBookingWithPayment()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition">Proceed to Pay</button>
-      </div>
-    </div>
-  </div>
-
   <div id="complaintModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
       <h3 class="text-lg font-bold mb-3">Raise Complaint</h3>
@@ -548,7 +568,7 @@
     let activeGenderFilter = "All";
     let authToken = localStorage.getItem("basera_token");
     let currentUser = null;
-    let activePgForBooking = null;
+    let activeCheckoutItem = null;
     let currentFetchedPGs = [];
 
     let activeRoomForPhotos = null;
@@ -601,14 +621,30 @@
       );
     }
 
-    // RAZORPAY PAYMENT GATEWAY INTEGRATION
-    async function submitBookingWithPayment() {
-      const moveInDate = document.getElementById("modalMoveIn").value;
-      const specialRequests = document.getElementById("modalRequests").value;
+    // UNIVERSAL PAYMENT REVIEW SLIDE ENGINE
+    function openUniversalPaymentModal(itemName, amount, serviceType = 'Service') {
+      activeCheckoutItem = { itemName, amount, serviceType };
 
-      if (!activePgForBooking) return;
+      document.getElementById("paymentSlideTitle").innerText = `${serviceType} Payment Review`;
+      document.getElementById("paymentSlideItemName").innerText = itemName;
+      document.getElementById("paymentSlideAmount").innerText = `₹${amount}`;
+      document.getElementById("paymentSlideDate").value = new Date().toISOString().split('T')[0];
+      document.getElementById("paymentSlideRequests").value = "";
 
-      showToast("Initiating secure payment gateway...", "info");
+      document.getElementById("paymentSlideModal").classList.remove("hidden");
+    }
+
+    function closePaymentSlideModal() {
+      document.getElementById("paymentSlideModal").classList.add("hidden");
+    }
+
+    async function executePaymentSlideCheckout() {
+      if (!activeCheckoutItem) return;
+
+      const moveInDate = document.getElementById("paymentSlideDate").value;
+      const specialRequests = document.getElementById("paymentSlideRequests").value;
+
+      showToast("Opening Razorpay payment gateway...", "info");
 
       try {
         const orderRes = await fetch(`${API_BASE}/payments/create-order`, {
@@ -618,8 +654,8 @@
             "Authorization": `Bearer ${authToken}`
           },
           body: JSON.stringify({
-            amount: activePgForBooking.price,
-            item_name: activePgForBooking.name
+            amount: activeCheckoutItem.amount,
+            item_name: activeCheckoutItem.itemName
           })
         });
 
@@ -634,7 +670,7 @@
           "amount": orderData.amount,
           "currency": orderData.currency,
           "name": "Basera Student Services",
-          "description": `Monthly Rent - ${activePgForBooking.name}`,
+          "description": activeCheckoutItem.itemName,
           "image": "https://cdn-icons-png.flaticon.com/512/6009/6009864.png",
           "order_id": orderData.order_id,
           "handler": async function (response) {
@@ -650,8 +686,8 @@
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                item_name: activePgForBooking.name,
-                monthly_amount: activePgForBooking.price,
+                item_name: activeCheckoutItem.itemName,
+                monthly_amount: activeCheckoutItem.amount,
                 move_in_date: moveInDate,
                 special_requests: specialRequests
               })
@@ -660,8 +696,11 @@
             const verifyData = await verifyRes.json();
             if (verifyRes.ok) {
               showToast(verifyData.message, "success");
-              closeBookingModal();
-              switchNavTab('student-bookings');
+              closePaymentSlideModal();
+              loadStudentProfile();
+              if (document.getElementById("view-student-bookings").classList.contains("hidden") === false) {
+                loadBookings();
+              }
             } else {
               showToast(verifyData.detail || "Payment verification failed.", "error");
             }
@@ -973,21 +1012,25 @@
 
       document.getElementById("paymentReminderBanners").innerHTML = `
         ${rem.mess_reminder.should_alert ? `
-          <div class="bg-amber-50 border border-amber-300 p-4 rounded-xl flex justify-between items-center">
+          <div class="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
             <div>
-              <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION EXPIRY</span>
+              <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION RENEWAL DUE</span>
               <p class="text-xs text-amber-700 mt-0.5">${rem.mess_reminder.message}</p>
             </div>
-            <span class="bg-amber-600 text-white font-bold text-xs px-3 py-1 rounded-lg">Expires in ${rem.mess_reminder.days_left} Days</span>
+            <button onclick="openUniversalPaymentModal('Mess Renewal - Annapurna Mess', 3000, 'Mess Renewal')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+              Renew Mess Plan (₹3,000)
+            </button>
           </div>
         ` : ''}
         ${rem.pg_reminder.should_alert ? `
-          <div class="bg-red-50 border border-red-300 p-4 rounded-xl flex justify-between items-center">
+          <div class="bg-red-50 border border-red-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
             <div>
-              <span class="block font-bold text-xs text-red-800"><i class="fa-solid fa-house"></i> PG RENT DUE WARNING</span>
+              <span class="block font-bold text-xs text-red-800"><i class="fa-solid fa-house"></i> MONTHLY PG RENT DUE</span>
               <p class="text-xs text-red-700 mt-0.5">${rem.pg_reminder.message}</p>
             </div>
-            <span class="bg-red-600 text-white font-bold text-xs px-3 py-1 rounded-lg">Due in ${rem.pg_reminder.days_left} Days</span>
+            <button onclick="openUniversalPaymentModal('Monthly PG Rent Payment', 4200, 'PG Rent')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+              Pay PG Rent (₹4,200)
+            </button>
           </div>
         ` : ''}
       `;
@@ -1015,7 +1058,9 @@
               <span class="text-lg font-black text-orange-600">₹${m.monthly_price}/mo</span>
               <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
             </div>
-            <button onclick="showToast('Subscribed to ${m.name} plan!', 'success')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Subscribe Plan</button>
+            <button onclick="openUniversalPaymentModal('${m.name} Subscription', ${m.monthly_price}, 'Mess Subscription')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+              Subscribe Plan
+            </button>
           </div>
         </div>
       `).join('');
@@ -1150,7 +1195,7 @@
 
       document.getElementById("detailBookBtn").onclick = () => {
         closePGDetailModal();
-        openBookingModal(pg.name, pg.monthly_price);
+        openUniversalPaymentModal(`${pg.name} Room Booking`, pg.monthly_price, 'PG Booking');
       };
 
       document.getElementById("pgDetailModal").classList.remove("hidden");
@@ -1192,14 +1237,6 @@
         </div>
       `).join('');
     }
-
-    function openBookingModal(name, price) {
-      activePgForBooking = { name, price };
-      document.getElementById("modalPgName").innerText = `Book ${name}`;
-      document.getElementById("modalPgPrice").innerText = `Monthly Rent: ₹${price}`;
-      document.getElementById("bookingPaymentModal").classList.remove("hidden");
-    }
-    function closeBookingModal() { document.getElementById("bookingPaymentModal").classList.add("hidden"); }
 
     async function loadStudentMessView() {
       const res = await fetch(`${API_BASE}/mess/weekly-menu`);
@@ -1683,3 +1720,4 @@
   </script>
 </body>
 </html>
+
