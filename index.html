@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Basera - Student Housing & Mess Platform</title>
   
-  <!-- INLINE FAVICON FIX (Eliminates 404 Console Error) -->
+  <!-- INLINE FAVICON FIX -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -216,16 +216,16 @@
         </div>
       </div>
 
-      <!-- Student: Explore Mess with Location Filtering -->
+      <!-- Student: Explore Mess with Location Filtering (Price Hidden Upfront) -->
       <div id="view-student-explore-mess" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
             <div>
               <h2 class="text-xl font-bold text-gray-900">Explore Nearby Mess Providers</h2>
-              <p class="text-xs text-gray-500">Filter by location, select meal tiers, and choose subscription duration</p>
+              <p class="text-xs text-gray-500">Select a mess provider and configure your location-based plan</p>
             </div>
             
-            <!-- Location Filter Bar -->
+            <!-- Location Filter Buttons -->
             <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1">
               <span class="text-xs font-bold text-gray-500 whitespace-nowrap"><i class="fa-solid fa-location-dot text-orange-600"></i> Location:</span>
               <button onclick="filterMessLocation('All')" id="locBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition">All Locations</button>
@@ -448,25 +448,34 @@
     </div>
   </main>
 
-  <!-- MESS PLAN & DURATION SELECTION MODAL -->
+  <!-- MESS PLAN, LOCATION & DURATION SELECTION MODAL -->
   <div id="messPlanSelectModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
       <div class="flex justify-between items-start border-b pb-3">
         <div>
-          <h3 class="text-lg font-black text-gray-900" id="modalMessTitle">Customize Mess Subscription</h3>
-          <p class="text-xs text-gray-500">Select meal tier and plan duration</p>
+          <h3 class="text-lg font-black text-gray-900" id="modalMessTitle">Configure Subscription</h3>
+          <p class="text-xs text-gray-500">Prices are calculated based on your specific location</p>
         </div>
         <button onclick="closeMessPlanModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- 1. MEAL PLAN SELECTION (3-Time vs 2-Time) -->
+      <!-- 1. LOCATION SELECTION -->
       <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">1. Select Meal Tier</label>
+        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">1. Select Delivery Location</label>
+        <div class="grid grid-cols-3 gap-2">
+          <button id="locModalBtn-MainGate" onclick="selectMessModalLocation('GEC Main Gate')" class="py-2 px-1 border-2 border-orange-600 bg-orange-50 rounded-xl font-bold text-[11px] text-center text-orange-700 transition">Main Gate</button>
+          <button id="locModalBtn-Chandankiyari" onclick="selectMessModalLocation('Chandankiyari')" class="py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition">Chandankiyari</button>
+          <button id="locModalBtn-Ghoragara" onclick="selectMessModalLocation('Ghoragara')" class="py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition">Ghoragara</button>
+        </div>
+      </div>
+
+      <!-- 2. MEAL TIER SELECTION -->
+      <div>
+        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">2. Select Meal Tier</label>
         <div class="grid grid-cols-2 gap-3">
           <button id="planBtn-3time" onclick="selectMealTier('3-Time')" class="p-3 border-2 border-orange-600 bg-orange-50/60 rounded-2xl text-left transition relative">
             <span class="block font-black text-xs text-gray-900">🍳 3-Times Daily</span>
             <span class="block text-[10px] text-gray-500 mt-0.5">Breakfast, Lunch & Dinner</span>
-            <span class="absolute top-2 right-2 text-orange-600 text-xs"><i class="fa-solid fa-circle-check"></i></span>
           </button>
           <button id="planBtn-2time" onclick="selectMealTier('2-Time')" class="p-3 border-2 border-gray-200 rounded-2xl text-left transition relative">
             <span class="block font-black text-xs text-gray-900">🥗 2-Times Daily</span>
@@ -475,21 +484,21 @@
         </div>
       </div>
 
-      <!-- 2. DURATION SELECTION (1, 7, 15, 30 Days) -->
+      <!-- 3. DURATION SELECTION -->
       <div>
-        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">2. Select Subscription Duration</label>
+        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">3. Select Duration</label>
         <div class="grid grid-cols-4 gap-2">
-          <button id="durBtn-1" onclick="selectMessDuration(1)" class="py-2.5 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">1 Day</button>
-          <button id="durBtn-7" onclick="selectMessDuration(7)" class="py-2.5 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">7 Days</button>
-          <button id="durBtn-15" onclick="selectMessDuration(15)" class="py-2.5 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">15 Days</button>
-          <button id="durBtn-30" onclick="selectMessDuration(30)" class="py-2.5 border-2 border-orange-600 bg-orange-50 font-bold text-xs text-center text-orange-700 transition">30 Days</button>
+          <button id="durBtn-1" onclick="selectMessDuration(1)" class="py-2 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">1 Day</button>
+          <button id="durBtn-7" onclick="selectMessDuration(7)" class="py-2 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">7 Days</button>
+          <button id="durBtn-15" onclick="selectMessDuration(15)" class="py-2 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition">15 Days</button>
+          <button id="durBtn-30" onclick="selectMessDuration(30)" class="py-2 border-2 border-orange-600 bg-orange-50 font-bold text-xs text-center text-orange-700 transition">30 Days</button>
         </div>
       </div>
 
       <!-- PRICE BREAKDOWN SUMMARY -->
       <div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center justify-between">
         <div>
-          <span class="block text-xs font-bold text-gray-800" id="summaryPlanLabel">3-Time Meal (30 Days)</span>
+          <span class="block text-xs font-bold text-gray-800" id="summaryPlanLabel">GEC Main Gate • 3-Time (30 Days)</span>
           <span class="text-[10px] text-orange-700 font-bold" id="summaryRateLabel">₹100 / day rate</span>
         </div>
         <div class="text-right">
@@ -682,11 +691,19 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    // MESS EXPLORER & PLAN CUSTOMIZATION STATE
+    // MESS EXPLORER & LOCATION ENGINE STATE
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
+    let selectedMessLocation = "GEC Main Gate";
     let selectedMealTier = "3-Time";
     let selectedDurationDays = 30;
+
+    // Location Price Rates Map (Daily Rate per Location/Tier)
+    const LOCATION_PRICE_MAP = {
+      "GEC Main Gate": { "3-Time": 100, "2-Time": 80 },
+      "Chandankiyari": { "3-Time": 90, "2-Time": 70 },
+      "Ghoragara": { "3-Time": 110, "2-Time": 85 }
+    };
 
     // GEOLOCATION ENGINE
     function fetchCurrentLocation(targetInputId, btnElem) {
@@ -735,7 +752,7 @@
       );
     }
 
-    // MESS LOCATION FILTERING
+    // MESS LOCATION FILTER HANDLER
     function filterMessLocation(location) {
       activeMessLocationFilter = location;
       
@@ -752,14 +769,15 @@
       loadExploreMess();
     }
 
-    // MESS PLAN & DURATION SELECTION MODAL HANDLERS
-    function openMessPlanModal(messName, baseMonthlyPrice) {
-      selectedMessData = { name: messName, basePrice: baseMonthlyPrice };
+    // MESS PLAN & LOCATION SELECTION MODAL HANDLERS
+    function openMessPlanModal(messName) {
+      selectedMessData = { name: messName };
+      selectedMessLocation = activeMessLocationFilter !== "All" ? activeMessLocationFilter : "GEC Main Gate";
       selectedMealTier = "3-Time";
       selectedDurationDays = 30;
 
       document.getElementById("modalMessTitle").innerText = messName;
-      updateMessPlanModalUI();
+      selectMessModalLocation(selectedMessLocation);
       document.getElementById("messPlanSelectModal").classList.remove("hidden");
     }
 
@@ -767,24 +785,24 @@
       document.getElementById("messPlanSelectModal").classList.add("hidden");
     }
 
+    function selectMessModalLocation(loc) {
+      selectedMessLocation = loc;
+      ['MainGate', 'Chandankiyari', 'Ghoragara'].forEach(l => {
+        const key = l === 'MainGate' ? 'GEC Main Gate' : l;
+        const btn = document.getElementById(`locModalBtn-${l}`);
+        if (btn) {
+          btn.className = (key === loc)
+            ? "py-2 px-1 border-2 border-orange-600 bg-orange-50 rounded-xl font-bold text-[11px] text-center text-orange-700 transition"
+            : "py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition";
+        }
+      });
+      updateMessPlanModalUI();
+    }
+
     function selectMealTier(tier) {
       selectedMealTier = tier;
-
-      const btn3 = document.getElementById("planBtn-3time");
-      const btn2 = document.getElementById("planBtn-2time");
-
-      if (tier === "3-Time") {
-        btn3.className = "p-3 border-2 border-orange-600 bg-orange-50/60 rounded-2xl text-left transition relative";
-        btn3.innerHTML = `<span class="block font-black text-xs text-gray-900">🍳 3-Times Daily</span><span class="block text-[10px] text-gray-500 mt-0.5">Breakfast, Lunch & Dinner</span><span class="absolute top-2 right-2 text-orange-600 text-xs"><i class="fa-solid fa-circle-check"></i></span>`;
-        btn2.className = "p-3 border-2 border-gray-200 rounded-2xl text-left transition relative";
-        btn2.innerHTML = `<span class="block font-black text-xs text-gray-900">🥗 2-Times Daily</span><span class="block text-[10px] text-gray-500 mt-0.5">Lunch & Dinner Only</span>`;
-      } else {
-        btn2.className = "p-3 border-2 border-orange-600 bg-orange-50/60 rounded-2xl text-left transition relative";
-        btn2.innerHTML = `<span class="block font-black text-xs text-gray-900">🥗 2-Times Daily</span><span class="block text-[10px] text-gray-500 mt-0.5">Lunch & Dinner Only</span><span class="absolute top-2 right-2 text-orange-600 text-xs"><i class="fa-solid fa-circle-check"></i></span>`;
-        btn3.className = "p-3 border-2 border-gray-200 rounded-2xl text-left transition relative";
-        btn3.innerHTML = `<span class="block font-black text-xs text-gray-900">🍳 3-Times Daily</span><span class="block text-[10px] text-gray-500 mt-0.5">Breakfast, Lunch & Dinner</span>`;
-      }
-
+      document.getElementById("planBtn-3time").className = tier === "3-Time" ? "p-3 border-2 border-orange-600 bg-orange-50/60 rounded-2xl text-left transition relative" : "p-3 border-2 border-gray-200 rounded-2xl text-left transition relative";
+      document.getElementById("planBtn-2time").className = tier === "2-Time" ? "p-3 border-2 border-orange-600 bg-orange-50/60 rounded-2xl text-left transition relative" : "p-3 border-2 border-gray-200 rounded-2xl text-left transition relative";
       updateMessPlanModalUI();
     }
 
@@ -794,24 +812,18 @@
         const btn = document.getElementById(`durBtn-${d}`);
         if (btn) {
           btn.className = (d === days)
-            ? "py-2.5 border-2 border-orange-600 bg-orange-50 font-bold text-xs text-center text-orange-700 transition"
-            : "py-2.5 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition";
+            ? "py-2 border-2 border-orange-600 bg-orange-50 font-bold text-xs text-center text-orange-700 transition"
+            : "py-2 border-2 border-gray-200 rounded-xl font-bold text-xs text-center transition";
         }
       });
       updateMessPlanModalUI();
     }
 
     function updateMessPlanModalUI() {
-      if (!selectedMessData) return;
-
-      const base30Price = selectedMessData.basePrice;
-      const dailyRate = selectedMealTier === "3-Time" 
-        ? Math.round(base30Price / 30) 
-        : Math.round((base30Price * 0.8) / 30);
-
+      const dailyRate = LOCATION_PRICE_MAP[selectedMessLocation]?.[selectedMealTier] || 100;
       const totalPrice = dailyRate * selectedDurationDays;
 
-      document.getElementById("summaryPlanLabel").innerText = `${selectedMealTier} Meal Plan (${selectedDurationDays} Day${selectedDurationDays > 1 ? 's' : ''})`;
+      document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDurationDays} Days)`;
       document.getElementById("summaryRateLabel").innerText = `₹${dailyRate} / day rate`;
       document.getElementById("summaryTotalPrice").innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
     }
@@ -819,10 +831,9 @@
     function proceedMessSubscription() {
       if (!selectedMessData) return;
 
-      const base30Price = selectedMessData.basePrice;
-      const dailyRate = selectedMealTier === "3-Time" ? Math.round(base30Price / 30) : Math.round((base30Price * 0.8) / 30);
+      const dailyRate = LOCATION_PRICE_MAP[selectedMessLocation]?.[selectedMealTier] || 100;
       const finalAmount = dailyRate * selectedDurationDays;
-      const planTitle = `${selectedMessData.name} - ${selectedMealTier} Plan (${selectedDurationDays} Days)`;
+      const planTitle = `${selectedMessData.name} (${selectedMessLocation}) - ${selectedMealTier} Plan (${selectedDurationDays} Days)`;
 
       closeMessPlanModal();
       openUniversalPaymentModal(planTitle, finalAmount, 'Mess Subscription', selectedDurationDays);
@@ -1231,7 +1242,7 @@
               <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION RENEWAL DUE</span>
               <p class="text-xs text-amber-700 mt-0.5">${rem.mess_reminder.message}</p>
             </div>
-            <button onclick="openMessPlanModal('Annapurna Homely Mess', 3000)" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+            <button onclick="openMessPlanModal('Annapurna Homely Mess')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
               Renew Mess Plan
             </button>
           </div>
@@ -1265,6 +1276,7 @@
         return;
       }
 
+      // HIDE PRICE IN INITIAL CARD LISTING (Location-based dynamic price)
       listContainer.innerHTML = filteredMesses.map(m => `
         <div class="bg-white rounded-2xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
           <div>
@@ -1280,10 +1292,12 @@
           </div>
           <div class="flex justify-between items-center pt-3 border-t">
             <div>
-              <span class="text-lg font-black text-orange-600">₹${m.monthly_price}/mo</span>
+              <span class="text-xs font-bold text-gray-500 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-orange-600"></i> Location Pricing
+              </span>
               <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
             </div>
-            <button onclick="openMessPlanModal('${m.name}', ${m.monthly_price})" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+            <button onclick="openMessPlanModal('${m.name}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
               Select Plan
             </button>
           </div>
@@ -2027,4 +2041,3 @@
   </script>
 </body>
 </html>
-
