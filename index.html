@@ -5,20 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Basera - Student Housing & Mess Platform</title>
   
-  <!-- INLINE FAVICON FIX -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
-
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  
-  <!-- RAZORPAY CHECKOUT SDK -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-  <!-- VERCEL WEB ANALYTICS -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
-  <script defer src="/_vercel/insights/script.js"></script>
 
   <style>
     @keyframes toastSlideIn {
@@ -48,10 +38,8 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
-  <!-- HEADER -->
   <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -71,7 +59,6 @@
     </nav>
   </header>
 
-  <!-- LANDING PAGE -->
   <div id="landingPage" class="space-y-12 pb-12">
     <section class="bg-gradient-to-br from-orange-600 to-amber-600 text-white py-16 px-4 text-center">
       <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">Find PGs & Manage Mess Subscriptions</h1>
@@ -83,7 +70,6 @@
     </section>
   </div>
 
-  <!-- AUTH SECTION -->
   <div id="authSection" class="max-w-md mx-auto w-full px-4 mb-12">
     <div class="bg-white p-6 rounded-2xl shadow-lg border">
       <h2 class="text-2xl font-black text-center text-gray-900 mb-4" id="authTitle">Access Basera</h2>
@@ -133,7 +119,7 @@
         </div>
 
         <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">EMAIL ADDRESS (RECEIVES INSTANT NOTIFICATIONS)</label>
+          <label class="block text-[10px] font-bold text-gray-500 mb-0.5">EMAIL ADDRESS</label>
           <input type="email" id="authEmail" required class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="student@gecbokaro.ac.in">
         </div>
 
@@ -168,11 +154,9 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <main class="max-w-7xl mx-auto px-4 pb-12 flex-1 w-full">
     <div id="dashboard" class="hidden space-y-6">
 
-      <!-- STUDENT PORTAL VIEWS -->
       <div id="view-student-profile" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center border-b pb-4">
@@ -216,7 +200,6 @@
         </div>
       </div>
 
-      <!-- Student: Explore Mess with Location Filtering (Price Hidden Upfront) -->
       <div id="view-student-explore-mess" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
@@ -225,7 +208,6 @@
               <p class="text-xs text-gray-500">Select a mess provider and configure your location-based plan</p>
             </div>
             
-            <!-- Location Filter Buttons -->
             <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1">
               <span class="text-xs font-bold text-gray-500 whitespace-nowrap"><i class="fa-solid fa-location-dot text-orange-600"></i> Location:</span>
               <button onclick="filterMessLocation('All')" id="locBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition">All Locations</button>
@@ -239,7 +221,6 @@
         </div>
       </div>
 
-      <!-- Student: Explore PGs & View Room Photos -->
       <div id="view-student-pgs" class="hidden space-y-6">
         <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
           <div>
@@ -262,7 +243,6 @@
         </div>
       </div>
 
-      <!-- Student: Mess Opt-Out -->
       <div id="view-student-mess" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
@@ -329,7 +309,6 @@
         </div>
       </div>
 
-      <!-- MESS OWNER PORTAL VIEWS -->
       <div id="view-mess-prep" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -364,7 +343,6 @@
         </div>
       </div>
 
-      <!-- PG OWNER PORTAL VIEWS -->
       <div id="view-owner-rooms" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -382,14 +360,12 @@
         </div>
       </div>
 
-      <!-- ADMIN PORTAL VIEWS -->
       <div id="view-admin-overview" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold">Admin Analytics</h2>
           <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
         </div>
 
-        <!-- EMAIL DIAGNOSTIC & TESTING WIDGET -->
         <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-2">
             <div>
@@ -423,7 +399,6 @@
         </div>
       </div>
 
-      <!-- NOTIFICATIONS INBOX -->
       <div id="view-notifications-inbox" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Email Alerts</h2>
@@ -431,7 +406,6 @@
         </div>
       </div>
 
-      <!-- COMPLAINTS -->
       <div id="view-complaints" class="hidden space-y-6">
         <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -448,7 +422,6 @@
     </div>
   </main>
 
-  <!-- MESS PLAN, LOCATION & DURATION SELECTION MODAL -->
   <div id="messPlanSelectModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
       <div class="flex justify-between items-start border-b pb-3">
@@ -459,7 +432,6 @@
         <button onclick="closeMessPlanModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
       </div>
 
-      <!-- 1. LOCATION SELECTION -->
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">1. Select Delivery Location</label>
         <div class="grid grid-cols-3 gap-2">
@@ -469,7 +441,6 @@
         </div>
       </div>
 
-      <!-- 2. MEAL TIER SELECTION -->
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">2. Select Meal Tier</label>
         <div class="grid grid-cols-2 gap-3">
@@ -484,7 +455,6 @@
         </div>
       </div>
 
-      <!-- 3. DURATION SELECTION -->
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">3. Select Duration</label>
         <div class="grid grid-cols-4 gap-2">
@@ -495,7 +465,6 @@
         </div>
       </div>
 
-      <!-- 4. DIET PREFERENCE SELECTION -->
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">4. Select Diet Preference</label>
         <div class="grid grid-cols-2 gap-3">
@@ -510,7 +479,6 @@
         </div>
       </div>
 
-      <!-- 5. MESS SELECTION & PAYMENT CHECKBOX CONFIRMATION -->
       <div class="bg-gray-50 p-3 rounded-2xl border flex items-start gap-3">
         <input type="checkbox" id="confirmMessCheckbox" class="mt-1 w-4 h-4 text-orange-600 rounded border-gray-300 focus:ring-orange-500 cursor-pointer" checked>
         <label for="confirmMessCheckbox" class="text-xs text-gray-700 font-medium cursor-pointer">
@@ -518,7 +486,6 @@
         </label>
       </div>
 
-      <!-- PRICE BREAKDOWN SUMMARY -->
       <div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center justify-between">
         <div>
           <span class="block text-xs font-bold text-gray-800" id="summaryPlanLabel">GEC Main Gate • 3-Time (30 Days)</span>
@@ -537,7 +504,6 @@
     </div>
   </div>
 
-  <!-- UNIVERSAL SERVICE PAYMENT REVIEW SLIDE MODAL -->
   <div id="paymentSlideModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
       <div class="flex justify-between items-start border-b pb-3">
@@ -583,7 +549,6 @@
     </div>
   </div>
 
-  <!-- OTHER MODALS -->
   <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[92vh] overflow-y-auto space-y-5 relative">
       <div class="flex justify-between items-start border-b pb-3">
@@ -700,7 +665,6 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT ENGINE -->
   <script>
     const API_BASE = "https://basera-backend-bidu.onrender.com/api";
     let authMode = "login";
@@ -714,22 +678,34 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    // MESS EXPLORER & LOCATION ENGINE STATE
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
     let selectedMessLocation = "GEC Main Gate";
     let selectedMealTier = "3-Time";
     let selectedDurationDays = 30;
-    let selectedDiet = "Veg"; // Veg or Non-Veg preference
+    let selectedDiet = "Veg";
 
-    // Location Price Rates Map (Daily Rate per Location/Tier)
-    const LOCATION_PRICE_MAP = {
+    // Dynamic price rate object updated from Supabase
+    let LOCATION_PRICE_MAP = {
       "GEC Main Gate": { "3-Time": 100, "2-Time": 80 },
       "Chandankiyari": { "3-Time": 90, "2-Time": 70 },
       "Ghoragara": { "3-Time": 110, "2-Time": 85 }
     };
 
-    // GEOLOCATION ENGINE
+    async function fetchLiveMessPricing() {
+      try {
+        const res = await fetch(`${API_BASE}/mess-pricing`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Object.keys(data).length > 0) {
+            LOCATION_PRICE_MAP = data;
+          }
+        }
+      } catch (err) {
+        console.log("Using default mess pricing fallback...");
+      }
+    }
+
     function fetchCurrentLocation(targetInputId, btnElem) {
       if (!navigator.geolocation) {
         showToast("Geolocation is not supported by your browser.", "error");
@@ -776,7 +752,6 @@
       );
     }
 
-    // MESS LOCATION FILTER HANDLER
     function filterMessLocation(location) {
       activeMessLocationFilter = location;
       
@@ -793,7 +768,6 @@
       loadExploreMess();
     }
 
-    // MESS PLAN & LOCATION SELECTION MODAL HANDLERS
     function openMessPlanModal(messName) {
       selectedMessData = { name: messName };
       selectedMessLocation = activeMessLocationFilter !== "All" ? activeMessLocationFilter : "GEC Main Gate";
@@ -888,7 +862,6 @@
       openUniversalPaymentModal(planTitle, finalAmount, 'Mess Subscription', selectedDurationDays, selectedDiet);
     }
 
-    // UNIVERSAL PAYMENT REVIEW SLIDE ENGINE
     function openUniversalPaymentModal(itemName, amount, serviceType = 'Service', durationDays = 30, dietPreference = "Veg") {
       activeCheckoutItem = { itemName, amount, serviceType, durationDays, dietPreference };
 
@@ -1060,6 +1033,8 @@
     }
 
     async function init() {
+      await fetchLiveMessPricing();
+
       const todayStr = new Date().toISOString().split('T')[0];
       const datePicker = document.getElementById("mealCancelDatePicker");
       if (datePicker) datePicker.value = todayStr;
@@ -1326,7 +1301,6 @@
         return;
       }
 
-      // HIDE PRICE IN INITIAL CARD LISTING (Location-based dynamic price)
       listContainer.innerHTML = filteredMesses.map(m => `
         <div class="bg-white rounded-2xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
           <div>
