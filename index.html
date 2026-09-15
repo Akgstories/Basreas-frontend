@@ -1711,61 +1711,30 @@
     }
 
     async function loadBookings() {
-      const res = await fetch(`${API_BASE}/bookings/my`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const bList = await res.json();
-      document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => `
-        <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-sm">${b.item_name}</h4>
-              <p class="text-xs text-gray-500">Amount: ₹${b.monthly_amount}</p>
-              <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
-            </div>
-            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
+  const res = await fetch(`${API_BASE}/bookings/my`, { headers: { "Authorization": `Bearer ${authToken}` } });
+  const bList = await res.json();
+  document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => {
+    const isPG = b.target_type === "PG Room";
+
+    return `
+      <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <h4 class="font-bold text-sm">${b.item_name}</h4>
+            <p class="text-xs text-gray-500">Amount: ₹${b.monthly_amount}</p>
+            <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
           </div>
-          ${b.status === 'Active' ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>` : ''}
+          <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
         </div>
-      `).join('') : `<p class="text-xs text-gray-400">No active bookings.</p>`;
-    }
-
-    async function requestVacate(bookingId) {
-      const res = await fetch(`${API_BASE}/pg/request-vacate`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({ booking_id: bookingId })
-      });
-      const data = await res.json(); 
-      showToast(data.message, "info"); 
-      loadBookings();
-    }
-
-    async function loadOwnerRooms() {
-      const res = await fetch(`${API_BASE}/rooms`);
-      const rooms = await res.json();
-      document.getElementById("ownerRoomsGrid").innerHTML = rooms.map(r => `
-        <div class="bg-white p-5 rounded-2xl border space-y-3 shadow-sm">
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-base text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
-              <p class="text-xs text-gray-500">Tenant: ${r.tenant_name} (${r.tenant_phone})</p>
-              <p class="text-[10px] text-gray-400">Address: ${r.tenant_address}</p>
-            </div>
-            <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">${r.status.toUpperCase()}</span>
-          </div>
-
-          <div class="flex items-center gap-2 pt-2">
-            ${r.images && r.images.length > 0 ? r.images.map(img => `
-              <img src="${img}" class="w-12 h-12 object-cover rounded-xl border">
-            `).join('') : '<span class="text-[11px] text-gray-400 font-medium">No photos uploaded</span>'}
-          </div>
-
-          <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs py-2 rounded-xl border border-orange-200 transition">
-            <i class="fa-solid fa-camera"></i> Manage Photos (${r.images ? r.images.length : 0}/5)
-          </button>
-        </div>
-      `).join('');
-      loadVacateRequestsTable("ownerVacateRequestsTable");
-    }
-
+        ${b.status === 'Active' ? (
+          isPG 
+            ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>`
+            : `<button onclick="unsubscribeMess()" class="w-full bg-orange-50 text-orange-600 font-bold text-xs py-2 rounded-xl border border-orange-200 hover:bg-orange-100 transition">Unsubscribe Mess</button>`
+        ) : ''}
+      </div>
+    `;
+  }).join('') : `<p class="text-xs text-gray-400">No active bookings.</p>`;
+}
     function openRoomPhotoModal(roomNumber, existingImages = []) {
       activeRoomForPhotos = roomNumber;
       currentRoomImages = [...existingImages];
