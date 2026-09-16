@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Basera - Student Housing & Mess Platform</title>
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
@@ -34,52 +34,64 @@
     }
     .anim-pulse-cancel  { animation: pulseCancel 0.5s ease-in-out; }
     .anim-pulse-restore { animation: pulseRestore 0.5s ease-in-out; }
+
+    /* Hide scrollbar for mobile clean tab scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col antialiased">
 
-  <div id="toastContainer" class="fixed top-5 right-5 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+  <div id="toastContainer" class="fixed top-3 right-3 left-3 md:left-auto md:top-5 md:right-5 z-[100] flex flex-col gap-2.5 pointer-events-none"></div>
 
+  <!-- HEADER (Desktop Nav & Compact Mobile Branding) -->
   <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <span class="text-2xl font-black text-orange-600 tracking-tight cursor-pointer" onclick="showLandingPage()">
+      <div class="flex items-center gap-2 md:gap-3">
+        <span class="text-xl md:text-2xl font-black text-orange-600 tracking-tight cursor-pointer" onclick="showLandingPage()">
           Basera<span class="text-gray-900">.</span>
         </span>
-        <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-0.5 rounded-full">
-          <i class="fa-solid fa-bolt text-xs"></i> Live Cloud Active
+        <span class="bg-orange-100 text-orange-700 text-[10px] md:text-xs font-bold px-2 py-0.5 md:px-2.5 rounded-full flex items-center gap-1">
+          <i class="fa-solid fa-bolt text-[10px]"></i> <span class="hidden xs:inline">Live</span> Cloud
         </span>
       </div>
       <div id="userHeaderBox">
-        <button onclick="scrollToAuth()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Sign In / Register</button>
+        <button onclick="scrollToAuth()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow-sm">Sign In / Register</button>
       </div>
     </div>
-    <nav id="mainNav" class="hidden bg-gray-900 text-white border-t">
+    
+    <!-- DESKTOP TOP NAVIGATION BAR (Hidden on Mobile Screens) -->
+    <nav id="mainNav" class="hidden md:block bg-gray-900 text-white border-t">
       <div id="navContainer" class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto text-xs font-semibold py-1"></div>
     </nav>
   </header>
 
-  <div id="landingPage" class="space-y-12 pb-12">
-    <section class="bg-gradient-to-br from-orange-600 to-amber-600 text-white py-16 px-4 text-center">
-      <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">Find PGs & Manage Mess Subscriptions</h1>
-      <p class="text-orange-100 max-w-2xl mx-auto mb-6">Complete local solution with Google Maps location tracking and automated email alerts.</p>
-      <div class="flex justify-center gap-4">
-        <button onclick="scrollToAuth('register')" class="bg-gray-900 hover:bg-black text-white font-bold text-sm px-6 py-3 rounded-xl transition">Get Started Free</button>
-        <button onclick="scrollToAuth('login')" class="bg-white hover:bg-gray-100 text-orange-600 font-bold text-sm px-6 py-3 rounded-xl transition">Sign In</button>
+  <!-- MOBILE BOTTOM NAVIGATION BAR (Visible on Phones < 768px when logged in) -->
+  <nav id="mobileNav" class="hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white z-50 md:hidden border-t border-gray-800 shadow-2xl">
+    <div id="mobileNavContainer" class="flex justify-around items-center py-1.5 px-1 overflow-x-auto no-scrollbar"></div>
+  </nav>
+
+  <div id="landingPage" class="space-y-8 md:space-y-12 pb-8">
+    <section class="bg-gradient-to-br from-orange-600 to-amber-600 text-white py-12 md:py-16 px-4 text-center">
+      <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 md:mb-4">Find PGs & Manage Mess Subscriptions</h1>
+      <p class="text-orange-100 text-xs md:text-base max-w-2xl mx-auto mb-6">Complete local solution with Google Maps location tracking and automated email alerts.</p>
+      <div class="flex justify-center gap-3 md:gap-4">
+        <button onclick="scrollToAuth('register')" class="bg-gray-900 hover:bg-black text-white font-bold text-xs md:text-sm px-5 py-3 rounded-xl transition shadow-lg">Get Started Free</button>
+        <button onclick="scrollToAuth('login')" class="bg-white hover:bg-gray-100 text-orange-600 font-bold text-xs md:text-sm px-5 py-3 rounded-xl transition shadow-lg">Sign In</button>
       </div>
     </section>
   </div>
 
   <div id="authSection" class="max-w-md mx-auto w-full px-4 mb-12">
-    <div class="bg-white p-6 rounded-2xl shadow-lg border">
-      <h2 class="text-2xl font-black text-center text-gray-900 mb-4" id="authTitle">Access Basera</h2>
+    <div class="bg-white p-5 md:p-6 rounded-3xl shadow-lg border">
+      <h2 class="text-xl md:text-2xl font-black text-center text-gray-900 mb-4" id="authTitle">Access Basera</h2>
 
       <div id="authTabs" class="flex border-b mb-5">
         <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 font-bold text-sm text-orange-600 border-b-2 border-orange-600">Sign In</button>
         <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-2 font-bold text-sm text-gray-400">Create Account</button>
       </div>
 
-      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+      <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3.5">
         <div>
           <label class="block text-xs font-bold text-gray-600 mb-1">PORTAL ROLE</label>
           <div class="grid grid-cols-4 gap-1">
@@ -90,17 +102,19 @@
           </div>
         </div>
 
-        <div id="nameField" class="hidden"><input type="text" id="authName" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="Full Name"></div>
+        <div id="nameField" class="hidden">
+          <input type="text" id="authName" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="Full Name">
+        </div>
 
         <div id="phoneField" class="hidden">
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">MOBILE NUMBER (10 DIGITS ONLY)</label>
-          <input type="text" id="authPhone" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="9155118661">
+          <input type="text" id="authPhone" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="9155118661">
         </div>
 
         <div id="addressField" class="hidden space-y-3">
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-0.5">FOOD DELIVERY ADDRESS / HOSTEL ROOM</label>
-            <input type="text" id="authAddress" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="GEC Bokaro Hostel, Room 101">
+            <input type="text" id="authAddress" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="GEC Bokaro Hostel, Room 101">
           </div>
           <div>
             <div class="flex justify-between items-center mb-0.5">
@@ -110,7 +124,7 @@
               </button>
             </div>
             <div class="relative">
-              <input type="url" id="authMapUrl" class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition pr-28" placeholder="https://maps.google.com/?q=GEC+Bokaro">
+              <input type="url" id="authMapUrl" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition pr-28" placeholder="https://maps.google.com/?q=GEC+Bokaro">
               <button type="button" onclick="fetchCurrentLocation('authMapUrl', this)" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
                 <i class="fa-solid fa-location-arrow"></i> Auto-Pin
               </button>
@@ -120,7 +134,7 @@
 
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">EMAIL ADDRESS</label>
-          <input type="email" id="authEmail" required class="w-full border rounded-xl p-2.5 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="student@gecbokaro.ac.in">
+          <input type="email" id="authEmail" required class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="student@gecbokaro.ac.in">
         </div>
 
         <div>
@@ -129,56 +143,56 @@
             <button type="button" onclick="toggleForgotPasswordView()" class="text-[11px] text-orange-600 font-bold hover:underline">Forgot Password?</button>
           </div>
           <div class="relative">
-            <input type="password" id="authPassword" required class="w-full border rounded-xl p-2.5 pr-10 text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="••••••••">
+            <input type="password" id="authPassword" required class="w-full border rounded-xl p-3 md:p-2.5 pr-10 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="••••••••">
             <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeAuthIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
               <i id="eyeAuthIcon" class="fa-solid fa-eye"></i>
             </button>
           </div>
         </div>
 
-        <button type="submit" id="authBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition">Sign In</button>
+        <button type="submit" id="authBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 md:py-3 rounded-xl text-sm transition shadow-md">Sign In</button>
       </form>
 
-      <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)" class="hidden space-y-4">
-        <input type="email" id="forgotEmail" required placeholder="Registered Email" class="w-full border rounded-xl p-2.5 text-sm">
-        <input type="text" id="forgotPhone" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Registered 10-Digit Phone" class="w-full border rounded-xl p-2.5 text-sm">
+      <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)" class="hidden space-y-3.5">
+        <input type="email" id="forgotEmail" required placeholder="Registered Email" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm">
+        <input type="text" id="forgotPhone" required maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Registered 10-Digit Phone" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm">
         <div class="relative">
-          <input type="password" id="forgotNewPassword" required placeholder="New Password" class="w-full border rounded-xl p-2.5 pr-10 text-sm">
+          <input type="password" id="forgotNewPassword" required placeholder="New Password" class="w-full border rounded-xl p-3 md:p-2.5 pr-10 text-base md:text-sm">
           <button type="button" onclick="togglePasswordVisibility('forgotNewPassword', 'eyeForgotIcon')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none">
             <i id="eyeForgotIcon" class="fa-solid fa-eye"></i>
           </button>
         </div>
-        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl text-sm transition">Reset Password</button>
-        <button type="button" onclick="toggleForgotPasswordView()" class="w-full text-xs text-gray-500 pt-2 block text-center hover:underline">← Back to Sign In</button>
+        <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 md:py-3 rounded-xl text-sm transition shadow-md">Reset Password</button>
+        <button type="button" onclick="toggleForgotPasswordView()" class="w-full text-xs text-gray-500 pt-1 block text-center hover:underline">← Back to Sign In</button>
       </form>
     </div>
   </div>
 
-  <main class="max-w-7xl mx-auto px-4 pb-12 flex-1 w-full">
+  <main class="max-w-7xl mx-auto px-4 pb-24 md:pb-12 flex-1 w-full">
     <div id="dashboard" class="hidden space-y-6">
 
       <div id="view-student-profile" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center border-b pb-4">
             <div>
-              <h2 class="text-xl font-bold text-gray-900" id="profileNameDisplay">Student Profile</h2>
+              <h2 class="text-lg md:text-xl font-bold text-gray-900" id="profileNameDisplay">Student Profile</h2>
               <p class="text-xs text-gray-500" id="profileEmailDisplay">student@gecbokaro.ac.in</p>
             </div>
-            <span class="bg-orange-100 text-orange-800 font-bold text-xs px-3 py-1 rounded-full uppercase">Student Portal</span>
+            <span class="bg-orange-100 text-orange-800 font-bold text-[10px] md:text-xs px-3 py-1 rounded-full uppercase">Student Portal</span>
           </div>
 
           <div id="paymentReminderBanners" class="space-y-3"></div>
 
-          <form onsubmit="updateProfileInfo(event)" class="bg-gray-50 p-4 rounded-xl border space-y-4">
+          <form onsubmit="updateProfileInfo(event)" class="bg-gray-50 p-4 rounded-2xl border space-y-4">
             <h3 class="font-bold text-sm text-gray-900"><i class="fa-solid fa-location-dot text-orange-600"></i> Food Delivery Address & Google Maps Location</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-[10px] font-bold text-gray-500 mb-1">MOBILE NUMBER (10 DIGITS)</label>
-                <input type="text" id="profilePhoneInput" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-2 text-xs bg-white font-bold">
+                <input type="text" id="profilePhoneInput" maxlength="10" pattern="[0-9]{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border rounded-xl p-2.5 md:p-2 text-base md:text-xs bg-white font-bold">
               </div>
               <div>
                 <label class="block text-[10px] font-bold text-gray-500 mb-1">DELIVERY ADDRESS / HOSTEL ROOM NUMBER</label>
-                <input type="text" id="profileAddressInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold">
+                <input type="text" id="profileAddressInput" class="w-full border rounded-xl p-2.5 md:p-2 text-base md:text-xs bg-white font-bold">
               </div>
               <div class="md:col-span-2">
                 <div class="flex justify-between items-center mb-1">
@@ -188,32 +202,32 @@
                   </button>
                 </div>
                 <div class="relative">
-                  <input type="url" id="profileMapInput" class="w-full border rounded-xl p-2 text-xs bg-white font-bold pr-28" placeholder="https://maps.google.com/?q=...">
+                  <input type="url" id="profileMapInput" class="w-full border rounded-xl p-2.5 md:p-2 text-base md:text-xs bg-white font-bold pr-28" placeholder="https://maps.google.com/?q=...">
                   <button type="button" onclick="fetchCurrentLocation('profileMapInput', this)" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
                     <i class="fa-solid fa-location-arrow"></i> Auto-Pin
                   </button>
                 </div>
               </div>
             </div>
-            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition">Update Profile & Location</button>
+            <button type="submit" class="w-full md:w-auto bg-orange-600 hover:bg-orange-700 text-white font-bold px-5 py-3 md:py-2 rounded-xl text-xs transition shadow-sm">Update Profile & Location</button>
           </form>
         </div>
       </div>
 
       <div id="view-student-explore-mess" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
             <div>
-              <h2 class="text-xl font-bold text-gray-900">Explore Nearby Mess Providers</h2>
+              <h2 class="text-lg md:text-xl font-bold text-gray-900">Explore Nearby Mess Providers</h2>
               <p class="text-xs text-gray-500">Select a mess provider and configure your location-based plan</p>
             </div>
             
-            <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1">
+            <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar">
               <span class="text-xs font-bold text-gray-500 whitespace-nowrap"><i class="fa-solid fa-location-dot text-orange-600"></i> Location:</span>
-              <button onclick="filterMessLocation('All')" id="locBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition">All Locations</button>
-              <button onclick="filterMessLocation('Main Gate')" id="locBtn-MainGate" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition">GEC Main Gate</button>
-              <button onclick="filterMessLocation('Chandankiyari')" id="locBtn-Chandankiyari" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Chandankiyari</button>
-              <button onclick="filterMessLocation('Ghoragara')" id="locBtn-Ghoragara" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Ghoragara</button>
+              <button onclick="filterMessLocation('All')" id="locBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap">All Locations</button>
+              <button onclick="filterMessLocation('Main Gate')" id="locBtn-MainGate" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">GEC Main Gate</button>
+              <button onclick="filterMessLocation('Chandankiyari')" id="locBtn-Chandankiyari" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">Chandankiyari</button>
+              <button onclick="filterMessLocation('Ghoragara')" id="locBtn-Ghoragara" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">Ghoragara</button>
             </div>
           </div>
 
@@ -222,71 +236,71 @@
       </div>
 
       <div id="view-student-pgs" class="hidden space-y-6">
-        <div class="bg-white p-5 rounded-2xl border flex flex-col md:flex-row justify-between items-center gap-4 shadow-sm">
+        <div class="bg-white p-5 rounded-3xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
           <div>
-            <h2 class="text-xl font-bold">Explore Student PGs & Available Rooms</h2>
+            <h2 class="text-lg md:text-xl font-bold">Explore Student PGs & Available Rooms</h2>
             <p class="text-xs text-gray-500">Filter accommodations, view photo galleries, and review pricing before payment</p>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <button onclick="filterPGGender('All')" id="genderBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white">All PGs</button>
-            <button onclick="filterPGGender('Boys PG')" id="genderBtn-Boys" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700">👦 Boys PG Only</button>
-            <button onclick="filterPGGender('Girls PG')" id="genderBtn-Girls" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700">👧 Girls PG Only</button>
-            <input type="text" id="pgSearch" oninput="loadPGs()" placeholder="Search location..." class="border rounded-xl px-3 py-1.5 text-xs bg-gray-50">
+            <button onclick="filterPGGender('Boys PG')" id="genderBtn-Boys" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700">👦 Boys</button>
+            <button onclick="filterPGGender('Girls PG')" id="genderBtn-Girls" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700">👧 Girls</button>
+            <input type="text" id="pgSearch" oninput="loadPGs()" placeholder="Search..." class="border rounded-xl px-3 py-1.5 text-base md:text-xs bg-gray-50 flex-1 md:flex-none">
           </div>
         </div>
 
         <div id="pgList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 
-        <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-images text-orange-600"></i> Room Photos & Interior Previews</h3>
           <div id="studentRoomsPhotoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
       </div>
 
       <div id="view-student-mess" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
             <div>
-              <h2 class="text-xl font-bold">Weekly Mess Menu & Advance Date Opt-Out / Restoration</h2>
+              <h2 class="text-lg md:text-xl font-bold">Weekly Mess Menu & Advance Opt-Out</h2>
               <p class="text-xs text-gray-500">Select any specific date to cancel or restore future meals</p>
             </div>
-            <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1 rounded-xl border border-red-200 hover:bg-red-100 transition">Unsubscribe Mess</button>
+            <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1.5 rounded-xl border border-red-200 hover:bg-red-100 transition">Unsubscribe Mess</button>
           </div>
 
           <div class="bg-orange-50/70 p-4 rounded-2xl border border-orange-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
               <i class="fa-solid fa-calendar-day text-orange-600 text-xl"></i>
               <div>
                 <span class="block text-xs font-bold text-gray-900">SELECT MEAL CANCELLATION DATE</span>
                 <span class="text-[10px] text-gray-500">Pick present or future date for opt-out/restoration</span>
               </div>
             </div>
-            <input type="date" id="mealCancelDatePicker" class="border border-orange-300 rounded-xl px-4 py-2 text-xs font-bold bg-white text-gray-800 focus:ring-2 focus:ring-orange-500 outline-none cursor-pointer">
+            <input type="date" id="mealCancelDatePicker" class="w-full sm:w-auto border border-orange-300 rounded-xl px-4 py-2 text-base md:text-xs font-bold bg-white text-gray-800 focus:ring-2 focus:ring-orange-500 outline-none cursor-pointer">
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-orange-50/30 p-4 rounded-2xl border border-orange-100">
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
+            <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Breakfast (₹30 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 07:00 AM</span>
-              <div class="flex gap-1">
-                <button onclick="cancelMeal('Breakfast', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
-                <button onclick="uncancelMeal('Breakfast', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
+              <div class="flex gap-2">
+                <button onclick="cancelMeal('Breakfast', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Breakfast', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Un-cancel</button>
               </div>
             </div>
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
+            <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Lunch (₹50 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 10:00 AM</span>
-              <div class="flex gap-1">
-                <button onclick="cancelMeal('Lunch', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
-                <button onclick="uncancelMeal('Lunch', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
+              <div class="flex gap-2">
+                <button onclick="cancelMeal('Lunch', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Lunch', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Un-cancel</button>
               </div>
             </div>
-            <div class="p-3 bg-white rounded-xl border text-center space-y-2 hover:shadow-md transition">
+            <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
               <span class="block text-xs font-bold">Dinner (₹50 Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 06:00 PM</span>
-              <div class="flex gap-1">
-                <button onclick="cancelMeal('Dinner', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Cancel</button>
-                <button onclick="uncancelMeal('Dinner', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-1.5 rounded-lg text-xs transition-all">Un-cancel</button>
+              <div class="flex gap-2">
+                <button onclick="cancelMeal('Dinner', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
+                <button onclick="uncancelMeal('Dinner', this)" class="flex-1 bg-green-600 hover:bg-green-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Un-cancel</button>
               </div>
             </div>
           </div>
@@ -295,160 +309,160 @@
       </div>
 
       <div id="view-student-calendar" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <h2 class="text-xl font-bold">30-Day Attendance & Refund Ledger</h2>
-          <div id="ledgerSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <h2 class="text-lg md:text-xl font-bold">30-Day Attendance & Refund Ledger</h2>
+          <div id="ledgerSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
           <div id="calendarGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"></div>
         </div>
       </div>
 
       <div id="view-student-bookings" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border shadow-sm">
-          <h2 class="text-xl font-bold mb-4">My Bookings</h2>
+        <div class="bg-white p-5 md:p-6 rounded-3xl border shadow-sm">
+          <h2 class="text-lg md:text-xl font-bold mb-4">My Bookings</h2>
           <div id="bookingsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
       </div>
 
       <div id="view-mess-prep" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <div class="flex justify-between items-center flex-wrap gap-2">
-            <h2 class="text-xl font-bold text-gray-900">Today's Kitchen Counter & Food Delivery Dispatch</h2>
-            <div class="flex items-center gap-2">
-              <button onclick="openAddMessModal()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <div class="flex justify-between items-center flex-wrap gap-3">
+            <h2 class="text-lg md:text-xl font-bold text-gray-900">Today's Kitchen Counter & Food Delivery Dispatch</h2>
+            <div class="flex items-center gap-2 w-full md:w-auto">
+              <button onclick="openAddMessModal()" class="flex-1 md:flex-none bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow">
                 + List New Mess
               </button>
-              <button onclick="openEditMessPriceModal()" class="bg-gray-800 hover:bg-black text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
-                ⚙️ Location Rates Editor
+              <button onclick="openEditMessPriceModal()" class="flex-1 md:flex-none bg-gray-800 hover:bg-black text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow">
+                ⚙️ Rates Editor
               </button>
-              <span class="text-xs bg-orange-100 text-orange-800 font-bold px-3 py-1 rounded-full" id="messPrepDateTag">Today</span>
             </div>
           </div>
-          <div id="messPrepStats" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+          <div id="messPrepStats" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
           <div>
             <h3 class="font-bold text-sm text-gray-900 mb-3"><i class="fa-solid fa-receipt text-orange-600"></i> Meals Cancelled Today</h3>
-            <div id="cancelledMealsTable" class="overflow-x-auto"></div>
+            <div id="cancelledMealsTable" class="overflow-x-auto no-scrollbar"></div>
           </div>
         </div>
       </div>
 
       <div id="view-mess-subscribers-ledger" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
             <div>
-              <h2 class="text-xl font-bold text-gray-900">Subscribers & Food Delivery Directory</h2>
+              <h2 class="text-lg md:text-xl font-bold text-gray-900">Subscribers & Delivery Directory</h2>
               <p class="text-xs text-gray-500">Student delivery addresses and Google Maps directions</p>
             </div>
-            <input type="month" id="messOwnerMonthPicker" value="2026-09" onchange="loadOwnerMonthlyBilling()" class="border rounded-xl px-3 py-1.5 text-xs bg-gray-50 font-bold">
+            <input type="month" id="messOwnerMonthPicker" value="2026-09" onchange="loadOwnerMonthlyBilling()" class="border rounded-xl px-3 py-2 text-base md:text-xs bg-gray-50 font-bold">
           </div>
-          <div id="messSubscribersTable" class="overflow-x-auto"></div>
+          <div id="messSubscribersTable" class="overflow-x-auto no-scrollbar"></div>
         </div>
       </div>
 
       <div id="view-mess-menu-manager" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900">Publish 7-Day Weekly Menu</h2>
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <h2 class="text-lg md:text-xl font-bold text-gray-900">Publish 7-Day Weekly Menu</h2>
           <div id="weeklyMenuEditorGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
       </div>
 
       <div id="view-owner-rooms" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
             <div>
-              <h2 class="text-xl font-bold">Room Directory & Photo Management</h2>
-              <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & optimized to WebP)</p>
+              <h2 class="text-lg md:text-xl font-bold">Room Directory & Photo Management</h2>
+              <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & WebP optimized)</p>
             </div>
-            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
+            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
           </div>
           <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
           <div class="pt-4 border-t">
             <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
-            <div id="ownerVacateRequestsTable" class="overflow-x-auto"></div>
+            <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
           </div>
         </div>
       </div>
 
       <div id="view-admin-overview" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <h2 class="text-xl font-bold">Admin Analytics</h2>
-          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <h2 class="text-lg md:text-xl font-bold">Admin Analytics</h2>
+          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-2">
             <div>
-              <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-paper-plane text-orange-600"></i> Email Service Diagnostics & Live Testing</h3>
-              <p class="text-xs text-gray-500">Monitor multi-provider dispatch status (Brevo / SMTP) and send live test emails</p>
+              <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-paper-plane text-orange-600"></i> Email Service Diagnostics</h3>
+              <p class="text-xs text-gray-500">Monitor multi-provider dispatch status (Brevo / SMTP)</p>
             </div>
             <div class="flex gap-2" id="emailProviderBadges"></div>
           </div>
 
-          <div class="bg-gray-50 p-4 rounded-xl border flex flex-col md:flex-row gap-3 items-center">
-            <input type="email" id="adminTestEmailInput" placeholder="Recipient Email (e.g., student@gecbokaro.ac.in)" class="w-full md:flex-1 border rounded-xl p-2.5 text-xs bg-white font-semibold outline-none focus:ring-2 focus:ring-orange-500">
-            <button onclick="sendAdminTestEmail()" class="w-full md:w-auto bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-paper-plane"></i> Send Live Test Email
+          <div class="bg-gray-50 p-4 rounded-2xl border flex flex-col md:flex-row gap-3 items-center">
+            <input type="email" id="adminTestEmailInput" placeholder="Recipient Email (e.g., student@gecbokaro.ac.in)" class="w-full md:flex-1 border rounded-xl p-3 md:p-2.5 text-base md:text-xs bg-white font-semibold outline-none focus:ring-2 focus:ring-orange-500">
+            <button onclick="sendAdminTestEmail()" class="w-full md:w-auto bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-5 py-3 md:py-2.5 rounded-xl transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Send Test Email
             </button>
           </div>
 
           <div>
             <h4 class="font-bold text-xs text-gray-700 uppercase tracking-wider mb-2">Recent Email Audit Logs</h4>
-            <div id="adminEmailLogsTable" class="overflow-x-auto"></div>
+            <div id="adminEmailLogsTable" class="overflow-x-auto no-scrollbar"></div>
           </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <h3 class="font-bold text-base mb-3">Pending Vacate Requests</h3>
-          <div id="adminVacateRequestsTable" class="overflow-x-auto"></div>
+          <div id="adminVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl border space-y-4 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <h3 class="font-bold text-base mb-3">Registered User Directory</h3>
-          <div id="adminUsersTable" class="overflow-x-auto"></div>
+          <div id="adminUsersTable" class="overflow-x-auto no-scrollbar"></div>
         </div>
       </div>
 
       <div id="view-notifications-inbox" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
-          <h2 class="text-xl font-bold text-gray-900">Owner Notifications & Automated Email Alerts</h2>
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <h2 class="text-lg md:text-xl font-bold text-gray-900">Notifications & Automated Email Alerts</h2>
           <div id="notificationsList" class="space-y-3"></div>
         </div>
       </div>
 
       <div id="view-complaints" class="hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border space-y-6 shadow-sm">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
             <div>
-              <h2 class="text-xl font-bold" id="complaintsTitle">Complaints Inbox</h2>
-              <p class="text-xs text-gray-500" id="complaintsSubtitle">Role-filtered complaint resolution center with email feedback</p>
+              <h2 class="text-lg md:text-xl font-bold" id="complaintsTitle">Complaints Inbox</h2>
+              <p class="text-xs text-gray-500" id="complaintsSubtitle">Role-filtered complaint resolution center</p>
             </div>
-            <button onclick="openComplaintModal()" class="bg-orange-600 text-white font-bold text-xs px-3 py-2 rounded-xl hover:bg-orange-700 transition">+ Raise Complaint</button>
+            <button onclick="openComplaintModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl hover:bg-orange-700 transition">+ Raise Complaint</button>
           </div>
-          <div id="complaintsTable" class="overflow-x-auto"></div>
+          <div id="complaintsTable" class="overflow-x-auto no-scrollbar"></div>
         </div>
       </div>
 
     </div>
   </main>
 
-  <!-- Add Mess Modal -->
-  <div id="addMessModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
+  <!-- ADD MESS MODAL (SLIDE-UP SHEET ON MOBILE) -->
+  <div id="addMessModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-lg font-bold text-gray-900">List New Mess Service</h3>
-        <button onclick="closeAddMessModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
+        <button onclick="closeAddMessModal()" class="text-gray-400 font-bold text-2xl px-2">&times;</button>
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">MESS NAME</label>
-        <input type="text" id="addMessName" placeholder="e.g. Shuddha Shakahari Mess" class="w-full border rounded-xl p-2.5 text-xs font-semibold">
+        <input type="text" id="addMessName" placeholder="e.g. Shuddha Shakahari Mess" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">MONTHLY BASE RENT (₹)</label>
-          <input type="number" id="addMessPrice" placeholder="3000" class="w-full border rounded-xl p-2.5 text-xs font-semibold">
+          <input type="number" id="addMessPrice" placeholder="3000" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
         </div>
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-0.5">DIET TYPE</label>
-          <select id="addMessDiet" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-white">
+          <select id="addMessDiet" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-bold bg-white">
             <option value="Veg & Non-Veg">Veg & Non-Veg</option>
             <option value="Pure Veg">Pure Veg</option>
           </select>
@@ -456,42 +470,43 @@
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">MEALS PER DAY</label>
-        <input type="text" id="addMessMeals" placeholder="Flexible Plan Options" value="Flexible Plan Options" class="w-full border rounded-xl p-2.5 text-xs font-semibold">
+        <input type="text" id="addMessMeals" placeholder="Flexible Plan Options" value="Flexible Plan Options" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">ADDRESS / LOCATION</label>
-        <input type="text" id="addMessAddress" placeholder="📍 Near GEC Bokaro Main Gate" class="w-full border rounded-xl p-2.5 text-xs font-semibold">
+        <input type="text" id="addMessAddress" placeholder="📍 Near GEC Bokaro Main Gate" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">GOOGLE MAPS LINK</label>
-        <input type="url" id="addMessMapUrl" placeholder="https://maps.google.com/..." class="w-full border rounded-xl p-2.5 text-xs font-semibold">
+        <input type="url" id="addMessMapUrl" placeholder="https://maps.google.com/..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">DESCRIPTION</label>
-        <textarea id="addMessDesc" placeholder="Freshly prepared hygienic meals tailored for engineering students..." class="w-full border rounded-xl p-2.5 text-xs font-semibold"></textarea>
+        <textarea id="addMessDesc" placeholder="Freshly prepared hygienic meals tailored for engineering students..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold"></textarea>
       </div>
       
       <div class="flex gap-2 pt-2">
-        <button onclick="closeAddMessModal()" class="flex-1 py-2.5 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
-        <button onclick="submitAddMess()" class="flex-1 py-2.5 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Publish Listing</button>
+        <button onclick="closeAddMessModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
+        <button onclick="submitAddMess()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Publish Listing</button>
       </div>
     </div>
   </div>
 
-  <!-- Edit Mess Location Price Modal -->
-  <div id="editMessModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl space-y-4">
+  <!-- EDIT MESS LOCATION PRICE MODAL -->
+  <div id="editMessModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-center border-b pb-2">
         <h3 class="text-lg font-bold text-gray-900">Update Dynamic Location Pricing</h3>
-        <button onclick="closeEditMessPriceModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
+        <button onclick="closeEditMessPriceModal()" class="text-gray-400 font-bold text-2xl px-2">&times;</button>
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT MESS PROVIDER</label>
-        <select id="editMessSelect" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-white"></select>
+        <select id="editMessSelect" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white"></select>
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT DELIVERY LOCATION</label>
-        <select id="editMessLocationSelect" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-white">
+        <select id="editMessLocationSelect" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white">
           <option value="GEC Main Gate">GEC Main Gate</option>
           <option value="Chandankiyari">Chandankiyari</option>
           <option value="Ghoragara">Ghoragara</option>
@@ -500,22 +515,24 @@
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">3-TIME DAILY RATE (₹)</label>
-          <input type="number" id="edit3TimeRateInput" placeholder="100" class="w-full border rounded-xl p-2.5 text-xs font-bold">
+          <input type="number" id="edit3TimeRateInput" placeholder="100" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold">
         </div>
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">2-TIME DAILY RATE (₹)</label>
-          <input type="number" id="edit2TimeRateInput" placeholder="80" class="w-full border rounded-xl p-2.5 text-xs font-bold">
+          <input type="number" id="edit2TimeRateInput" placeholder="80" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold">
         </div>
       </div>
       <div class="flex gap-2 pt-2">
-        <button onclick="closeEditMessPriceModal()" class="flex-1 py-2.5 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
-        <button onclick="submitMessPriceUpdate()" class="flex-1 py-2.5 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Save Location Rates</button>
+        <button onclick="closeEditMessPriceModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
+        <button onclick="submitMessPriceUpdate()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Save Location Rates</button>
       </div>
     </div>
   </div>
 
-  <div id="messPlanSelectModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
+  <!-- MESS PLAN SELECT MODAL -->
+  <div id="messPlanSelectModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <h3 class="text-lg font-black text-gray-900" id="modalMessTitle">Configure Subscription</h3>
@@ -596,8 +613,10 @@
     </div>
   </div>
 
-  <div id="paymentSlideModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
+  <!-- PAYMENT CHECKOUT MODAL -->
+  <div id="paymentSlideModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <h3 class="text-lg font-black text-gray-900" id="paymentSlideTitle">Service Checkout Review</h3>
@@ -620,12 +639,12 @@
       <div class="space-y-3">
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1" id="paymentDateLabel">EFFECTIVE / MOVE-IN DATE</label>
-          <input type="date" id="paymentSlideDate" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-gray-50">
+          <input type="date" id="paymentSlideDate" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-gray-50">
         </div>
 
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">SPECIAL REQUESTS / NOTES</label>
-          <textarea id="paymentSlideRequests" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50" placeholder="Ground floor room request, specific delivery timing..."></textarea>
+          <textarea id="paymentSlideRequests" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs bg-gray-50" placeholder="Ground floor room request, specific delivery timing..."></textarea>
         </div>
 
         <div class="bg-gray-50 border p-3 rounded-xl flex items-center justify-between text-xs">
@@ -641,12 +660,14 @@
     </div>
   </div>
 
-  <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[92vh] overflow-y-auto space-y-5 relative">
+  <!-- PG DETAIL MODAL -->
+  <div id="pgDetailModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-2xl w-full shadow-2xl max-h-[90vh] overflow-y-auto space-y-4 relative">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <div class="flex items-center gap-2">
-            <h3 class="text-xl font-black text-gray-900" id="detailPgName">Hostel Details</h3>
+            <h3 class="text-lg md:text-xl font-black text-gray-900" id="detailPgName">Hostel Details</h3>
             <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-0.5 rounded-full" id="detailPgRating">⭐ 4.9</span>
           </div>
           <p class="text-xs text-gray-500 mt-0.5" id="detailPgAddress">📍 Location Address</p>
@@ -655,11 +676,11 @@
       </div>
 
       <div class="space-y-3">
-        <div class="relative w-full h-64 md:h-80 bg-gray-900 rounded-2xl overflow-hidden border shadow-inner flex items-center justify-center">
+        <div class="relative w-full h-56 md:h-80 bg-gray-900 rounded-2xl overflow-hidden border shadow-inner flex items-center justify-center">
           <img id="detailHeroImage" src="" class="w-full h-full object-cover transition-all duration-300">
           <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full" id="detailPhotoBadge">1 / 5 Photos</span>
         </div>
-        <div id="detailThumbnailRow" class="flex gap-2.5 overflow-x-auto pb-1"></div>
+        <div id="detailThumbnailRow" class="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar"></div>
       </div>
 
       <div class="flex flex-wrap items-center gap-2" id="detailBadgesRow"></div>
@@ -675,10 +696,10 @@
           <span class="text-xs text-gray-400 font-bold"> / month</span>
         </div>
         <div class="flex gap-2">
-          <a id="detailMapBtn" href="#" target="_blank" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs px-4 py-3 rounded-2xl border border-blue-200 transition flex items-center gap-1.5">
+          <a id="detailMapBtn" href="#" target="_blank" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs px-3.5 py-3 rounded-2xl border border-blue-200 transition flex items-center gap-1.5">
             <i class="fa-solid fa-map-location-dot"></i> Directions
           </a>
-          <button id="detailBookBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-black text-xs px-6 py-3 rounded-2xl transition shadow-lg shadow-orange-600/30">
+          <button id="detailBookBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-black text-xs px-5 py-3 rounded-2xl transition shadow-lg shadow-orange-600/30">
             Book Room Now
           </button>
         </div>
@@ -686,14 +707,16 @@
     </div>
   </div>
 
-  <div id="roomPhotoModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4">
+  <!-- ROOM PHOTO MODAL -->
+  <div id="roomPhotoModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-center border-b pb-3">
         <div>
           <h3 class="text-lg font-bold text-gray-900" id="photoModalTitle">Manage Room Photos</h3>
-          <p class="text-xs text-gray-500">Max 5 pictures per room • Auto WebP Compression</p>
+          <p class="text-xs text-gray-500">Max 5 pictures per room • WebP Compression</p>
         </div>
-        <button onclick="closeRoomPhotoModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
+        <button onclick="closeRoomPhotoModal()" class="text-gray-400 font-bold text-2xl px-2">&times;</button>
       </div>
 
       <div>
@@ -707,52 +730,58 @@
       </div>
 
       <div class="flex gap-2 pt-3 border-t">
-        <button onclick="closeRoomPhotoModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="saveRoomPhotos()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition">Save & Optimize Photos</button>
+        <button onclick="closeRoomPhotoModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+        <button onclick="saveRoomPhotos()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition">Save & Optimize Photos</button>
       </div>
     </div>
   </div>
 
-  <div id="inspectCalendarModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+  <!-- INSPECT CALENDAR MODAL -->
+  <div id="inspectCalendarModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-4xl w-full shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <h3 class="text-lg font-bold text-gray-900" id="inspectStudentTitle">Subscriber Attendance Ledger</h3>
           <p class="text-xs text-gray-500" id="inspectStudentSubtitle">30-Day Detailed Meal Opt-Out Breakdown</p>
         </div>
-        <button onclick="closeInspectCalendarModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
+        <button onclick="closeInspectCalendarModal()" class="text-gray-400 font-bold text-2xl px-2">&times;</button>
       </div>
       <div id="inspectLedgerSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
       <div id="inspectCalendarGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5"></div>
-      <button onclick="closeInspectCalendarModal()" class="w-full bg-gray-900 text-white font-bold py-2.5 rounded-xl text-xs">Close Inspector</button>
+      <button onclick="closeInspectCalendarModal()" class="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-xs">Close Inspector</button>
     </div>
   </div>
 
-  <div id="complaintModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-      <h3 class="text-lg font-bold mb-3">Raise Complaint</h3>
-      <select id="compCategory" class="w-full border rounded-xl p-2 text-sm mb-3 font-bold">
+  <!-- COMPLAINT MODAL -->
+  <div id="complaintModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
+      <h3 class="text-lg font-bold">Raise Complaint</h3>
+      <select id="compCategory" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm font-bold bg-white">
         <option value="PG Maintenance">PG Maintenance (Sent to PG Owner)</option>
         <option value="Mess Quality">Mess Quality (Sent to Mess Owner)</option>
       </select>
-      <input type="text" id="compTitle" placeholder="Title" class="w-full border rounded-xl p-2 text-sm mb-3">
-      <textarea id="compDesc" placeholder="Description..." class="w-full border rounded-xl p-2 text-sm mb-4"></textarea>
-      <div class="flex gap-2">
-        <button onclick="closeComplaintModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="submitComplaint()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl">Submit</button>
+      <input type="text" id="compTitle" placeholder="Title" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <textarea id="compDesc" placeholder="Description..." class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm"></textarea>
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeComplaintModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+        <button onclick="submitComplaint()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Submit</button>
       </div>
     </div>
   </div>
 
-  <div id="addRoomModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl">
-      <h3 class="text-lg font-bold mb-3">Add Room</h3>
-      <input type="text" id="addRoomNum" placeholder="Room Number" class="w-full border rounded-xl p-2 text-sm mb-3">
-      <input type="text" id="addRoomType" placeholder="Type" class="w-full border rounded-xl p-2 text-sm mb-3">
-      <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-2 text-sm mb-4">
-      <div class="flex gap-2">
-        <button onclick="closeAddRoomModal()" class="flex-1 py-2 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="submitAddRoom()" class="flex-1 py-2 text-xs font-bold bg-orange-600 text-white rounded-xl">Add Room</button>
+  <!-- ADD ROOM MODAL -->
+  <div id="addRoomModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
+      <h3 class="text-lg font-bold">Add Room</h3>
+      <input type="text" id="addRoomNum" placeholder="Room Number" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <input type="text" id="addRoomType" placeholder="Type" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeAddRoomModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+        <button onclick="submitAddRoom()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Add Room</button>
       </div>
     </div>
   </div>
@@ -770,7 +799,7 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    let messPricingRules = []; // Dynamic rates per mess and per location
+    let messPricingRules = []; 
     let currentFetchedMesses = [];
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
@@ -947,8 +976,8 @@
         const btn = document.getElementById(`locBtn-${locMap[key]}`);
         if (btn) {
           btn.className = (location === key) 
-            ? "px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition"
-            : "px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition";
+            ? "px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap"
+            : "px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap";
         }
       });
 
@@ -972,7 +1001,7 @@
       }
 
       listContainer.innerHTML = filteredMesses.map(m => `
-        <div class="bg-white rounded-2xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
+        <div class="bg-white rounded-3xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
           <div>
             <div class="flex justify-between items-start mb-2">
               <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
@@ -1254,7 +1283,7 @@
       if (!container) return;
 
       const toast = document.createElement('div');
-      toast.className = `pointer-events-auto flex items-center justify-between gap-3 min-w-[280px] max-w-md px-4 py-3 rounded-xl shadow-xl text-xs font-bold text-white toast-enter ${
+      toast.className = `pointer-events-auto flex items-center justify-between gap-3 min-w-[280px] max-w-md px-4 py-3 rounded-2xl shadow-xl text-xs font-bold text-white toast-enter ${
         type === 'success' ? 'bg-emerald-600' :
         type === 'error'   ? 'bg-red-600' :
         type === 'warning' ? 'bg-amber-600' : 'bg-blue-600'
@@ -1327,6 +1356,7 @@
       document.getElementById("authSection").classList.remove("hidden");
       document.getElementById("dashboard").classList.add("hidden");
       document.getElementById("mainNav").classList.add("hidden");
+      document.getElementById("mobileNav").classList.add("hidden");
     }
 
     function scrollToAuth(mode = 'login') {
@@ -1418,12 +1448,13 @@
       document.getElementById("authSection").classList.add("hidden");
       document.getElementById("dashboard").classList.remove("hidden");
       document.getElementById("mainNav").classList.remove("hidden");
+      document.getElementById("mobileNav").classList.remove("hidden");
 
       document.getElementById("userHeaderBox").innerHTML = `
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 md:gap-3">
           <div class="text-right">
             <span class="block text-xs font-bold text-gray-900">${user.full_name}</span>
-            <span class="text-[10px] text-orange-600 font-bold uppercase">${user.role} Portal</span>
+            <span class="text-[10px] text-orange-600 font-bold uppercase">${user.role.replace('_', ' ')}</span>
           </div>
           <button onclick="logout()" class="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-xl font-bold text-gray-700 transition">Logout</button>
         </div>
@@ -1434,45 +1465,55 @@
 
     function renderRoleNav(role) {
       const nav = document.getElementById("navContainer");
+      const mobileNav = document.getElementById("mobileNavContainer");
       let tabs = [];
 
       if (role === 'student') {
         tabs = [
-          { key: 'student-profile', label: '👤 Profile & Expiry Banners', icon: 'fa-user' },
-          { key: 'student-explore-mess', label: '🍲 Explore Mess', icon: 'fa-utensils' },
-          { key: 'student-pgs', label: '🏠 Explore PGs & Photos', icon: 'fa-house' },
-          { key: 'student-mess', label: '🍱 Weekly Menu & Date Opt-Out', icon: 'fa-calendar-check' },
-          { key: 'student-calendar', label: '📅 30-Day Attendance', icon: 'fa-calendar-days' },
-          { key: 'student-bookings', label: '🔖 Bookings & Vacate', icon: 'fa-bookmark' },
-          { key: 'complaints', label: '⚠️ Raise Complaint', icon: 'fa-triangle-exclamation' }
+          { key: 'student-profile', label: 'Profile', fullLabel: '👤 Profile & Expiry Banners', icon: 'fa-user' },
+          { key: 'student-explore-mess', label: 'Mess', fullLabel: '🍲 Explore Mess', icon: 'fa-utensils' },
+          { key: 'student-pgs', label: 'PGs', fullLabel: '🏠 Explore PGs & Photos', icon: 'fa-house' },
+          { key: 'student-mess', label: 'Opt-Out', fullLabel: '🍱 Weekly Menu & Opt-Out', icon: 'fa-calendar-check' },
+          { key: 'student-calendar', label: 'Calendar', fullLabel: '📅 30-Day Attendance', icon: 'fa-calendar-days' },
+          { key: 'student-bookings', label: 'Bookings', fullLabel: '🔖 Bookings & Vacate', icon: 'fa-bookmark' },
+          { key: 'complaints', label: 'Alerts', fullLabel: '⚠️ Raise Complaint', icon: 'fa-triangle-exclamation' }
         ];
       } else if (role === 'mess_partner') {
         tabs = [
-          { key: 'mess-prep', label: '🍳 Kitchen & Food Dispatch', icon: 'fa-kitchen-set' },
-          { key: 'mess-subscribers-ledger', label: '📊 Subscribers & Delivery Address', icon: 'fa-file-invoice-dollar' },
-          { key: 'notifications-inbox', label: '🔔 Messages & Cancellation Alerts', icon: 'fa-bell' },
-          { key: 'mess-menu-manager', label: '📝 Edit 7-Day Menu', icon: 'fa-pen-to-square' },
-          { key: 'complaints', label: '⚠️ Mess Complaints', icon: 'fa-triangle-exclamation' }
+          { key: 'mess-prep', label: 'Kitchen', fullLabel: '🍳 Kitchen & Food Dispatch', icon: 'fa-kitchen-set' },
+          { key: 'mess-subscribers-ledger', label: 'Subscribers', fullLabel: '📊 Subscribers & Delivery Address', icon: 'fa-file-invoice-dollar' },
+          { key: 'notifications-inbox', label: 'Alerts', fullLabel: '🔔 Messages & Cancellation Alerts', icon: 'fa-bell' },
+          { key: 'mess-menu-manager', label: 'Menu', fullLabel: '📝 Edit 7-Day Menu', icon: 'fa-pen-to-square' },
+          { key: 'complaints', label: 'Complaints', fullLabel: '⚠️ Mess Complaints', icon: 'fa-triangle-exclamation' }
         ];
       } else if (role === 'pg_owner') {
         tabs = [
-          { key: 'owner-rooms', label: '🏢 Rooms & Photo Manager', icon: 'fa-building' },
-          { key: 'notifications-inbox', label: '🔔 Booking & Vacate Alerts', icon: 'fa-bell' },
-          { key: 'complaints', label: '⚠️ PG Repairs Inbox', icon: 'fa-wrench' }
+          { key: 'owner-rooms', label: 'Rooms', fullLabel: '🏢 Rooms & Photo Manager', icon: 'fa-building' },
+          { key: 'notifications-inbox', label: 'Alerts', fullLabel: '🔔 Booking & Vacate Alerts', icon: 'fa-bell' },
+          { key: 'complaints', label: 'Repairs', fullLabel: '⚠️ PG Repairs Inbox', icon: 'fa-wrench' }
         ];
       } else if (role === 'admin') {
         tabs = [
-          { key: 'admin-overview', label: '📊 Metrics & User Management', icon: 'fa-chart-line' },
-          { key: 'notifications-inbox', label: '🔔 System Logs', icon: 'fa-bell' },
-          { key: 'complaints', label: '⚠️ All Complaints', icon: 'fa-triangle-exclamation' }
+          { key: 'admin-overview', label: 'Metrics', fullLabel: '📊 Metrics & User Management', icon: 'fa-chart-line' },
+          { key: 'notifications-inbox', label: 'Logs', fullLabel: '🔔 System Logs', icon: 'fa-bell' },
+          { key: 'complaints', label: 'Complaints', fullLabel: '⚠️ All Complaints', icon: 'fa-triangle-exclamation' }
         ];
       }
 
       nav.innerHTML = tabs.map((t, idx) => `
         <button onclick="switchNavTab('${t.key}')" id="navBtn-${t.key}" class="px-4 py-2.5 ${idx === 0 ? 'bg-orange-600 text-white' : 'hover:bg-gray-800 text-gray-300'} font-bold flex items-center gap-1.5 whitespace-nowrap rounded-lg transition">
-          <i class="fa-solid ${t.icon}"></i> ${t.label}
+          <i class="fa-solid ${t.icon}"></i> ${t.fullLabel}
         </button>
       `).join('');
+
+      if (mobileNav) {
+        mobileNav.innerHTML = tabs.map((t, idx) => `
+          <button onclick="switchNavTab('${t.key}')" id="mobileNavBtn-${t.key}" class="flex flex-col items-center justify-center flex-1 min-w-[55px] py-1 ${idx === 0 ? 'text-orange-500' : 'text-gray-400 hover:text-white'} transition">
+            <i class="fa-solid ${t.icon} text-base mb-0.5"></i>
+            <span class="text-[9px] font-bold tracking-tighter truncate max-w-[65px]">${t.label}</span>
+          </button>
+        `).join('');
+      }
 
       switchNavTab(tabs[0].key);
     }
@@ -1491,6 +1532,10 @@
       document.querySelectorAll("#navContainer button").forEach(btn => btn.className = "px-4 py-2.5 hover:bg-gray-800 text-gray-300 font-bold flex items-center gap-1.5 whitespace-nowrap rounded-lg transition");
       const activeBtn = document.getElementById(`navBtn-${viewKey}`);
       if (activeBtn) activeBtn.className = "px-4 py-2.5 bg-orange-600 text-white font-bold flex items-center gap-1.5 whitespace-nowrap rounded-lg transition";
+
+      document.querySelectorAll("#mobileNavContainer button").forEach(btn => btn.className = "flex flex-col items-center justify-center flex-1 min-w-[55px] py-1 text-gray-400 hover:text-white transition");
+      const activeMobileBtn = document.getElementById(`mobileNavBtn-${viewKey}`);
+      if (activeMobileBtn) activeMobileBtn.className = "flex flex-col items-center justify-center flex-1 min-w-[55px] py-1 text-orange-500 font-bold transition scale-105";
 
       if (viewKey === 'student-profile') loadStudentProfile();
       if (viewKey === 'student-explore-mess') loadExploreMess();
@@ -1726,7 +1771,7 @@
       const res = await fetch(`${API_BASE}/mess/weekly-menu`);
       const menu = await res.json();
       document.getElementById("weeklyMenuStudentCards").innerHTML = menu.map(m => `
-        <div class="bg-gray-50 p-4 rounded-xl border text-xs space-y-2">
+        <div class="bg-gray-50 p-4 rounded-2xl border text-xs space-y-2">
           <span class="block font-black text-orange-600 uppercase border-b pb-1">${m.day_name}</span>
           <div><strong class="text-gray-700">Breakfast:</strong> ${m.breakfast}</div>
           <div><strong class="text-gray-700">Lunch:</strong> ${m.lunch}</div>
@@ -1787,7 +1832,6 @@
       });
       const data = await res.json();
 
-      document.getElementById("messPrepDateTag").innerText = `Date: ${data.date}`;
       document.getElementById("messPrepStats").innerHTML = `
         <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">ENROLLED</span><strong class="text-lg">${data.total_enrolled}</strong></div>
         <div class="bg-amber-50 p-3 rounded-xl border border-amber-200"><span class="block text-[10px] text-amber-700 font-bold">BREAKFAST CANCELS</span><strong class="text-lg text-amber-700">${data.breakfast_cancels}</strong></div>
@@ -1825,12 +1869,12 @@
           <thead class="bg-gray-100 uppercase">
             <tr>
               <th class="p-2.5">Subscriber</th>
-              <th class="p-2.5">10-Digit Phone</th>
-              <th class="p-2.5">Food Delivery Address & Map Link</th>
+              <th class="p-2.5">Phone</th>
+              <th class="p-2.5">Address & Map</th>
               <th class="p-2.5">Plan & Diet</th>
-              <th class="p-2.5">Cancellations</th>
+              <th class="p-2.5">Cancels</th>
               <th class="p-2.5">Net Bill</th>
-              <th class="p-2.5">Audit Action</th>
+              <th class="p-2.5">Action</th>
             </tr>
           </thead>
           <tbody>${data.subscribers.map(s => `
@@ -1895,10 +1939,10 @@
       document.getElementById("weeklyMenuEditorGrid").innerHTML = menu.map(m => `
         <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
           <h4 class="font-bold text-orange-600 border-b pb-1 text-sm">${m.day_name} Menu</h4>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">BREAKFAST</label><input type="text" id="bf-${m.day_name}" value="${m.breakfast}" class="w-full border rounded-lg p-2 text-xs"></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">LUNCH</label><input type="text" id="lu-${m.day_name}" value="${m.lunch}" class="w-full border rounded-lg p-2 text-xs"></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">DINNER</label><input type="text" id="dn-${m.day_name}" value="${m.dinner}" class="w-full border rounded-lg p-2 text-xs"></div>
-          <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-1.5 rounded-lg text-xs transition">Save ${m.day_name}</button>
+          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">BREAKFAST</label><input type="text" id="bf-${m.day_name}" value="${m.breakfast}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
+          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">LUNCH</label><input type="text" id="lu-${m.day_name}" value="${m.lunch}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
+          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">DINNER</label><input type="text" id="dn-${m.day_name}" value="${m.dinner}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
+          <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2 rounded-lg text-xs transition">Save ${m.day_name}</button>
         </div>
       `).join('');
     }
@@ -1991,7 +2035,7 @@
             `).join('') : '<span class="text-[11px] text-gray-400 font-medium">No photos uploaded</span>'}
           </div>
 
-          <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs py-2 rounded-xl border border-orange-200 transition">
+          <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs py-2.5 rounded-xl border border-orange-200 transition">
             <i class="fa-solid fa-camera"></i> Manage Photos (${r.images ? r.images.length : 0}/5)
           </button>
         </div>
@@ -2216,7 +2260,7 @@
       const res = await fetch(`${API_BASE}/notifications`, { headers: { "Authorization": `Bearer ${authToken}` } });
       const notifs = await res.json();
       document.getElementById("notificationsList").innerHTML = notifs.length ? notifs.map(n => `
-        <div class="bg-gray-50 p-4 rounded-xl border flex justify-between items-start">
+        <div class="bg-gray-50 p-4 rounded-2xl border flex justify-between items-start">
           <div>
             <h4 class="font-bold text-xs text-gray-900">${n.title}</h4>
             <p class="text-xs text-gray-600 mt-0.5">${n.message}</p>
@@ -2248,7 +2292,7 @@
               <td class="p-2 font-bold">${c.title}</td>
               <td class="p-2">${c.user_name} (${c.user_phone})</td>
               <td class="p-2"><span class="px-2 py-0.5 rounded font-bold ${c.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${c.status}</span></td>
-              <td class="p-2">${c.status === 'Pending' && canResolve(c) ? `<button onclick="resolveComplaint('${c.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg transition">Resolve Complaint</button>` : '-'}</td>
+              <td class="p-2">${c.status === 'Pending' && canResolve(c) ? `<button onclick="resolveComplaint('${c.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg transition">Resolve</button>` : '-'}</td>
             </tr>
           `).join('')}</tbody>
         </table>
@@ -2301,4 +2345,3 @@
   </script>
 </body>
 </html>
-
