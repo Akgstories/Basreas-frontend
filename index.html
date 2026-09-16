@@ -318,7 +318,7 @@
                 + List New Mess
               </button>
               <button onclick="openEditMessPriceModal()" class="bg-gray-800 hover:bg-black text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
-                ⚙️ Update Price
+                ⚙️ Location Rates Editor
               </button>
               <span class="text-xs bg-orange-100 text-orange-800 font-bold px-3 py-1 rounded-full" id="messPrepDateTag">Today</span>
             </div>
@@ -478,24 +478,38 @@
     </div>
   </div>
 
-  <!-- Edit Mess Price Modal -->
+  <!-- Edit Mess Location Price Modal -->
   <div id="editMessModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-xl space-y-4">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="text-lg font-bold text-gray-900">Update Mess Pricing</h3>
+        <h3 class="text-lg font-bold text-gray-900">Update Dynamic Location Pricing</h3>
         <button onclick="closeEditMessPriceModal()" class="text-gray-400 font-bold text-lg px-2">&times;</button>
       </div>
       <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT MESS</label>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT MESS PROVIDER</label>
         <select id="editMessSelect" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-white"></select>
       </div>
       <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">NEW MONTHLY BASE PRICE (₹)</label>
-        <input type="number" id="editMessPriceInput" placeholder="3000" class="w-full border rounded-xl p-2.5 text-xs font-bold">
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT DELIVERY LOCATION</label>
+        <select id="editMessLocationSelect" class="w-full border rounded-xl p-2.5 text-xs font-bold bg-white">
+          <option value="GEC Main Gate">GEC Main Gate</option>
+          <option value="Chandankiyari">Chandankiyari</option>
+          <option value="Ghoragara">Ghoragara</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">3-TIME DAILY RATE (₹)</label>
+          <input type="number" id="edit3TimeRateInput" placeholder="100" class="w-full border rounded-xl p-2.5 text-xs font-bold">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">2-TIME DAILY RATE (₹)</label>
+          <input type="number" id="edit2TimeRateInput" placeholder="80" class="w-full border rounded-xl p-2.5 text-xs font-bold">
+        </div>
       </div>
       <div class="flex gap-2 pt-2">
         <button onclick="closeEditMessPriceModal()" class="flex-1 py-2.5 text-xs font-bold bg-gray-100 rounded-xl hover:bg-gray-200 transition">Cancel</button>
-        <button onclick="submitMessPriceUpdate()" class="flex-1 py-2.5 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Save New Price</button>
+        <button onclick="submitMessPriceUpdate()" class="flex-1 py-2.5 text-xs font-bold bg-orange-600 text-white rounded-xl hover:bg-orange-700 transition shadow">Save Location Rates</button>
       </div>
     </div>
   </div>
@@ -756,7 +770,7 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
-    let messPricingRules = []; // Holds dynamic rates fetched from mess_pricing database table
+    let messPricingRules = []; // Dynamic rates per mess and per location
     let currentFetchedMesses = [];
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
@@ -816,6 +830,7 @@
         if (res.ok) {
           showToast(data.message || "Mess listed successfully!", "success");
           closeAddMessModal();
+          await fetchMessPricingRules();
           if (typeof loadExploreMess === "function") loadExploreMess();
         } else {
           showToast(data.detail || "Failed to create listing.", "error");
@@ -832,9 +847,11 @@
       }
       const selectElem = document.getElementById("editMessSelect");
       selectElem.innerHTML = currentFetchedMesses.map(m => `
-        <option value="${m.id}">${m.name} (Current: ₹${m.monthly_price}/mo)</option>
+        <option value="${m.id}">${m.name}</option>
       `).join('');
-      document.getElementById("editMessPriceInput").value = currentFetchedMesses[0]?.monthly_price || 3000;
+
+      document.getElementById("edit3TimeRateInput").value = 100;
+      document.getElementById("edit2TimeRateInput").value = 80;
       document.getElementById("editMessModal").classList.remove("hidden");
     }
 
@@ -844,29 +861,32 @@
 
     async function submitMessPriceUpdate() {
       const messId = document.getElementById("editMessSelect").value;
-      const newPrice = parseInt(document.getElementById("editMessPriceInput").value);
+      const locName = document.getElementById("editMessLocationSelect").value;
+      const rate3 = parseInt(document.getElementById("edit3TimeRateInput").value);
+      const rate2 = parseInt(document.getElementById("edit2TimeRateInput").value);
 
-      if (!newPrice || newPrice <= 0) {
-        showToast("Please enter a valid monthly price.", "warning");
+      if (!rate3 || !rate2 || rate3 <= 0 || rate2 <= 0) {
+        showToast("Please enter valid daily rates for 3-time and 2-time plans.", "warning");
         return;
       }
 
       try {
-        const res = await fetch(`${API_BASE}/mess/update-price`, {
+        const res = await fetch(`${API_BASE}/mess/update-location-price`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${authToken}`
           },
-          body: JSON.stringify({ mess_id: messId, monthly_price: newPrice })
+          body: JSON.stringify({ mess_id: messId, location_name: locName, three_time_rate: rate3, two_time_rate: rate2 })
         });
         const data = await res.json();
         if (res.ok) {
           showToast(data.message, "success");
           closeEditMessPriceModal();
+          await fetchMessPricingRules();
           loadExploreMess();
         } else {
-          showToast(data.detail || "Failed to update price.", "error");
+          showToast(data.detail || "Failed to update location pricing.", "error");
         }
       } catch (e) {
         showToast("Error connecting to server.", "error");
@@ -966,8 +986,8 @@
           </div>
           <div class="flex justify-between items-center pt-3 border-t">
             <div>
-              <span class="text-xs font-bold text-orange-600 flex items-center gap-1">
-                ₹${m.monthly_price}/mo base
+              <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
+                <i class="fa-solid fa-calculator text-orange-600"></i> Dynamic Pricing
               </span>
               <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
             </div>
@@ -981,7 +1001,7 @@
 
     function openMessPlanModal(messIdOrName) {
       const found = currentFetchedMesses.find(m => m.id === messIdOrName || m.name === messIdOrName);
-      selectedMessData = found || { name: messIdOrName, monthly_price: 3000 };
+      selectedMessData = found || { id: "mess-1", name: messIdOrName, monthly_price: 3000 };
       selectedMessLocation = activeMessLocationFilter !== "All" ? activeMessLocationFilter : "GEC Main Gate";
       selectedMealTier = "3-Time";
       selectedDurationDays = 30;
@@ -1052,7 +1072,8 @@
       if (!selectedMessData) return;
 
       const locPricing = messPricingRules.find(
-        p => p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+        p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
+             p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
       );
 
       let dailyRate = 100;
@@ -1083,7 +1104,8 @@
       }
 
       const locPricing = messPricingRules.find(
-        p => p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+        p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
+             p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
       );
 
       let dailyRate = 100;
@@ -2279,3 +2301,4 @@
   </script>
 </body>
 </html>
+
