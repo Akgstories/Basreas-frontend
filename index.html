@@ -756,6 +756,7 @@
     let activeRoomForPhotos = null;
     let currentRoomImages = [];
 
+    let messPricingRules = []; // Holds dynamic rates fetched from mess_pricing database table
     let currentFetchedMesses = [];
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
@@ -763,6 +764,17 @@
     let selectedMealTier = "3-Time";
     let selectedDurationDays = 30;
     let selectedDiet = "Veg";
+
+    async function fetchMessPricingRules() {
+      try {
+        const res = await fetch(`${API_BASE}/mess-pricing`);
+        if (res.ok) {
+          messPricingRules = await res.json();
+        }
+      } catch (err) {
+        console.error("Could not load dynamic mess pricing rules:", err);
+      }
+    }
 
     function openAddMessModal() {
       document.getElementById("addMessModal").classList.remove("hidden");
@@ -1039,16 +1051,21 @@
     function updateMessPlanModalUI() {
       if (!selectedMessData) return;
 
-      const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
-      const baseDailyRate = baseMonthlyPrice / 30;
+      const locPricing = messPricingRules.find(
+        p => p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+      );
 
-      let locMultiplier = 1.0;
-      if (selectedMessLocation === "Chandankiyari") locMultiplier = 0.9;
-      else if (selectedMessLocation === "Ghoragara") locMultiplier = 1.1;
+      let dailyRate = 100;
+      if (locPricing) {
+        dailyRate = selectedMealTier === "3-Time" ? locPricing.three_time_rate : locPricing.two_time_rate;
+      } else {
+        const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
+        const baseDailyRate = baseMonthlyPrice / 30;
+        let locMultiplier = selectedMessLocation === "Chandankiyari" ? 0.9 : (selectedMessLocation === "Ghoragara" ? 1.1 : 1.0);
+        let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
+        dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
+      }
 
-      let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-
-      const dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
       const totalPrice = dailyRate * selectedDurationDays;
 
       document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDiet}) • ${selectedDurationDays} Days`;
@@ -1065,13 +1082,22 @@
         return;
       }
 
-      const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
-      const baseDailyRate = baseMonthlyPrice / 30;
-      let locMultiplier = selectedMessLocation === "Chandankiyari" ? 0.9 : (selectedMessLocation === "Ghoragara" ? 1.1 : 1.0);
-      let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-      const dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
-      const finalAmount = dailyRate * selectedDurationDays;
+      const locPricing = messPricingRules.find(
+        p => p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+      );
 
+      let dailyRate = 100;
+      if (locPricing) {
+        dailyRate = selectedMealTier === "3-Time" ? locPricing.three_time_rate : locPricing.two_time_rate;
+      } else {
+        const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
+        const baseDailyRate = baseMonthlyPrice / 30;
+        let locMultiplier = selectedMessLocation === "Chandankiyari" ? 0.9 : (selectedMessLocation === "Ghoragara" ? 1.1 : 1.0);
+        let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
+        dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
+      }
+
+      const finalAmount = dailyRate * selectedDurationDays;
       const planTitle = `${selectedMessData.name} (${selectedMessLocation}) - ${selectedMealTier} [${selectedDiet}] Plan (${selectedDurationDays} Days)`;
 
       closeMessPlanModal();
@@ -1252,6 +1278,8 @@
       const todayStr = new Date().toISOString().split('T')[0];
       const datePicker = document.getElementById("mealCancelDatePicker");
       if (datePicker) datePicker.value = todayStr;
+
+      await fetchMessPricingRules();
 
       if (authToken) {
         try {
