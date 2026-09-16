@@ -994,6 +994,7 @@
       );
     }
 
+    // DYNAMIC MESS CARDS & DYNAMIC CARD LOCATIONS (OPTION 2 FIX)
     async function loadExploreMess() {
       const res = await fetch(`${API_BASE}/mess-listings`);
       const messes = await res.json();
@@ -1001,7 +1002,13 @@
 
       const filteredMesses = messes.filter(m => {
         if (activeMessLocationFilter === "All") return true;
-        return m.address.toLowerCase().includes(activeMessLocationFilter.toLowerCase());
+
+        const pricingLocs = messPricingRules
+          .filter(p => p.mess_id === m.id || p.mess_id === m.name)
+          .map(p => p.location_name ? p.location_name.toLowerCase() : '');
+
+        return pricingLocs.includes(activeMessLocationFilter.toLowerCase()) || 
+               m.address.toLowerCase().includes(activeMessLocationFilter.toLowerCase());
       });
 
       const listContainer = document.getElementById("messProvidersList");
@@ -1010,32 +1017,43 @@
         return;
       }
 
-      listContainer.innerHTML = filteredMesses.map(m => `
-        <div class="bg-white rounded-3xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
-          <div>
-            <div class="flex justify-between items-start mb-2">
-              <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
-              <span class="bg-green-100 text-green-800 font-bold text-[10px] px-2 py-0.5 rounded">${m.diet_type}</span>
-            </div>
-            <p class="text-xs text-gray-500 mb-2">${m.address}</p>
-            <p class="text-xs text-gray-600 mb-3">${m.description}</p>
-            <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
-              <i class="fa-solid fa-map-location-dot"></i> View Location
-            </a>
-          </div>
-          <div class="flex justify-between items-center pt-3 border-t">
+      listContainer.innerHTML = filteredMesses.map(m => {
+        const activeLocations = messPricingRules
+          .filter(p => p.mess_id === m.id || p.mess_id === m.name)
+          .map(p => p.location_name ? p.location_name.trim() : '')
+          .filter(Boolean);
+
+        const locationDisplay = activeLocations.length > 0 
+          ? activeLocations.join(', ') 
+          : m.address;
+
+        return `
+          <div class="bg-white rounded-3xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
             <div>
-              <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
-                <i class="fa-solid fa-calculator text-orange-600"></i> Dynamic Pricing
-              </span>
-              <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
+                <span class="bg-green-100 text-green-800 font-bold text-[10px] px-2 py-0.5 rounded">${m.diet_type}</span>
+              </div>
+              <p class="text-xs text-gray-500 mb-2 font-semibold text-orange-600">📍 ${locationDisplay}</p>
+              <p class="text-xs text-gray-600 mb-3">${m.description}</p>
+              <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
+                <i class="fa-solid fa-map-location-dot"></i> View Location
+              </a>
             </div>
-            <button onclick="openMessPlanModal('${m.id}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
-              Select Plan
-            </button>
+            <div class="flex justify-between items-center pt-3 border-t">
+              <div>
+                <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
+                  <i class="fa-solid fa-calculator text-orange-600"></i> Dynamic Pricing
+                </span>
+                <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
+              </div>
+              <button onclick="openMessPlanModal('${m.id}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+                Select Plan
+              </button>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // DYNAMICALLY OPEN MESS SUBSCRIPTION MODAL WITH LOCATIONS FROM SUPABASE
@@ -2369,3 +2387,4 @@
   </script>
 </body>
 </html>
+
