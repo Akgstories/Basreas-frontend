@@ -114,7 +114,7 @@
         <div id="addressField" class="hidden space-y-3">
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-0.5">FOOD DELIVERY ADDRESS / HOSTEL ROOM</label>
-            <input type="text" id="authAddress" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="GEC Bokaro Hostel, Room 101">
+            <input type="text" id="authAddress" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="Hostel Room / Address">
           </div>
           <div>
             <div class="flex justify-between items-center mb-0.5">
@@ -124,7 +124,7 @@
               </button>
             </div>
             <div class="relative">
-              <input type="url" id="authMapUrl" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition pr-28" placeholder="https://maps.google.com/?q=GEC+Bokaro">
+              <input type="url" id="authMapUrl" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition pr-28" placeholder="https://maps.google.com/?q=...">
               <button type="button" onclick="fetchCurrentLocation('authMapUrl', this)" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
                 <i class="fa-solid fa-location-arrow"></i> Auto-Pin
               </button>
@@ -222,13 +222,8 @@
               <p class="text-xs text-gray-500">Select a mess provider and configure your location-based plan</p>
             </div>
             
-            <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar">
-              <span class="text-xs font-bold text-gray-500 whitespace-nowrap"><i class="fa-solid fa-location-dot text-orange-600"></i> Location:</span>
-              <button onclick="filterMessLocation('All')" id="locBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap">All Locations</button>
-              <button onclick="filterMessLocation('Main Gate')" id="locBtn-MainGate" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">GEC Main Gate</button>
-              <button onclick="filterMessLocation('Chandankiyari')" id="locBtn-Chandankiyari" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">Chandankiyari</button>
-              <button onclick="filterMessLocation('Ghoragara')" id="locBtn-Ghoragara" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap">Ghoragara</button>
-            </div>
+            <!-- DYNAMIC LOCATION FILTER CONTAINER -->
+            <div id="messLocationFilterBar" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar"></div>
           </div>
 
           <div id="messProvidersList" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
@@ -474,7 +469,7 @@
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">ADDRESS / LOCATION</label>
-        <input type="text" id="addMessAddress" placeholder="📍 Near GEC Bokaro Main Gate" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
+        <input type="text" id="addMessAddress" placeholder="📍 Location Address" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">GOOGLE MAPS LINK</label>
@@ -482,7 +477,7 @@
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">DESCRIPTION</label>
-        <textarea id="addMessDesc" placeholder="Freshly prepared hygienic meals tailored for engineering students..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold"></textarea>
+        <textarea id="addMessDesc" placeholder="Freshly prepared hygienic meals tailored for students..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold"></textarea>
       </div>
       
       <div class="flex gap-2 pt-2">
@@ -505,12 +500,8 @@
         <select id="editMessSelect" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white"></select>
       </div>
       <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT DELIVERY LOCATION</label>
-        <select id="editMessLocationSelect" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white">
-          <option value="GEC Main Gate">GEC Main Gate</option>
-          <option value="Chandankiyari">Chandankiyari</option>
-          <option value="Ghoragara">Ghoragara</option>
-        </select>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">ENTER DELIVERY LOCATION NAME</label>
+        <input type="text" id="editMessLocationSelect" placeholder="e.g. Kandra, BIT Main Gate, Chasnalla" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
@@ -543,11 +534,8 @@
 
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">1. Select Delivery Location</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button id="locModalBtn-MainGate" onclick="selectMessModalLocation('GEC Main Gate')" class="py-2 px-1 border-2 border-orange-600 bg-orange-50 rounded-xl font-bold text-[11px] text-center text-orange-700 transition">Main Gate</button>
-          <button id="locModalBtn-Chandankiyari" onclick="selectMessModalLocation('Chandankiyari')" class="py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition">Chandankiyari</button>
-          <button id="locModalBtn-Ghoragara" onclick="selectMessModalLocation('Ghoragara')" class="py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition">Ghoragara</button>
-        </div>
+        <!-- DYNAMIC MODAL LOCATION BUTTON CONTAINER -->
+        <div id="modalLocationSelectorGrid" class="grid grid-cols-3 gap-2"></div>
       </div>
 
       <div>
@@ -597,7 +585,7 @@
 
       <div class="bg-orange-50 border border-orange-200 p-4 rounded-2xl flex items-center justify-between">
         <div>
-          <span class="block text-xs font-bold text-gray-800" id="summaryPlanLabel">GEC Main Gate • 3-Time (30 Days)</span>
+          <span class="block text-xs font-bold text-gray-800" id="summaryPlanLabel">Location • 3-Time (30 Days)</span>
           <span class="text-[10px] text-orange-700 font-bold" id="summaryRateLabel">₹100 / day rate</span>
         </div>
         <div class="text-right">
@@ -803,20 +791,57 @@
     let currentFetchedMesses = [];
     let activeMessLocationFilter = "All";
     let selectedMessData = null;
-    let selectedMessLocation = "GEC Main Gate";
+    let selectedMessLocation = "";
     let selectedMealTier = "3-Time";
     let selectedDurationDays = 30;
     let selectedDiet = "Veg";
 
+    // FETCH MESS PRICING RULES AND RENDER DYNAMIC LOCATION FILTERS
     async function fetchMessPricingRules() {
       try {
         const res = await fetch(`${API_BASE}/mess-pricing`);
         if (res.ok) {
           messPricingRules = await res.json();
+          renderDynamicLocationFilters();
         }
       } catch (err) {
         console.error("Could not load dynamic mess pricing rules:", err);
       }
+    }
+
+    // DYNAMICALLY RENDER TOP LOCATION FILTERS FROM DATABASE
+    function renderDynamicLocationFilters() {
+      const container = document.getElementById("messLocationFilterBar");
+      if (!container) return;
+
+      const uniqueLocations = [...new Set(messPricingRules.map(p => p.location_name ? p.location_name.trim() : '').filter(Boolean))];
+      
+      let html = `
+        <span class="text-xs font-bold text-gray-500 whitespace-nowrap"><i class="fa-solid fa-location-dot text-orange-600"></i> Location:</span>
+        <button onclick="filterMessLocation('All')" class="loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl ${activeMessLocationFilter === 'All' ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition whitespace-nowrap" data-loc="All">All Locations</button>
+      `;
+
+      uniqueLocations.forEach(loc => {
+        const isActive = activeMessLocationFilter.toLowerCase() === loc.toLowerCase();
+        html += `
+          <button onclick="filterMessLocation('${loc}')" class="loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl ${isActive ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition whitespace-nowrap" data-loc="${loc}">${loc}</button>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function filterMessLocation(location) {
+      activeMessLocationFilter = location;
+      
+      document.querySelectorAll(".loc-filter-btn").forEach(btn => {
+        const loc = btn.getAttribute("data-loc");
+        btn.className = (loc === location)
+          ? "loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap"
+          : "loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap";
+      });
+
+      loadExploreMess();
     }
 
     function openAddMessModal() {
@@ -840,7 +865,7 @@
         monthly_price: parseInt(document.getElementById("addMessPrice").value) || 3000,
         diet_type: document.getElementById("addMessDiet").value,
         meals_per_day: document.getElementById("addMessMeals").value || "Flexible Plan Options",
-        address: document.getElementById("addMessAddress").value || "📍 Near GEC Bokaro",
+        address: document.getElementById("addMessAddress").value || "📍 Location Address",
         google_map_url: document.getElementById("addMessMapUrl").value || "https://maps.google.com",
         description: document.getElementById("addMessDesc").value || "Freshly prepared hygienic meals."
       };
@@ -879,6 +904,7 @@
         <option value="${m.id}">${m.name}</option>
       `).join('');
 
+      document.getElementById("editMessLocationSelect").value = "";
       document.getElementById("edit3TimeRateInput").value = 100;
       document.getElementById("edit2TimeRateInput").value = 80;
       document.getElementById("editMessModal").classList.remove("hidden");
@@ -890,12 +916,12 @@
 
     async function submitMessPriceUpdate() {
       const messId = document.getElementById("editMessSelect").value;
-      const locName = document.getElementById("editMessLocationSelect").value;
+      const locName = document.getElementById("editMessLocationSelect").value.trim();
       const rate3 = parseInt(document.getElementById("edit3TimeRateInput").value);
       const rate2 = parseInt(document.getElementById("edit2TimeRateInput").value);
 
-      if (!rate3 || !rate2 || rate3 <= 0 || rate2 <= 0) {
-        showToast("Please enter valid daily rates for 3-time and 2-time plans.", "warning");
+      if (!locName || !rate3 || !rate2 || rate3 <= 0 || rate2 <= 0) {
+        showToast("Please enter a location name and valid daily rates.", "warning");
         return;
       }
 
@@ -968,22 +994,6 @@
       );
     }
 
-    function filterMessLocation(location) {
-      activeMessLocationFilter = location;
-      
-      const locMap = { 'All': 'All', 'Main Gate': 'MainGate', 'Chandankiyari': 'Chandankiyari', 'Ghoragara': 'Ghoragara' };
-      Object.keys(locMap).forEach(key => {
-        const btn = document.getElementById(`locBtn-${locMap[key]}`);
-        if (btn) {
-          btn.className = (location === key) 
-            ? "px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap"
-            : "px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap";
-        }
-      });
-
-      loadExploreMess();
-    }
-
     async function loadExploreMess() {
       const res = await fetch(`${API_BASE}/mess-listings`);
       const messes = await res.json();
@@ -1028,10 +1038,23 @@
       `).join('');
     }
 
+    // DYNAMICALLY OPEN MESS SUBSCRIPTION MODAL WITH LOCATIONS FROM SUPABASE
     function openMessPlanModal(messIdOrName) {
       const found = currentFetchedMesses.find(m => m.id === messIdOrName || m.name === messIdOrName);
-      selectedMessData = found || { id: "mess-1", name: messIdOrName, monthly_price: 3000 };
-      selectedMessLocation = activeMessLocationFilter !== "All" ? activeMessLocationFilter : "GEC Main Gate";
+      selectedMessData = found || { id: messIdOrName, name: messIdOrName, monthly_price: 3000 };
+
+      const messLocations = messPricingRules
+        .filter(p => p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name)
+        .map(p => p.location_name.trim());
+      
+      const availableLocations = messLocations.length > 0 
+        ? [...new Set(messLocations)] 
+        : [...new Set(messPricingRules.map(p => p.location_name ? p.location_name.trim() : '').filter(Boolean))];
+
+      selectedMessLocation = (availableLocations.length > 0)
+        ? (availableLocations.includes(activeMessLocationFilter) ? activeMessLocationFilter : availableLocations[0])
+        : "Main Location";
+
       selectedMealTier = "3-Time";
       selectedDurationDays = 30;
 
@@ -1039,7 +1062,13 @@
       const chkMessName = document.getElementById("checkboxMessName");
       if (chkMessName) chkMessName.innerText = selectedMessData.name;
 
-      selectMessModalLocation(selectedMessLocation);
+      const grid = document.getElementById("modalLocationSelectorGrid");
+      if (grid) {
+        grid.innerHTML = availableLocations.map(loc => `
+          <button onclick="selectMessModalLocation('${loc}')" data-modal-loc="${loc}" class="modal-loc-btn py-2 px-1 border-2 ${loc === selectedMessLocation ? 'border-orange-600 bg-orange-50 text-orange-700' : 'border-gray-200 text-gray-700'} rounded-xl font-bold text-[11px] text-center transition">${loc}</button>
+        `).join('');
+      }
+
       selectDietPreference("Veg");
       document.getElementById("messPlanSelectModal").classList.remove("hidden");
     }
@@ -1065,14 +1094,11 @@
 
     function selectMessModalLocation(loc) {
       selectedMessLocation = loc;
-      ['MainGate', 'Chandankiyari', 'Ghoragara'].forEach(l => {
-        const key = l === 'MainGate' ? 'GEC Main Gate' : l;
-        const btn = document.getElementById(`locModalBtn-${l}`);
-        if (btn) {
-          btn.className = (key === loc)
-            ? "py-2 px-1 border-2 border-orange-600 bg-orange-50 rounded-xl font-bold text-[11px] text-center text-orange-700 transition"
-            : "py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition";
-        }
+      document.querySelectorAll(".modal-loc-btn").forEach(btn => {
+        const btnLoc = btn.getAttribute("data-modal-loc");
+        btn.className = (btnLoc === loc)
+          ? "modal-loc-btn py-2 px-1 border-2 border-orange-600 bg-orange-50 rounded-xl font-bold text-[11px] text-center text-orange-700 transition"
+          : "modal-loc-btn py-2 px-1 border-2 border-gray-200 rounded-xl font-bold text-[11px] text-center text-gray-700 transition";
       });
       updateMessPlanModalUI();
     }
@@ -1111,9 +1137,8 @@
       } else {
         const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
         const baseDailyRate = baseMonthlyPrice / 30;
-        let locMultiplier = selectedMessLocation === "Chandankiyari" ? 0.9 : (selectedMessLocation === "Ghoragara" ? 1.1 : 1.0);
         let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-        dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
+        dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
       }
 
       const totalPrice = dailyRate * selectedDurationDays;
@@ -1143,9 +1168,8 @@
       } else {
         const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
         const baseDailyRate = baseMonthlyPrice / 30;
-        let locMultiplier = selectedMessLocation === "Chandankiyari" ? 0.9 : (selectedMessLocation === "Ghoragara" ? 1.1 : 1.0);
         let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-        dailyRate = Math.max(1, Math.round(baseDailyRate * locMultiplier * tierMultiplier));
+        dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
       }
 
       const finalAmount = dailyRate * selectedDurationDays;
