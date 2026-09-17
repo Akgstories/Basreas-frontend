@@ -35,7 +35,6 @@
     .anim-pulse-cancel  { animation: pulseCancel 0.5s ease-in-out; }
     .anim-pulse-restore { animation: pulseRestore 0.5s ease-in-out; }
 
-    /* Hide scrollbar for mobile clean tab scrolling */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -44,7 +43,7 @@
 
   <div id="toastContainer" class="fixed top-3 right-3 left-3 md:left-auto md:top-5 md:right-5 z-[100] flex flex-col gap-2.5 pointer-events-none"></div>
 
-  <!-- HEADER (Desktop Nav & Compact Mobile Branding) -->
+  <!-- HEADER -->
   <header class="bg-white border-b sticky top-0 z-40 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2 md:gap-3">
@@ -60,17 +59,18 @@
       </div>
     </div>
     
-    <!-- DESKTOP TOP NAVIGATION BAR (Hidden on Mobile Screens) -->
+    <!-- DESKTOP TOP NAVIGATION BAR -->
     <nav id="mainNav" class="hidden md:block bg-gray-900 text-white border-t">
       <div id="navContainer" class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto text-xs font-semibold py-1"></div>
     </nav>
   </header>
 
-  <!-- MOBILE BOTTOM NAVIGATION BAR (Visible on Phones < 768px when logged in) -->
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
   <nav id="mobileNav" class="hidden fixed bottom-0 left-0 right-0 bg-gray-900 text-white z-50 md:hidden border-t border-gray-800 shadow-2xl">
     <div id="mobileNavContainer" class="flex justify-around items-center py-1.5 px-1 overflow-x-auto no-scrollbar"></div>
   </nav>
 
+  <!-- LANDING PAGE -->
   <div id="landingPage" class="space-y-8 md:space-y-12 pb-8">
     <section class="bg-gradient-to-br from-orange-600 to-amber-600 text-white py-12 md:py-16 px-4 text-center">
       <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 md:mb-4">Find PGs & Manage Mess Subscriptions</h1>
@@ -82,6 +82,7 @@
     </section>
   </div>
 
+  <!-- AUTH SECTION -->
   <div id="authSection" class="max-w-md mx-auto w-full px-4 mb-12">
     <div class="bg-white p-5 md:p-6 rounded-3xl shadow-lg border">
       <h2 class="text-xl md:text-2xl font-black text-center text-gray-900 mb-4" id="authTitle">Access Basera</h2>
@@ -168,9 +169,11 @@
     </div>
   </div>
 
+  <!-- DASHBOARD MAIN CONTENT -->
   <main class="max-w-7xl mx-auto px-4 pb-24 md:pb-12 flex-1 w-full">
     <div id="dashboard" class="hidden space-y-6">
 
+      <!-- STUDENT PROFILE VIEW -->
       <div id="view-student-profile" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center border-b pb-4">
@@ -214,6 +217,7 @@
         </div>
       </div>
 
+      <!-- STUDENT EXPLORE MESS VIEW -->
       <div id="view-student-explore-mess" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-4">
@@ -222,7 +226,6 @@
               <p class="text-xs text-gray-500">Select a mess provider and configure your location-based plan</p>
             </div>
             
-            <!-- DYNAMIC LOCATION FILTER CONTAINER -->
             <div id="messLocationFilterBar" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 no-scrollbar"></div>
           </div>
 
@@ -230,6 +233,7 @@
         </div>
       </div>
 
+      <!-- STUDENT PGS VIEW -->
       <div id="view-student-pgs" class="hidden space-y-6">
         <div class="bg-white p-5 rounded-3xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
           <div>
@@ -252,6 +256,7 @@
         </div>
       </div>
 
+      <!-- STUDENT MESS VIEW -->
       <div id="view-student-mess" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
@@ -303,6 +308,7 @@
         </div>
       </div>
 
+      <!-- STUDENT CALENDAR VIEW -->
       <div id="view-student-calendar" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <h2 class="text-lg md:text-xl font-bold">30-Day Attendance & Refund Ledger</h2>
@@ -311,6 +317,7 @@
         </div>
       </div>
 
+      <!-- STUDENT BOOKINGS VIEW -->
       <div id="view-student-bookings" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border shadow-sm">
           <h2 class="text-lg md:text-xl font-bold mb-4">My Bookings</h2>
@@ -318,6 +325,7 @@
         </div>
       </div>
 
+      <!-- MESS PREP VIEW -->
       <div id="view-mess-prep" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-3">
@@ -339,6 +347,7 @@
         </div>
       </div>
 
+      <!-- MESS SUBSCRIBERS LEDGER VIEW -->
       <div id="view-mess-subscribers-ledger" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-4">
@@ -352,6 +361,7 @@
         </div>
       </div>
 
+      <!-- MESS MENU MANAGER VIEW -->
       <div id="view-mess-menu-manager" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <h2 class="text-lg md:text-xl font-bold text-gray-900">Publish 7-Day Weekly Menu</h2>
@@ -359,6 +369,7 @@
         </div>
       </div>
 
+      <!-- OWNER ROOMS VIEW -->
       <div id="view-owner-rooms" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -376,10 +387,21 @@
         </div>
       </div>
 
+      <!-- ADMIN OVERVIEW VIEW -->
       <div id="view-admin-overview" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <h2 class="text-lg md:text-xl font-bold">Admin Analytics</h2>
-          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-5 gap-3"></div>
+          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-6 gap-3"></div>
+        </div>
+
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-base text-gray-900">All Registered Mess Services</h3>
+            <button onclick="openAddMessModal()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition">
+              + Add Mess Listing
+            </button>
+          </div>
+          <div id="adminMessTableContainer" class="overflow-x-auto no-scrollbar"></div>
         </div>
 
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
@@ -415,6 +437,7 @@
         </div>
       </div>
 
+      <!-- NOTIFICATIONS INBOX VIEW -->
       <div id="view-notifications-inbox" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <h2 class="text-lg md:text-xl font-bold text-gray-900">Notifications & Automated Email Alerts</h2>
@@ -422,6 +445,7 @@
         </div>
       </div>
 
+      <!-- COMPLAINTS VIEW -->
       <div id="view-complaints" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
           <div class="flex justify-between items-center">
@@ -438,7 +462,9 @@
     </div>
   </main>
 
-  <!-- ADD MESS MODAL (SLIDE-UP SHEET ON MOBILE) -->
+  <!-- MODALS -->
+
+  <!-- ADD MESS MODAL -->
   <div id="addMessModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
     <div class="bg-white rounded-t-3xl md:rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-3 max-h-[90vh] overflow-y-auto">
       <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
@@ -472,8 +498,18 @@
         <input type="text" id="addMessAddress" placeholder="📍 Location Address" class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
       </div>
       <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-0.5">GOOGLE MAPS LINK</label>
-        <input type="url" id="addMessMapUrl" placeholder="https://maps.google.com/..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold">
+        <div class="flex justify-between items-center mb-0.5">
+          <label class="block text-[10px] font-bold text-gray-500">GOOGLE MAPS LOCATION LINK</label>
+          <button type="button" onclick="fetchCurrentLocation('addMessMapUrl', this)" class="text-[10px] font-bold text-orange-600 hover:underline flex items-center gap-1">
+            <i class="fa-solid fa-location-crosshairs"></i> Pin Location
+          </button>
+        </div>
+        <div class="relative">
+          <input type="url" id="addMessMapUrl" placeholder="https://maps.google.com/..." class="w-full border rounded-xl p-2.5 text-base md:text-xs font-semibold pr-24">
+          <button type="button" onclick="fetchCurrentLocation('addMessMapUrl', this)" class="absolute right-1 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 text-orange-800 text-[10px] font-bold px-2 py-1 rounded-lg transition">
+            Auto-Pin
+          </button>
+        </div>
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-0.5">DESCRIPTION</label>
@@ -534,7 +570,6 @@
 
       <div>
         <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">1. Select Delivery Location</label>
-        <!-- DYNAMIC MODAL LOCATION BUTTON CONTAINER -->
         <div id="modalLocationSelectorGrid" class="grid grid-cols-3 gap-2"></div>
       </div>
 
@@ -774,6 +809,7 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
     const API_BASE = "https://basera-backend-bidu.onrender.com/api";
     let authMode = "login";
@@ -796,7 +832,8 @@
     let selectedDurationDays = 30;
     let selectedDiet = "Veg";
 
-    // FETCH MESS PRICING RULES AND RENDER DYNAMIC LOCATION FILTERS
+    window.onload = init;
+
     async function fetchMessPricingRules() {
       try {
         const res = await fetch(`${API_BASE}/mess-pricing`);
@@ -809,7 +846,6 @@
       }
     }
 
-    // DYNAMICALLY RENDER TOP LOCATION FILTERS FROM DATABASE
     function renderDynamicLocationFilters() {
       const container = document.getElementById("messLocationFilterBar");
       if (!container) return;
@@ -886,6 +922,7 @@
           closeAddMessModal();
           await fetchMessPricingRules();
           if (typeof loadExploreMess === "function") loadExploreMess();
+          if (currentUser && currentUser.role === 'admin') loadAdminOverview();
         } else {
           showToast(data.detail || "Failed to create listing.", "error");
         }
@@ -994,7 +1031,6 @@
       );
     }
 
-    // DYNAMIC MESS CARDS & DYNAMIC CARD LOCATIONS (OPTION 2 FIX)
     async function loadExploreMess() {
       const res = await fetch(`${API_BASE}/mess-listings`);
       const messes = await res.json();
@@ -1056,7 +1092,6 @@
       }).join('');
     }
 
-    // DYNAMICALLY OPEN MESS SUBSCRIPTION MODAL WITH LOCATIONS FROM SUPABASE
     function openMessPlanModal(messIdOrName) {
       const found = currentFetchedMesses.find(m => m.id === messIdOrName || m.name === messIdOrName);
       selectedMessData = found || { id: messIdOrName, name: messIdOrName, monthly_price: 3000 };
@@ -1387,7 +1422,7 @@
             authToken = null;
           }
         } catch (e) { 
-          console.log("Backend offline or connecting..."); 
+          console.log("Backend connecting..."); 
         }
       }
       showLandingPage();
@@ -1612,7 +1647,7 @@
       const rem = await res.json();
 
       document.getElementById("paymentReminderBanners").innerHTML = `
-        ${rem.mess_reminder.should_alert ? `
+        ${rem.mess_reminder && rem.mess_reminder.should_alert ? `
           <div class="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
             <div>
               <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION RENEWAL DUE</span>
@@ -1623,7 +1658,7 @@
             </button>
           </div>
         ` : ''}
-        ${rem.pg_reminder.should_alert ? `
+        ${rem.pg_reminder && rem.pg_reminder.should_alert ? `
           <div class="bg-red-50 border border-red-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
             <div>
               <span class="block font-bold text-xs text-red-800"><i class="fa-solid fa-house"></i> MONTHLY PG RENT DUE</span>
@@ -1868,6 +1903,18 @@
       } catch (e) { showToast("Error communicating with backend server.", "error"); }
     }
 
+    async function unsubscribeMess() {
+      if (!confirm("Are you sure you want to unsubscribe from your current mess plan?")) return;
+      try {
+        const res = await fetch(`${API_BASE}/mess/unsubscribe`, {
+          method: "POST", headers: { "Authorization": `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (res.ok) { showToast(data.message || "Unsubscribed from mess plan.", "info"); loadStudentMessView(); loadCalendarLedger(); loadBookings(); }
+        else showToast(data.detail || "Unsubscribe failed.", "error");
+      } catch (e) { showToast("Error connecting to server.", "error"); }
+    }
+
     async function loadMessPrepStats() {
       const res = await fetch(`${API_BASE}/mess/daily-stats`, {
         headers: { "Authorization": `Bearer ${authToken}` }
@@ -1899,7 +1946,7 @@
       ` : `<p class="text-xs text-gray-400 py-4">No meal cancellations today.</p>`;
     }
 
-    async function loadOwnerMonthlyBilling() {
+   async function loadOwnerMonthlyBilling() {
       const month = document.getElementById("messOwnerMonthPicker").value;
       const res = await fetch(`${API_BASE}/mess/owner-monthly-billing?month=${month}`, {
         headers: { "Authorization": `Bearer ${authToken}` }
@@ -1924,8 +1971,7 @@
               <td class="p-2.5 font-bold text-gray-900">${s.name}</td>
               <td class="p-2.5 font-bold">${s.phone}</td>
               <td class="p-2.5 font-bold text-orange-600">
-                ${s.address}
-                ${s.google_map_url ? `<br><a href="${s.google_map_url}" target="_blank" class="text-[10px] text-blue-600 underline font-semibold">📍 Open Directions</a>` : ''}
+                ${s.address}${s.google_map_url ? `<br><a href="${s.google_map_url}" target="_blank" class="text-[10px] text-blue-600 underline font-semibold">📍 Open Directions</a>` : ''}
               </td>
               <td class="p-2.5">
                 ${s.plan}<br>
@@ -2025,22 +2071,25 @@
       const res = await fetch(`${API_BASE}/bookings/my`, { headers: { "Authorization": `Bearer ${authToken}` } });
       const bList = await res.json();
       document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => {
-        const isPG = b.target_type === "PG Room";
+        const isMess = b.target_type === "Mess Subscription" || b.item_name.toLowerCase().includes("mess");
 
         return `
           <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
             <div class="flex justify-between items-start">
               <div>
-                <h4 class="font-bold text-sm">${b.item_name}</h4>
+                <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase mb-1 inline-block">
+                  ${isMess ? 'Mess Subscription' : 'PG Stay'}
+                </span>
+                <h4 class="font-bold text-sm text-gray-900">${b.item_name}</h4>
                 <p class="text-xs text-gray-500">Amount: ₹${b.monthly_amount}</p>
                 <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
               </div>
               <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
             </div>
             ${b.status === 'Active' ? (
-              isPG 
-                ? `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>`
-                : `<button onclick="unsubscribeMess()" class="w-full bg-orange-50 text-orange-600 font-bold text-xs py-2 rounded-xl border border-orange-200 hover:bg-orange-100 transition">Unsubscribe Mess</button>`
+              isMess 
+                ? `<button onclick="unsubscribeMess()" class="w-full bg-orange-50 text-orange-600 font-bold text-xs py-2 rounded-xl border border-orange-200 hover:bg-orange-100 transition">Unsubscribe Mess</button>`
+                : `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>`
             ) : ''}
           </div>
         `;
@@ -2191,10 +2240,49 @@
       document.getElementById("adminMetricsGrid").innerHTML = `
         <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">STUDENTS</span><strong class="text-lg">${m.active_students}</strong></div>
         <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">PGS</span><strong class="text-lg">${m.pg_listings}</strong></div>
+        <div class="bg-orange-50/40 border-orange-200 p-3 rounded-xl text-center border"><span class="block text-[10px] text-orange-600 font-bold">MESSES</span><strong class="text-lg text-orange-600">${m.total_messes || 0}</strong></div>
         <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACANT ROOMS</span><strong class="text-lg">${m.vacant_rooms}</strong></div>
         <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACATE REQS</span><strong class="text-lg text-orange-600">${m.pending_vacate_requests}</strong></div>
         <div class="bg-orange-50 p-3 rounded-xl text-center border border-orange-200"><span class="block text-[10px] text-orange-600 font-bold">GMV</span><strong class="text-lg text-orange-600">${m.monthly_gmv}</strong></div>
       `;
+
+      const messRes = await fetch(`${API_BASE}/mess-listings`);
+      const messList = await messRes.json();
+      const messTableContainer = document.getElementById("adminMessTableContainer");
+      if (messList && messList.length > 0) {
+        messTableContainer.innerHTML = `
+          <table class="w-full text-xs text-left border">
+            <thead class="bg-gray-100 uppercase text-[10px]">
+              <tr>
+                <th class="p-2.5">Mess Name</th>
+                <th class="p-2.5">Provider</th>
+                <th class="p-2.5">Monthly Price</th>
+                <th class="p-2.5">Diet Type</th>
+                <th class="p-2.5">Address</th>
+                <th class="p-2.5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${messList.map(m => `
+                <tr class="border-b hover:bg-gray-50">
+                  <td class="p-2.5 font-bold text-gray-900">${m.name}</td>
+                  <td class="p-2.5">${m.provider_name}</td>
+                  <td class="p-2.5 font-bold text-orange-600">₹${m.monthly_price}</td>
+                  <td class="p-2.5"><span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded text-[10px]">${m.diet_type}</span></td>
+                  <td class="p-2.5 text-gray-500">${m.address}</td>
+                  <td class="p-2.5 text-right">
+                    <button onclick="deleteAdminMessListing('${m.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2.5 py-1 rounded-lg border border-red-200 text-[10px] transition">
+                      <i class="fa-solid fa-trash-can mr-1"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } else {
+        messTableContainer.innerHTML = `<p class="text-xs text-gray-400 py-3">No registered mess services listed.</p>`;
+      }
 
       loadEmailAdminDiagnostics();
       loadVacateRequestsTable("adminVacateRequestsTable");
@@ -2209,14 +2297,34 @@
               <td class="p-2 font-bold">${u.full_name}</td>
               <td class="p-2">${u.email}</td>
               <td class="p-2">
-                ${u.phone}<br><span class="text-[10px] text-gray-400">${u.address}</span>
-                ${u.google_map_url ? `<br><a href="${u.google_map_url}" target="_blank" class="text-[10px] text-blue-600 font-bold">📍 Map Link</a>` : ''}
+                ${u.phone}<br><span class="text-[10px] text-gray-400">${u.address}</span>${u.google_map_url ? `<br><a href="${u.google_map_url}" target="_blank" class="text-[10px] text-blue-600 font-bold">📍 Map Link</a>` : ''}
               </td>
               <td class="p-2 font-bold text-orange-600 uppercase">${u.role}</td>
             </tr>
           `).join('')}</tbody>
         </table>
       `;
+    }
+
+    async function deleteAdminMessListing(messId) {
+      if (!confirm("Are you sure you want to delete this mess listing? This action cannot be undone.")) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/mess-listings/${messId}`, {
+          method: "DELETE",
+          headers: { "Authorization": `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showToast(data.message || "Mess listing deleted.", "success");
+          await fetchMessPricingRules();
+          loadAdminOverview();
+        } else {
+          showToast(data.detail || "Failed to delete mess listing.", "error");
+        }
+      } catch (e) {
+        showToast("Error deleting mess listing.", "error");
+      }
     }
 
     async function loadEmailAdminDiagnostics() {
@@ -2233,158 +2341,126 @@
               <i class="fa-solid fa-paper-plane"></i> Brevo API: ${b.configured ? 'Active' : 'Not Set'}
             </span>
             <span class="px-3 py-1 rounded-full text-[10px] font-bold ${s.configured ? 'bg-blue-100 text-blue-800 border border-blue-300' : 'bg-gray-100 text-gray-600 border'}">
-              <i class="fa-solid fa-envelope"></i> SMTP Fallback: ${s.configured ? 'Active (' + s.server + ')' : 'Not Set'}
+              <i class="fa-solid fa-server"></i> SMTP: ${s.configured ? 'Active' : 'Not Set'}
             </span>
           `;
-
-          const logs = data.recent_logs || [];
-          document.getElementById("adminEmailLogsTable").innerHTML = logs.length ? `
-            <table class="w-full text-xs text-left border">
-              <thead class="bg-gray-100 uppercase text-[10px]">
-                <tr>
-                  <th class="p-2">Timestamp</th>
-                  <th class="p-2">Recipient</th>
-                  <th class="p-2">Subject</th>
-                  <th class="p-2">Provider</th>
-                  <th class="p-2">Status</th>
-                  <th class="p-2">Details</th>
-                </tr>
-              </thead>
-              <tbody>${logs.map(l => `
-                <tr class="border-b">
-                  <td class="p-2 text-gray-500 font-semibold">${l.timestamp}</td>
-                  <td class="p-2 font-bold text-gray-900">${l.recipient}</td>
-                  <td class="p-2">${l.subject}</td>
-                  <td class="p-2 font-bold text-orange-600">${l.provider}</td>
-                  <td class="p-2">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${l.status === 'SUCCESS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                      ${l.status}
-                    </span>
-                  </td>
-                  <td class="p-2 text-[10px] text-gray-500 line-clamp-1">${l.error_detail || '-'}</td>
-                </tr>
-              `).join('')}</tbody>
-            </table>
-          ` : `<p class="text-xs text-gray-400 py-3">No email dispatch logs recorded yet.</p>`;
         }
       } catch (e) {
-        console.log("Error loading email status...");
+        console.error("Email diagnostics load failed", e);
       }
+      loadAdminEmailLogs();
     }
 
     async function sendAdminTestEmail() {
       const email = document.getElementById("adminTestEmailInput").value.trim();
-      if (!email) {
-        showToast("Please enter a recipient email address.", "warning");
-        return;
-      }
-
-      showToast("Triggering diagnostic test email...", "info");
+      if (!email) { showToast("Enter recipient email", "warning"); return; }
       try {
-        const res = await fetch(`${API_BASE}/admin/test-email`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ recipient: email })
+        const res = await fetch(`${API_BASE}/admin/send-test-email`, {
+          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+          body: JSON.stringify({ recipient_email: email })
         });
         const data = await res.json();
-        if (res.ok) {
-          showToast(data.message, "success");
-          setTimeout(() => loadEmailAdminDiagnostics(), 1500);
-        } else {
-          showToast(data.detail || "Test dispatch failed.", "error");
-        }
-      } catch (e) {
-        showToast("Error dispatching test email.", "error");
-      }
+        if (res.ok) { showToast(data.message || "Test email dispatched!", "success"); loadAdminEmailLogs(); }
+        else { showToast(data.detail || "Email dispatch failed.", "error"); }
+      } catch (e) { showToast("Error sending test email.", "error"); }
+    }
+
+    async function loadAdminEmailLogs() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/email-logs`, { headers: { "Authorization": `Bearer ${authToken}` } });
+        const logs = await res.json();
+        document.getElementById("adminEmailLogsTable").innerHTML = logs.length ? `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Timestamp</th><th class="p-2">Recipient</th><th class="p-2">Subject</th><th class="p-2">Provider</th><th class="p-2">Status</th></tr></thead>
+            <tbody>${logs.map(l => `
+              <tr class="border-b">
+                <td class="p-2 text-gray-400">${l.timestamp}</td>
+                <td class="p-2 font-bold">${l.recipient}</td>
+                <td class="p-2">${l.subject}</td>
+                <td class="p-2"><span class="bg-gray-100 text-gray-700 font-bold px-2 py-0.5 rounded text-[10px]">${l.provider}</span></td>
+                <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${l.status === 'Sent' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${l.status}</span></td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        ` : `<p class="text-xs text-gray-400 py-3">No email logs found.</p>`;
+      } catch (e) {}
     }
 
     async function loadNotifications() {
-      const res = await fetch(`${API_BASE}/notifications`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const notifs = await res.json();
-      document.getElementById("notificationsList").innerHTML = notifs.length ? notifs.map(n => `
-        <div class="bg-gray-50 p-4 rounded-2xl border flex justify-between items-start">
-          <div>
-            <h4 class="font-bold text-xs text-gray-900">${n.title}</h4>
-            <p class="text-xs text-gray-600 mt-0.5">${n.message}</p>
+      try {
+        const res = await fetch(`${API_BASE}/notifications`, { headers: { "Authorization": `Bearer ${authToken}` } });
+        const notes = await res.json();
+        document.getElementById("notificationsList").innerHTML = notes.length ? notes.map(n => `
+          <div class="bg-gray-50 p-4 rounded-2xl border flex items-start justify-between gap-3">
+            <div class="space-y-1">
+              <span class="block font-bold text-xs text-gray-900">${n.title}</span>
+              <p class="text-xs text-gray-600">${n.message}</p>
+              <span class="text-[10px] text-gray-400">${n.created_at || 'Just now'}</span>
+            </div>
+            <span class="bg-orange-100 text-orange-800 font-bold text-[10px] px-2.5 py-1 rounded-full">${n.category || 'Alert'}</span>
           </div>
-          <span class="text-[10px] text-gray-400 font-bold">${n.created_at}</span>
-        </div>
-      `).join('') : `<p class="text-xs text-gray-400 py-4">No notifications in inbox.</p>`;
+        `).join('') : `<p class="text-xs text-gray-400 py-4">No new notifications.</p>`;
+      } catch (e) {}
     }
 
     async function loadComplaints() {
-      const res = await fetch(`${API_BASE}/complaints`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const comps = await res.json();
-
-      document.getElementById("complaintsTitle").innerText = currentUser.role === "pg_owner" ? "PG Maintenance Complaints Inbox" : (currentUser.role === "mess_partner" ? "Mess Quality Complaints Inbox" : "Complaints System");
-
-      const canResolve = (c) => {
-        if (currentUser.role === "admin") return true;
-        if (currentUser.role === "pg_owner" && c.category === "PG Maintenance") return true;
-        if (currentUser.role === "mess_partner" && c.category === "Mess Quality") return true;
-        return false;
-      };
-
-      document.getElementById("complaintsTable").innerHTML = comps.length ? `
-        <table class="w-full text-xs text-left">
-          <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Category</th><th class="p-2">Title</th><th class="p-2">User</th><th class="p-2">Status</th><th class="p-2">Action</th></tr></thead>
-          <tbody>${comps.map(c => `
-            <tr class="border-b">
-              <td class="p-2 font-bold text-orange-600">${c.category}</td>
-              <td class="p-2 font-bold">${c.title}</td>
-              <td class="p-2">${c.user_name} (${c.user_phone})</td>
-              <td class="p-2"><span class="px-2 py-0.5 rounded font-bold ${c.status === 'Resolved' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${c.status}</span></td>
-              <td class="p-2">${c.status === 'Pending' && canResolve(c) ? `<button onclick="resolveComplaint('${c.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg transition">Resolve</button>` : '-'}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
-      ` : `<p class="text-xs text-gray-400 py-4">No complaints recorded for your portal category.</p>`;
+      try {
+        const res = await fetch(`${API_BASE}/complaints`, { headers: { "Authorization": `Bearer ${authToken}` } });
+        const list = await res.json();
+        document.getElementById("complaintsTable").innerHTML = list.length ? `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Category</th><th class="p-2">Title</th><th class="p-2">Description</th><th class="p-2">Raised By</th><th class="p-2">Status</th></tr></thead>
+            <tbody>${list.map(c => `
+              <tr class="border-b">
+                <td class="p-2"><span class="bg-gray-100 font-bold px-2 py-0.5 rounded text-[10px]">${c.category}</span></td>
+                <td class="p-2 font-bold">${c.title}</td>
+                <td class="p-2 text-gray-600">${c.description}</td>
+                <td class="p-2 text-gray-500">${c.user_name || 'Student'}</td>
+                <td class="p-2"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">${c.status || 'Pending'}</span></td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        ` : `<p class="text-xs text-gray-400 py-4">No complaints recorded.</p>`;
+      } catch (e) {}
     }
 
     function openComplaintModal() { document.getElementById("complaintModal").classList.remove("hidden"); }
     function closeComplaintModal() { document.getElementById("complaintModal").classList.add("hidden"); }
 
     async function submitComplaint() {
-      await fetch(`${API_BASE}/complaints`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({ category: document.getElementById("compCategory").value, title: document.getElementById("compTitle").value, description: document.getElementById("compDesc").value })
-      });
-      closeComplaintModal(); 
-      showToast("Complaint submitted successfully.", "info");
-      loadComplaints();
-    }
-
-    async function resolveComplaint(id) {
-      const res = await fetch(`${API_BASE}/complaints/resolve`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({ complaint_id: id })
-      });
-      const data = await res.json();
-      if (res.ok) showToast(data.message, "success"); 
-      else showToast(data.detail || "Resolution failed.", "error");
-      loadComplaints();
-    }
-
-    async function unsubscribeMess() {
-      if (!confirm("Pause mess plan and meal billing?")) return;
-      showToast("Mess subscription paused.", "info");
+      const cat = document.getElementById("compCategory").value;
+      const title = document.getElementById("compTitle").value.trim();
+      const desc = document.getElementById("compDesc").value.trim();
+      if (!title || !desc) { showToast("Please fill out all fields.", "warning"); return; }
+      try {
+        const res = await fetch(`${API_BASE}/complaints/create`, {
+          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+          body: JSON.stringify({ category: cat, title, description: desc })
+        });
+        const data = await res.json();
+        if (res.ok) { showToast(data.message || "Complaint registered.", "success"); closeComplaintModal(); loadComplaints(); }
+        else showToast(data.detail || "Submission failed.", "error");
+      } catch (e) { showToast("Error submitting complaint.", "error"); }
     }
 
     function openAddRoomModal() { document.getElementById("addRoomModal").classList.remove("hidden"); }
     function closeAddRoomModal() { document.getElementById("addRoomModal").classList.add("hidden"); }
 
     async function submitAddRoom() {
-      await fetch(`${API_BASE}/pg/add-room`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ room_number: document.getElementById("addRoomNum").value, room_type: document.getElementById("addRoomType").value, monthly_rent: parseInt(document.getElementById("addRoomRent").value) })
-      });
-      closeAddRoomModal(); 
-      showToast("Room added successfully!", "success");
-      loadOwnerRooms();
+      const num = document.getElementById("addRoomNum").value.trim();
+      const type = document.getElementById("addRoomType").value.trim();
+      const rent = parseInt(document.getElementById("addRoomRent").value);
+      if (!num || !type || !rent) { showToast("Please fill all fields.", "warning"); return; }
+      try {
+        const res = await fetch(`${API_BASE}/pg/add-room`, {
+          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+          body: JSON.stringify({ room_number: num, room_type: type, monthly_rent: rent })
+        });
+        const data = await res.json();
+        if (res.ok) { showToast(data.message || "Room added!", "success"); closeAddRoomModal(); loadOwnerRooms(); }
+        else showToast(data.detail || "Failed to add room.", "error");
+      } catch (e) { showToast("Error adding room.", "error"); }
     }
-
-    init();
   </script>
 </body>
 </html>
-
