@@ -348,6 +348,9 @@
             <div id="cancelledMealsTable" class="overflow-x-auto no-scrollbar"></div>
           </div>
         </div>
+
+        <!-- Vendor Monthly Credits Container for Mess Partner -->
+        <div id="messVendorCreditContainer"></div>
       </div>
 
       <!-- MESS SUBSCRIBERS LEDGER VIEW -->
@@ -375,15 +378,17 @@
       <!-- OWNER ROOMS VIEW -->
       <div id="view-owner-rooms" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center flex-wrap gap-2">
             <div>
               <h2 class="text-lg md:text-xl font-bold">Room Directory & Photo Management</h2>
               <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & WebP optimized)</p>
             </div>
-            <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
-            <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
-              <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
-            </button>
+            <div class="flex gap-2">
+              <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
+              <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
+              </button>
+            </div>
           </div>
           <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
           <div class="pt-4 border-t">
@@ -391,6 +396,9 @@
             <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
           </div>
         </div>
+
+        <!-- Vendor Monthly Credits Container for PG Owner -->
+        <div id="ownerVendorCreditContainer"></div>
       </div>
 
       <!-- ADMIN OVERVIEW VIEW -->
@@ -400,6 +408,7 @@
           <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-6 gap-3"></div>
         </div>
 
+        <!-- All Registered Mess Services Card -->
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <div class="flex justify-between items-center">
             <h3 class="font-bold text-base text-gray-900">All Registered Mess Services</h3>
@@ -410,6 +419,35 @@
           <div id="adminMessTableContainer" class="overflow-x-auto no-scrollbar"></div>
         </div>
 
+        <!-- All Registered PG Services Card -->
+        <div class="bg-white rounded-3xl p-6 border shadow-sm space-y-4">
+          <div class="flex justify-between items-center flex-wrap gap-3 border-b pb-4">
+            <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-house-user text-orange-600"></i> All Registered PG Services</h3>
+            <button onclick="openAddPGModal()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition">
+              + Add PG Listing
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50 uppercase text-[10px] font-bold text-gray-500 border-b">
+                <tr>
+                  <th class="p-3">PG Name</th>
+                  <th class="p-3">Gender Pref</th>
+                  <th class="p-3">Sharing</th>
+                  <th class="p-3">Monthly Price</th>
+                  <th class="p-3">Address</th>
+                  <th class="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminPGTableBody" class="divide-y text-gray-700 font-medium">
+                <tr><td colspan="6" class="p-4 text-center text-gray-400">Loading PG listings...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Email Diagnostics -->
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
           <div class="flex justify-between items-center flex-wrap gap-2">
             <div>
@@ -468,7 +506,7 @@
     </div>
   </main>
 
-  <!-- MODALS -->
+  <!-- ALL MODALS CONTAINER -->
 
   <!-- ADD MESS MODAL -->
   <div id="addMessModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
@@ -815,6 +853,90 @@
     </div>
   </div>
 
+  <!-- Modal: Vendor Direct Bank Settlement Setup -->
+  <div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
+      <button onclick="closeVendorOnboardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Bank Settlement</h3>
+      
+      <form onsubmit="submitVendorOnboarding(event)" class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">ACCOUNT HOLDER NAME</label>
+          <input type="text" id="onboardHolderName" required placeholder="Name on Bank Account" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">BANK ACCOUNT NUMBER</label>
+          <input type="text" id="onboardAccountNo" required placeholder="392810102938" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">IFSC CODE</label>
+          <input type="text" id="onboardIfsc" required placeholder="SBIN0001234" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">PAN CARD NUMBER</label>
+          <input type="text" id="onboardPan" required maxlength="10" placeholder="ABCDE1234F" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
+        </div>
+
+        <p class="text-[10px] text-gray-500 bg-orange-50 p-2.5 rounded-xl border border-orange-100">
+          <i class="fa-solid fa-shield-halved text-orange-600"></i> Student payments will be transferred directly to this bank account via Razorpay.
+        </p>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeVendorOnboardModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
+          <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Activate Direct Payouts</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add PG Listing -->
+  <div id="addPGModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
+      <button onclick="closeAddPGModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-house-user text-orange-600"></i> Add PG Listing</h3>
+      
+      <form onsubmit="submitAddPG(event)" class="space-y-3">
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">PG NAME</label>
+          <input type="text" id="addPgName" required placeholder="e.g. Royal Boys PG" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-500 mb-1">GENDER</label>
+            <select id="addPgGender" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+              <option value="Boys PG">Boys PG</option>
+              <option value="Girls PG">Girls PG</option>
+              <option value="Co-ed PG">Co-ed PG</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-500 mb-1">SHARING TYPE</label>
+            <input type="text" id="addPgSharing" required placeholder="e.g. 2 Sharing" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-500 mb-1">PRICE (₹/MO)</label>
+            <input type="number" id="addPgPrice" required placeholder="4500" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-gray-500 mb-1">DISTANCE (KM)</label>
+            <input type="number" step="0.1" id="addPgDistance" required placeholder="1.2" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">ADDRESS</label>
+          <input type="text" id="addPgAddress" required placeholder="e.g. Near GEC Main Gate, Bokaro" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeAddPGModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
+          <button type="submit" id="addPgSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add PG</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
     const API_BASE = "https://basera-backend-bidu.onrender.com/api";
@@ -839,6 +961,24 @@
     let selectedDiet = "Veg";
 
     window.onload = init;
+
+    // Helper for structured API Requests with Auth
+    async function apiCall(endpoint, method = "GET", body = null) {
+      const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
+      const options = {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      };
+      if (body) options.body = JSON.stringify(body);
+
+      const res = await fetch(`${API_BASE}${endpoint}`, options);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || data.message || "API request failed");
+      return data;
+    }
 
     async function fetchMessPricingRules() {
       try {
@@ -1626,10 +1766,10 @@
       if (viewKey === 'student-mess') loadStudentMessView();
       if (viewKey === 'student-calendar') loadCalendarLedger();
       if (viewKey === 'student-bookings') loadBookings();
-      if (viewKey === 'mess-prep') loadMessPrepStats();
+      if (viewKey === 'mess-prep') { loadMessPrepStats(); renderVendorMonthlyCreditCard('messVendorCreditContainer'); }
       if (viewKey === 'mess-subscribers-ledger') loadOwnerMonthlyBilling();
       if (viewKey === 'mess-menu-manager') loadWeeklyMenuEditor();
-      if (viewKey === 'owner-rooms') loadOwnerRooms();
+      if (viewKey === 'owner-rooms') { loadOwnerRooms(); renderVendorMonthlyCreditCard('ownerVendorCreditContainer'); }
       if (viewKey === 'admin-overview') loadAdminOverview();
       if (viewKey === 'notifications-inbox') loadNotifications();
       if (viewKey === 'complaints') loadComplaints();
@@ -2290,6 +2430,7 @@
         messTableContainer.innerHTML = `<p class="text-xs text-gray-400 py-3">No registered mess services listed.</p>`;
       }
 
+      loadAdminPGs();
       loadEmailAdminDiagnostics();
       loadVacateRequestsTable("adminVacateRequestsTable");
 
@@ -2468,257 +2609,214 @@
       } catch (e) { showToast("Error adding room.", "error"); }
     }
 
+    // VENDOR DIRECT BANK SETTLEMENT LOGIC
     function openVendorOnboardModal() { 
-  document.getElementById("vendorOnboardModal").classList.remove("hidden"); 
-}
-
-function closeVendorOnboardModal() { 
-  document.getElementById("vendorOnboardModal").classList.add("hidden"); 
-}
-
-async function submitVendorOnboarding(e) {
-  e.preventDefault();
-  const btn = document.getElementById("onboardSubmitBtn");
-  btn.disabled = true;
-  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Activating Account...`;
-
-  const payload = {
-    account_holder_name: document.getElementById("onboardHolderName").value.trim(),
-    bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
-    bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
-    pan_number: document.getElementById("onboardPan").value.trim().toUpperCase()
-  };
-
-  try {
-    // 1. Point directly to your backend domain (replace with your actual Render URL)
-    const backendUrl = " https://basera-backend-bidu.onrender.com"; 
-
-    const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
-    
-    const response = await fetch(`${backendUrl}/api/vendor/onboard-route`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const resData = await response.json();
-    if (!response.ok) throw new Error(resData.detail || "Failed to activate account.");
-
-    showToast(resData.message || "Razorpay Direct Account activated successfully!", "success");
-    closeVendorOnboardModal();
-  } catch (err) {
-    showToast(err.message || "Failed to setup vendor account.", "error");
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `Activate Direct Payouts`;
-  }
-}
-
-function openAddPGModal() {
-  document.getElementById("addPGModal").classList.remove("hidden");
-}
-
-function closeAddPGModal() {
-  document.getElementById("addPGModal").classList.add("hidden");
-}
-
-async function loadAdminPGs() {
-  const tbody = document.getElementById("adminPGTableBody");
-  if (!tbody) return;
-
-  try {
-    const pgs = await apiCall("/api/admin/pg-listings", "GET");
-    if (!pgs || pgs.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No PG listings found.</td></tr>`;
-      return;
+      document.getElementById("vendorOnboardModal").classList.remove("hidden"); 
     }
-    // Automatically triggers PG loading when Admin view opens
-document.addEventListener("DOMContentLoaded", () => {
-  const adminTabBtn = document.querySelector('[onclick*="admin"]');
-  if (adminTabBtn) {
-    adminTabBtn.addEventListener("click", () => {
-      setTimeout(loadAdminPGs, 200);
-    });
-  }
-});
 
-    tbody.innerHTML = pgs.map(pg => `
-      <tr class="hover:bg-gray-50">
-        <td class="p-3 font-bold text-gray-900">${pg.name}</td>
-        <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">${pg.gender_pref}</span></td>
-        <td class="p-3">${pg.sharing}</td>
-        <td class="p-3 font-bold text-orange-600">₹${pg.monthly_price}</td>
-        <td class="p-3 text-gray-500 truncate max-w-xs">${pg.address}</td>
-        <td class="p-3 text-right">
-          <button onclick="deleteAdminPG('${pg.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-[11px] px-2.5 py-1 rounded-lg border border-red-200 transition">
-            <i class="fa-solid fa-trash"></i> Delete
-          </button>
-        </td>
-      </tr>
-    `).join("");
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load PG listings.</td></tr>`;
-  }
-}
+    function closeVendorOnboardModal() { 
+      document.getElementById("vendorOnboardModal").classList.add("hidden"); 
+    }
 
-async function submitAddPG(e) {
-  e.preventDefault();
-  const btn = document.getElementById("addPgSubmitBtn");
-  btn.disabled = true;
+    async function submitVendorOnboarding(e) {
+      e.preventDefault();
+      const btn = document.getElementById("onboardSubmitBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Activating Account...`;
 
-  const payload = {
-    name: document.getElementById("addPgName").value.trim(),
-    gender_pref: document.getElementById("addPgGender").value,
-    sharing: document.getElementById("addPgSharing").value.trim(),
-    monthly_price: parseInt(document.getElementById("addPgPrice").value),
-    distance_km: parseFloat(document.getElementById("addPgDistance").value),
-    address: document.getElementById("addPgAddress").value.trim()
-  };
+      const payload = {
+        account_holder_name: document.getElementById("onboardHolderName").value.trim(),
+        bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
+        bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
+        pan_number: document.getElementById("onboardPan").value.trim().toUpperCase()
+      };
 
-  try {
-    const res = await apiCall("/api/admin/pg-listings", "POST", payload);
-    showToast(res.message || "PG added!", "success");
-    closeAddPGModal();
-    loadAdminPGs();
-  } catch (err) {
-    showToast(err.message || "Failed to add PG.", "error");
-  } finally {
-    btn.disabled = false;
-  }
-}
+      try {
+        const resData = await apiCall("/vendor/onboard-route", "POST", payload);
+        showToast(resData.message || "Razorpay Direct Account activated successfully!", "success");
+        closeVendorOnboardModal();
+      } catch (err) {
+        showToast(err.message || "Failed to setup vendor account.", "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Activate Direct Payouts`;
+      }
+    }
 
-async function deleteAdminPG(pgId) {
-  if (!confirm("Are you sure you want to delete this PG listing?")) return;
-  try {
-    const res = await apiCall(`/api/admin/pg-listings/${pgId}`, "DELETE");
-    showToast(res.message || "PG deleted!", "success");
-    loadAdminPGs();
-  } catch (err) {
-    showToast(err.message || "Failed to delete PG.", "error");
-  }
-}
+    // ADMIN PG LISTING LOGIC
+    function openAddPGModal() {
+      document.getElementById("addPGModal").classList.remove("hidden");
+    }
 
-// Call loadAdminPGs() when opening the Admin view
-if (typeof loadAdminView === "function") {
-  const origAdminView = loadAdminView;
-  loadAdminView = function() {
-    origAdminView();
-    loadAdminPGs();
-  };
-}
+    function closeAddPGModal() {
+      document.getElementById("addPGModal").classList.add("hidden");
+    }
+
+    async function loadAdminPGs() {
+      const tbody = document.getElementById("adminPGTableBody");
+      if (!tbody) return;
+
+      try {
+        const pgs = await apiCall("/admin/pg-listings", "GET");
+        if (!pgs || pgs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No PG listings found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = pgs.map(pg => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 font-bold text-gray-900">${pg.name}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">${pg.gender_pref}</span></td>
+            <td class="p-3">${pg.sharing}</td>
+            <td class="p-3 font-bold text-orange-600">₹${pg.monthly_price}</td>
+            <td class="p-3 text-gray-500 truncate max-w-xs">${pg.address}</td>
+            <td class="p-3 text-right">
+              <button onclick="deleteAdminPG('${pg.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-[11px] px-2.5 py-1 rounded-lg border border-red-200 transition">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        `).join("");
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load PG listings.</td></tr>`;
+      }
+    }
+
+    async function submitAddPG(e) {
+      e.preventDefault();
+      const btn = document.getElementById("addPgSubmitBtn");
+      btn.disabled = true;
+
+      const payload = {
+        name: document.getElementById("addPgName").value.trim(),
+        gender_pref: document.getElementById("addPgGender").value,
+        sharing: document.getElementById("addPgSharing").value.trim(),
+        monthly_price: parseInt(document.getElementById("addPgPrice").value),
+        distance_km: parseFloat(document.getElementById("addPgDistance").value),
+        address: document.getElementById("addPgAddress").value.trim()
+      };
+
+      try {
+        const res = await apiCall("/admin/pg-listings", "POST", payload);
+        showToast(res.message || "PG added!", "success");
+        closeAddPGModal();
+        loadAdminPGs();
+      } catch (err) {
+        showToast(err.message || "Failed to add PG.", "error");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function deleteAdminPG(pgId) {
+      if (!confirm("Are you sure you want to delete this PG listing?")) return;
+      try {
+        const res = await apiCall(`/admin/pg-listings/${pgId}`, "DELETE");
+        showToast(res.message || "PG deleted!", "success");
+        loadAdminPGs();
+      } catch (err) {
+        showToast(err.message || "Failed to delete PG.", "error");
+      }
+    }
+
+    // MONTHLY CREDIT LEDGER LOGIC FOR VENDORS
+    function renderVendorMonthlyCreditCard(targetContainerId) {
+      const container = document.getElementById(targetContainerId);
+      if (!container) return;
+
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const defaultMonth = `${yyyy}-${mm}`;
+
+      container.innerHTML = `
+        <div class="bg-white rounded-3xl p-6 border shadow-sm space-y-6">
+          <div class="flex justify-between items-center flex-wrap gap-4 border-b pb-4">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-wallet text-orange-600"></i> Monthly Credit & Earnings</h3>
+              <p class="text-xs text-gray-500">Track monthly payouts, student collections, and platform commission.</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold text-gray-500 uppercase">Select Month:</label>
+              <input type="month" id="vendorCreditMonthPicker" value="${defaultMonth}" onchange="loadVendorMonthlyCredits()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-orange-50/60 p-4 rounded-2xl border border-orange-100">
+              <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Gross Student Collection</p>
+              <h4 id="creditGrossAmount" class="text-xl font-black text-gray-900 mt-1">₹0</h4>
+            </div>
+            <div class="bg-green-50/60 p-4 rounded-2xl border border-green-100">
+              <p class="text-[10px] font-bold text-green-600 uppercase tracking-wider">Net Bank Payout (95%)</p>
+              <h4 id="creditNetPayout" class="text-xl font-black text-green-700 mt-1">₹0</h4>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200">
+              <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Platform Fee (5%)</p>
+              <h4 id="creditPlatformFee" class="text-xl font-black text-gray-700 mt-1">₹0</h4>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50 uppercase text-[10px] font-bold text-gray-500 border-b">
+                <tr>
+                  <th class="p-3">Date</th>
+                  <th class="p-3">Student Name</th>
+                  <th class="p-3">Plan / Description</th>
+                  <th class="p-3">Gross Amount</th>
+                  <th class="p-3">Your Net Credit</th>
+                  <th class="p-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody id="vendorCreditTableBody" class="divide-y text-gray-700 font-medium">
+                <tr><td colspan="6" class="p-4 text-center text-gray-400">Loading monthly credits...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      loadVendorMonthlyCredits();
+    }
+
+    async function loadVendorMonthlyCredits() {
+      const picker = document.getElementById("vendorCreditMonthPicker");
+      const monthVal = picker ? picker.value : "";
+      const tbody = document.getElementById("vendorCreditTableBody");
+      if (!tbody) return;
+
+      try {
+        const res = await apiCall(`/vendor/monthly-credits?month=${monthVal}`, "GET");
+        
+        document.getElementById("creditGrossAmount").innerText = `₹${res.summary.total_gross}`;
+        document.getElementById("creditNetPayout").innerText = `₹${res.summary.total_net_payout}`;
+        document.getElementById("creditPlatformFee").innerText = `₹${res.summary.total_commission}`;
+
+        if (!res.transactions || res.transactions.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No transactions recorded for ${res.month}.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = res.transactions.map(t => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 text-gray-500 font-bold">${t.date}</td>
+            <td class="p-3 font-bold text-gray-900">${t.student_name} <br><span class="text-[10px] text-gray-400 font-normal">${t.student_phone}</span></td>
+            <td class="p-3 text-gray-600">${t.description}</td>
+            <td class="p-3 font-bold text-gray-900">₹${t.gross_amount}</td>
+            <td class="p-3 font-bold text-green-600">+₹${t.net_credit}</td>
+            <td class="p-3 text-right">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
+                <i class="fa-solid fa-circle-check"></i> ${t.status}
+              </span>
+            </td>
+          </tr>
+        `).join("");
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load credit details.</td></tr>`;
+      }
+    }
   </script>
-  <!-- Modal: Vendor Direct Bank Settlement Setup -->
-<div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-  <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
-    <button onclick="closeVendorOnboardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
-    <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Bank Settlement</h3>
-    
-    <form onsubmit="submitVendorOnboarding(event)" class="space-y-3">
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">ACCOUNT HOLDER NAME</label>
-        <input type="text" id="onboardHolderName" required placeholder="Name on Bank Account" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">BANK ACCOUNT NUMBER</label>
-        <input type="text" id="onboardAccountNo" required placeholder="392810102938" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">IFSC CODE</label>
-        <input type="text" id="onboardIfsc" required placeholder="SBIN0001234" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
-      </div>
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">PAN CARD NUMBER</label>
-        <input type="text" id="onboardPan" required maxlength="10" placeholder="ABCDE1234F" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
-      </div>
-
-      <p class="text-[10px] text-gray-500 bg-orange-50 p-2.5 rounded-xl border border-orange-100">
-        <i class="fa-solid fa-shield-halved text-orange-600"></i> Student payments will be transferred directly to this bank account via Razorpay.
-      </p>
-
-      <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeVendorOnboardModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-        <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Activate Direct Payouts</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- All Registered PG Services Card -->
-<div class="bg-white rounded-3xl p-6 border shadow-sm space-y-4">
-  <div class="flex justify-between items-center flex-wrap gap-3 border-b pb-4">
-    <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-house-user text-orange-600"></i> All Registered PG Services</h3>
-    <button onclick="openAddPGModal()" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow transition">
-      + Add PG Listing
-    </button>
-  </div>
-
-  <div class="overflow-x-auto">
-    <table class="w-full text-left text-xs">
-      <thead class="bg-gray-50 uppercase text-[10px] font-bold text-gray-500 border-b">
-        <tr>
-          <th class="p-3">PG Name</th>
-          <th class="p-3">Gender Pref</th>
-          <th class="p-3">Sharing</th>
-          <th class="p-3">Monthly Price</th>
-          <th class="p-3">Address</th>
-          <th class="p-3 text-right">Action</th>
-        </tr>
-      </thead>
-      <tbody id="adminPGTableBody" class="divide-y text-gray-700 font-medium">
-        <tr><td colspan="6" class="p-4 text-center text-gray-400">Loading PG listings...</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-<!-- Modal: Add PG Listing -->
-<div id="addPGModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-  <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
-    <button onclick="closeAddPGModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
-    <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-house-user text-orange-600"></i> Add PG Listing</h3>
-    
-    <form onsubmit="submitAddPG(event)" class="space-y-3">
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">PG NAME</label>
-        <input type="text" id="addPgName" required placeholder="e.g. Royal Boys PG" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">GENDER</label>
-          <select id="addPgGender" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
-            <option value="Boys">Boys</option>
-            <option value="Girls">Girls</option>
-            <option value="Co-ed">Co-ed</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">SHARING TYPE</label>
-          <input type="text" id="addPgSharing" required placeholder="e.g. 2 Sharing" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
-        </div>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">PRICE (₹/MO)</label>
-          <input type="number" id="addPgPrice" required placeholder="4500" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">DISTANCE (KM)</label>
-          <input type="number" step="0.1" id="addPgDistance" required placeholder="1.2" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
-        </div>
-      </div>
-      <div>
-        <label class="block text-[10px] font-bold text-gray-500 mb-1">ADDRESS</label>
-        <input type="text" id="addPgAddress" required placeholder="e.g. Near GEC Main Gate, Bokaro" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
-      </div>
-
-      <div class="flex gap-2 pt-2">
-        <button type="button" onclick="closeAddPGModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-        <button type="submit" id="addPgSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add PG</button>
-      </div>
-    </form>
-  </div>
-</div>
 </body>
 </html>
