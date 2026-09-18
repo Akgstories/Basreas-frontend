@@ -375,27 +375,35 @@
         </div>
       </div>
 
-      <!-- OWNER ROOMS VIEW -->
-      <div id="view-owner-rooms" class="hidden space-y-6">
-        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
-          <div class="flex justify-between items-center flex-wrap gap-2">
-            <div>
-              <h2 class="text-lg md:text-xl font-bold">Room Directory & Photo Management</h2>
-              <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & WebP optimized)</p>
-            </div>
-            <div class="flex gap-2">
-              <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
-              <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
-                <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
-              </button>
-            </div>
-          </div>
-          <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-          <div class="pt-4 border-t">
-            <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
-            <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
-          </div>
-        </div>
+      <!-- OWNER ROOMS & PG VIEW -->
+
+<div id="view-owner-rooms" class="hidden space-y-6">
+  <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+    <div class="flex justify-between items-center flex-wrap gap-2">
+      <div>
+        <h2 class="text-lg md:text-xl font-bold">My PG Listings & Rooms</h2>
+        <p class="text-xs text-gray-500">Manage your registered PGs and add/configure rooms under each property</p>
+      </div>
+      <div class="flex gap-2">
+        <button onclick="openAddPGModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">
+          + Add PG Listing
+        </button>
+        <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
+        </button>
+      </div>
+    </div>
+
+    <!-- PG LIST & NESTED ROOMS CONTAINER -->
+    <div id="ownerPGsContainer" class="space-y-6"></div>
+
+    <div class="pt-4 border-t">
+      <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
+      <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
+    </div>
+  </div>
+
+  
 
         <!-- Vendor Monthly Credits Container for PG Owner -->
         <div id="ownerVendorCreditContainer"></div>
@@ -839,19 +847,19 @@
   </div>
 
   <!-- ADD ROOM MODAL -->
-  <div id="addRoomModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
-    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
-      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
-      <h3 class="text-lg font-bold">Add Room</h3>
-      <input type="text" id="addRoomNum" placeholder="Room Number" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-      <input type="text" id="addRoomType" placeholder="Type" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-      <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-      <div class="flex gap-2 pt-1">
-        <button onclick="closeAddRoomModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-        <button onclick="submitAddRoom()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Add Room</button>
-      </div>
+<div id="addRoomModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+  <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
+    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
+    <h3 class="text-lg font-bold" id="addRoomModalTitle">Add Room to PG</h3>
+    <input type="text" id="addRoomNum" placeholder="Room Number (e.g. 101)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+    <input type="text" id="addRoomType" placeholder="Type (e.g. Double Sharing / Single)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+    <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+    <div class="flex gap-2 pt-1">
+      <button onclick="closeAddRoomModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+      <button onclick="submitAddRoom()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Add Room</button>
     </div>
   </div>
+</div>
 
   <!-- Modal: Vendor Direct Bank Settlement Setup -->
   <div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
@@ -2817,6 +2825,144 @@
         tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load credit details.</td></tr>`;
       }
     }
+
+    let activePgIdForRoom = null;
+
+// Open Add Room Modal linked to a specific PG ID
+function openAddRoomModal(pgId, pgName) {
+  activePgIdForRoom = pgId;
+  document.getElementById("addRoomModalTitle").innerText = `Add Room to ${pgName || 'PG'}`;
+  document.getElementById("addRoomNum").value = "";
+  document.getElementById("addRoomType").value = "";
+  document.getElementById("addRoomRent").value = "";
+  document.getElementById("addRoomModal").classList.remove("hidden");
+}
+
+function closeAddRoomModal() {
+  document.getElementById("addRoomModal").classList.add("hidden");
+}
+
+// Submit Room under selected PG
+async function submitAddRoom() {
+  const num = document.getElementById("addRoomNum").value.trim();
+  const type = document.getElementById("addRoomType").value.trim();
+  const rent = parseInt(document.getElementById("addRoomRent").value);
+
+  if (!num || !type || !rent) { 
+    showToast("Please fill all room details.", "warning"); 
+    return; 
+  }
+  if (!activePgIdForRoom) {
+    showToast("No PG selected. Please click 'Add Room' inside a PG card.", "error");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/pg/add-room`, {
+      method: "POST", 
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+      body: JSON.stringify({ 
+        pg_id: activePgIdForRoom, 
+        room_number: num, 
+        room_type: type, 
+        monthly_rent: rent 
+      })
+    });
+    const data = await res.json();
+    if (res.ok) { 
+      showToast(data.message || "Room added successfully!", "success"); 
+      closeAddRoomModal(); 
+      loadOwnerRooms(); 
+    } else {
+      showToast(data.detail || "Failed to add room.", "error");
+    }
+  } catch (e) { 
+    showToast("Error connecting to backend.", "error"); 
+  }
+}
+
+// Load PG Owner's PGs and their nested rooms
+async function loadOwnerRooms() {
+  try {
+    // 1. Fetch PGs and Rooms
+    const [pgRes, roomRes] = await Promise.all([
+      fetch(`${API_BASE}/pgs`),
+      fetch(`${API_BASE}/rooms`)
+    ]);
+    
+    const pgs = await pgRes.json();
+    const allRooms = await roomRes.json();
+
+    const container = document.getElementById("ownerPGsContainer");
+
+    if (!pgs || pgs.length === 0) {
+      container.innerHTML = `
+        <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed">
+          <i class="fa-solid fa-house-user text-3xl text-gray-300 mb-2"></i>
+          <p class="text-xs text-gray-500 font-bold">No PG listings found.</p>
+          <button onclick="openAddPGModal()" class="mt-3 bg-orange-600 text-white font-bold text-xs px-4 py-2 rounded-xl">
+            + Create First PG Listing
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // 2. Render each PG with its nested rooms
+    container.innerHTML = pgs.map(pg => {
+      const pgRooms = allRooms.filter(r => r.pg_id === pg.id || r.pg_name === pg.name);
+
+      return `
+        <div class="bg-gray-50 rounded-2xl p-5 border space-y-4 shadow-sm">
+          <!-- PG Header Info -->
+          <div class="flex justify-between items-start flex-wrap gap-2 border-b pb-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="font-bold text-lg text-gray-900">${pg.name}</h3>
+                <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">${pg.gender_pref}</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-0.5">📍 ${pg.address} • ${pg.sharing}</p>
+            </div>
+            
+            <button onclick="openAddRoomModal('${pg.id}', '${pg.name.replace(/'/g, "\\'")}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
+              + Add Room to ${pg.name}
+            </button>
+          </div>
+
+          <!-- Rooms Grid inside PG -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${pgRooms.length > 0 ? pgRooms.map(r => `
+              <div class="bg-white p-4 rounded-xl border space-y-3">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-bold text-sm text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
+                    <p class="text-xs text-orange-600 font-bold">₹${r.monthly_rent}/mo</p>
+                    <p class="text-[10px] text-gray-400">Tenant: ${r.tenant_name || 'Vacant'} (${r.tenant_phone || 'N/A'})</p>
+                  </div>
+                  <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full">${r.status.toUpperCase()}</span>
+                </div>
+
+                <div class="flex items-center gap-1.5 pt-1">
+                  ${r.images && r.images.length > 0 ? r.images.map(img => `
+                    <img src="${img}" class="w-10 h-10 object-cover rounded-lg border">
+                  `).join('') : '<span class="text-[10px] text-gray-400">No photos</span>'}
+                </div>
+
+                <button onclick="openRoomPhotoModal('${r.room_number}',${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-[11px] py-1.5 rounded-lg transition">
+                  <i class="fa-solid fa-camera"></i> Photos (${r.images ? r.images.length : 0}/5)
+                </button>
+              </div>
+            `).join('') : '<p class="col-span-2 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No rooms listed under this PG yet. Click above to add a room.</p>'}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    loadVacateRequestsTable("ownerVacateRequestsTable");
+  } catch (err) {
+    showToast("Error loading PG & room listings.", "error");
+  }
+}
   </script>
 </body>
 </html>
