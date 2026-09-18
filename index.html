@@ -2490,8 +2490,20 @@ async function submitVendorOnboarding(e) {
   };
 
   try {
-    const res = await apiCall("/api/vendor/onboard-route", "POST", payload);
-    showToast(res.message, "success");
+    const token = localStorage.getItem("basera_token") || "";
+    const response = await fetch(`${API_BASE_URL}/api/vendor/onboard-route`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Failed to activate account.");
+
+    showToast(data.message || "Razorpay Direct Account activated successfully!", "success");
     closeVendorOnboardModal();
   } catch (err) {
     showToast(err.message || "Failed to setup vendor account.", "error");
