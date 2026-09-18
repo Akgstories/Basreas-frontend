@@ -2535,6 +2535,15 @@ async function loadAdminPGs() {
       tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No PG listings found.</td></tr>`;
       return;
     }
+    // Automatically triggers PG loading when Admin view opens
+document.addEventListener("DOMContentLoaded", () => {
+  const adminTabBtn = document.querySelector('[onclick*="admin"]');
+  if (adminTabBtn) {
+    adminTabBtn.addEventListener("click", () => {
+      setTimeout(loadAdminPGs, 200);
+    });
+  }
+});
 
     tbody.innerHTML = pgs.map(pg => `
       <tr class="hover:bg-gray-50">
@@ -2664,7 +2673,6 @@ if (typeof loadAdminView === "function") {
     </table>
   </div>
 </div>
-
 <!-- Modal: Add PG Listing -->
 <div id="addPGModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
   <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
