@@ -337,6 +337,9 @@
               <button onclick="openEditMessPriceModal()" class="flex-1 md:flex-none bg-gray-800 hover:bg-black text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow">
                 ⚙️ Rates Editor
               </button>
+              <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
+              </button>
             </div>
           </div>
           <div id="messPrepStats" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
@@ -378,6 +381,9 @@
               <p class="text-xs text-gray-500">Upload up to 5 pictures per room (Auto-resized & WebP optimized)</p>
             </div>
             <button onclick="openAddRoomModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">+ Add Room</button>
+            <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
+            </button>
           </div>
           <div id="ownerRoomsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
           <div class="pt-4 border-t">
@@ -2461,6 +2467,74 @@
         else showToast(data.detail || "Failed to add room.", "error");
       } catch (e) { showToast("Error adding room.", "error"); }
     }
+
+    function openVendorOnboardModal() { 
+  document.getElementById("vendorOnboardModal").classList.remove("hidden"); 
+}
+
+function closeVendorOnboardModal() { 
+  document.getElementById("vendorOnboardModal").classList.add("hidden"); 
+}
+
+async function submitVendorOnboarding(e) {
+  e.preventDefault();
+  const btn = document.getElementById("onboardSubmitBtn");
+  btn.disabled = true;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Activating Account...`;
+
+  const payload = {
+    account_holder_name: document.getElementById("onboardHolderName").value.trim(),
+    bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
+    bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
+    pan_number: document.getElementById("onboardPan").value.trim().toUpperCase()
+  };
+
+  try {
+    const res = await apiCall("/api/vendor/onboard-route", "POST", payload);
+    showToast(res.message, "success");
+    closeVendorOnboardModal();
+  } catch (err) {
+    showToast(err.message || "Failed to setup vendor account.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `Activate Direct Payouts`;
+  }
+}
   </script>
+  <!-- Modal: Vendor Direct Bank Settlement Setup -->
+<div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
+    <button onclick="closeVendorOnboardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
+    <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Bank Settlement</h3>
+    
+    <form onsubmit="submitVendorOnboarding(event)" class="space-y-3">
+      <div>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">ACCOUNT HOLDER NAME</label>
+        <input type="text" id="onboardHolderName" required placeholder="Name on Bank Account" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">BANK ACCOUNT NUMBER</label>
+        <input type="text" id="onboardAccountNo" required placeholder="392810102938" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">IFSC CODE</label>
+        <input type="text" id="onboardIfsc" required placeholder="SBIN0001234" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
+      </div>
+      <div>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">PAN CARD NUMBER</label>
+        <input type="text" id="onboardPan" required maxlength="10" placeholder="ABCDE1234F" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
+      </div>
+
+      <p class="text-[10px] text-gray-500 bg-orange-50 p-2.5 rounded-xl border border-orange-100">
+        <i class="fa-solid fa-shield-halved text-orange-600"></i> Student payments will be transferred directly to this bank account via Razorpay.
+      </p>
+
+      <div class="flex gap-2 pt-2">
+        <button type="button" onclick="closeVendorOnboardModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
+        <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Activate Direct Payouts</button>
+      </div>
+    </form>
+  </div>
+</div>
 </body>
 </html>
