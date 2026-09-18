@@ -2490,9 +2490,34 @@ async function submitVendorOnboarding(e) {
   };
 
   try {
-    // Uses the global apiCall function configured for your backend
-    const res = await apiCall("/api/vendor/onboard-route", "POST", payload);
-    showToast(res.message || "Razorpay Direct Account activated successfully!", "success");
+    let resData;
+
+    // Option 1: Use global apiCall helper if available in scope
+    if (typeof apiCall === "function") {
+      resData = await apiCall("/api/vendor/onboard-route", "POST", payload);
+    } 
+    // Option 2: Standalone fetch fallback if apiCall is scoped elsewhere
+    else {
+      const backendUrl = typeof API_BASE_URL !== "undefined" 
+        ? API_BASE_URL 
+        : (window.API_BASE_URL || localStorage.getItem("API_BASE_URL") || "").replace(/\/$/, "");
+
+      const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
+      
+      const response = await fetch(`${backendUrl}/api/vendor/onboard-route`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      resData = await response.json();
+      if (!response.ok) throw new Error(resData.detail || "Failed to activate account.");
+    }
+
+    showToast(resData.message || "Razorpay Direct Account activated successfully!", "success");
     closeVendorOnboardModal();
   } catch (err) {
     showToast(err.message || "Failed to setup vendor account.", "error");
