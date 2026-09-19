@@ -739,30 +739,88 @@
     async function loadExploreMess() {
       try {
         const messes = await apiCall("/mess-listings");
-        document.getElementById("messProvidersList").innerHTML = messes.map(m => `
+        const pricingData = await apiCall("/mess-pricing");
+        
+        // Render location filter pills at the top
+        const locations = ["All Locations", "GEC Main Gate", "Chandankiyari", "Ghoragara"];
+        document.getElementById("messLocationFilterBar").innerHTML = locations.map(loc => `
+          <button onclick="filterMessByLocation('${loc}')" class="px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap ${loc === 'All Locations' ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-700'} location-pill" data-loc="${loc}">
+            📍 ${loc}
+          </button>
+        `).join('');
+
+        window.currentMessPricing = pricingData;
+        window.currentMessListings = messes;
+        renderMessCards(messes, pricingData, "All Locations");
+      } catch (err) {
+        showToast("Error loading mess listings", "error");
+      }
+    }
+
+    function filterMessByLocation(locationName) {
+      document.querySelectorAll('.location-pill').forEach(btn => {
+        if (btn.getAttribute('data-loc') === locationName) {
+          btn.className = "px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap bg-orange-600 text-white location-pill";
+        } else {
+          btn.className = "px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap bg-gray-100 text-gray-700 location-pill";
+        }
+      });
+      renderMessCards(window.currentMessListings, window.currentMessPricing, locationName);
+    }
+
+    function renderMessCards(messes, pricingList, selectedLocation) {
+      document.getElementById("messProvidersList").innerHTML = messes.map(m => {
+        const providerPricing = pricingList.filter(p => p.mess_id === m.id);
+        const filteredPricing = selectedLocation === "All Locations" ? providerPricing : providerPricing.filter(p => p.location_name.toLowerCase() === selectedLocation.toLowerCase());
+        
+        return `
           <div class="bg-white rounded-3xl border p-5 shadow-sm space-y-4 flex flex-col justify-between">
-            <div class="space-y-2">
+            <div class="space-y-3">
               <div class="flex justify-between items-start">
-                <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
+                <div>
+                  <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
+                  <p class="text-[11px] text-gray-400 font-medium">Provider: ${m.provider_name}</p>
+                </div>
                 <span class="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-star text-[9px] text-amber-500"></i> ${m.rating}</span>
               </div>
               <p class="text-xs text-gray-500">${m.address}</p>
               <p class="text-xs text-gray-600 line-clamp-2">${m.description}</p>
-            </div>
-            <div class="pt-3 border-t space-y-3">
-              <div class="flex justify-between items-center">
-                <span class="text-xs font-bold text-gray-500">Monthly Plan</span>
-                <span class="text-xl font-black text-orange-600">₹${m.monthly_price}</span>
+              
+              <div class="space-y-2 pt-2 border-t">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase">Select Delivery Location & Plan</label>
+                <div class="space-y-1.5" id="pricing-options-${m.id}">
+                  ${filteredPricing.length > 0 ? filteredPricing.map((p, idx) => `
+                    <div class="flex items-center justify-between bg-gray-50 p-2.5 rounded-xl border text-xs">
+                      <div>
+                        <span class="font-bold block text-gray-800">${p.location_name}</span>
+                        <span class="text-[10px] text-gray-500">3-Time: ₹${p.three_time_rate}/meal \vert{} 2-Time: ₹${p.two_time_rate}/meal</span>
+                      </div>
+                      <div class="flex gap-1">
+                        <button onclick="openUniversalPaymentModal('${m.name} (${p.location_name} - 3 Time)',${p.three_time_rate * 30})" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-[10px] px-2.5 py-1.5 rounded-lg shadow">
+                          3-Time (₹${p.three_time_rate * 30})
+                        </button>
+                        <button onclick="openUniversalPaymentModal('${m.name} (${p.location_name} - 2 Time)',${p.two_time_rate * 30})" class="bg-gray-800 hover:bg-black text-white font-bold text-[10px] px-2.5 py-1.5 rounded-lg shadow">
+                          2-Time (₹${p.two_time_rate * 30})
+                        </button>
+                      </div>
+                    </div>
+                  `).join('') : `
+                    <div class="flex items-center justify-between bg-gray-50 p-3 rounded-xl border text-xs">
+                      <div>
+                        <span class="font-bold block text-gray-800">Standard Monthly Plan</span>
+                        <span class="text-[10px] text-gray-500">Flexible Delivery</span>
+                      </div>
+                      <button onclick="openUniversalPaymentModal('${m.name}',${m.monthly_price})" class="bg-orange-600 text-white font-bold text-xs px-3 py-1.5 rounded-lg">
+                        ₹${m.monthly_price}/mo
+                      </button>
+                    </div>
+                  `}
+                </div>
               </div>
-              <button onclick="openUniversalPaymentModal('${m.name}', ${m.monthly_price})" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 rounded-xl shadow transition">
-                Subscribe Now
-              </button>
             </div>
           </div>
-        `).join('');
-      } catch (err) {
-        showToast("Error loading mess listings", "error");
-      }
+        `;
+      }).join('');
     }
 
     function filterPGGender(gender) {
