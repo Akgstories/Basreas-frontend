@@ -94,6 +94,16 @@
       </div>
 
       <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-gray-600 mb-1">PORTAL ROLE</label>
+          <div class="grid grid-cols-4 gap-1">
+            <button type="button" onclick="setRegisterRole('student')" id="roleBtn-student" class="py-2 text-[10px] font-bold rounded-xl border border-orange-600 bg-orange-50 text-orange-700">Student</button>
+            <button type="button" onclick="setRegisterRole('pg_owner')" id="roleBtn-pg_owner" class="py-2 text-[10px] font-bold rounded-xl border border-gray-200 bg-gray-50 text-gray-600">PG Owner</button>
+            <button type="button" onclick="setRegisterRole('mess_partner')" id="roleBtn-mess_partner" class="py-2 text-[10px] font-bold rounded-xl border border-gray-200 bg-gray-50 text-gray-600">Mess Owner</button>
+            <button type="button" onclick="setRegisterRole('admin')" id="roleBtn-admin" class="py-2 text-[10px] font-bold rounded-xl border border-gray-200 bg-gray-50 text-gray-600">Admin</button>
+          </div>
+        </div>
+
         <div id="nameField" class="hidden">
           <input type="text" id="authName" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-orange-500 outline-none transition" placeholder="Full Name">
         </div>
@@ -142,7 +152,6 @@
 
         <button type="submit" id="authBtn" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 md:py-3 rounded-xl text-sm transition shadow-md">Sign In</button>
       </form>
-
       <!-- FORGOT PASSWORD FORM -->
       <form id="forgotPasswordForm" onsubmit="handleForgotPasswordSubmit(event)" class="hidden space-y-3.5">
         <input type="email" id="forgotEmail" required placeholder="Registered Email" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-sm">
@@ -1454,3 +1463,4 @@
   </script>
 </body>
 </html>
+
