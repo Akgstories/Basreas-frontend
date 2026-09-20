@@ -971,7 +971,6 @@
     window.onload = init;
 
     // Helper for structured API Requests with Auth
-    // Helper for structured API Requests with Auth
     async function apiCall(endpoint, method = "GET", body = null) {
       const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
       const options = {
@@ -1440,7 +1439,10 @@
 
         const orderData = await orderRes.json();
         if (!orderRes.ok) {
-          showToast(orderData.detail || "Could not create payment order.", "error");
+          const errMsg = typeof orderData.detail === "object" 
+            ? JSON.stringify(orderData.detail) 
+            : (orderData.detail || orderData.message || "Could not create payment order.");
+          showToast(errMsg, "error");
           return;
         }
 
@@ -1455,35 +1457,42 @@
           "handler": async function (response) {
             showToast("Verifying payment...", "info");
 
-            const verifyRes = await fetch(`${API_BASE}/payments/verify`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${authToken}`
-              },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                item_name: activeCheckoutItem.itemName,
-                monthly_amount: activeCheckoutItem.amount,
-                move_in_date: moveInDate,
-                special_requests: specialRequests,
-                duration_days: activeCheckoutItem.durationDays || 30,
-                diet_preference: activeCheckoutItem.dietPreference || selectedDiet || "Veg"
-              })
-            });
+            try {
+              const verifyRes = await fetch(`${API_BASE}/payments/verify`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  item_name: activeCheckoutItem.itemName,
+                  monthly_amount: activeCheckoutItem.amount,
+                  move_in_date: moveInDate,
+                  special_requests: specialRequests,
+                  duration_days: activeCheckoutItem.durationDays || 30,
+                  diet_preference: activeCheckoutItem.dietPreference || selectedDiet || "Veg"
+                })
+              });
 
-            const verifyData = await verifyRes.json();
-            if (verifyRes.ok) {
-              showToast(verifyData.message, "success");
-              closePaymentSlideModal();
-              loadStudentProfile();
-              if (document.getElementById("view-student-bookings").classList.contains("hidden") === false) {
-                loadBookings();
+              const verifyData = await verifyRes.json();
+              if (verifyRes.ok) {
+                showToast(verifyData.message, "success");
+                closePaymentSlideModal();
+                loadStudentProfile();
+                if (!document.getElementById("view-student-bookings").classList.contains("hidden")) {
+                  loadBookings();
+                }
+              } else {
+                const verifyErrMsg = typeof verifyData.detail === "object"
+                  ? JSON.stringify(verifyData.detail)
+                  : (verifyData.detail || "Payment verification failed.");
+                showToast(verifyErrMsg, "error");
               }
-            } else {
-              showToast(verifyData.detail || "Payment verification failed.", "error");
+            } catch (vErr) {
+              showToast("Error verifying payment response.", "error");
             }
           },
           "prefill": {
@@ -1498,15 +1507,22 @@
 
         const rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {
-          showToast(`Payment Failed: ${response.error.description}`, "error");
+          const failMsg = response.error && response.error.description 
+            ? response.error.description 
+            : "Payment process failed.";
+          showToast(`Payment Failed: ${failMsg}`, "error");
         });
         rzp.open();
 
       } catch (err) {
-        showToast("Error connecting to payment gateway.", "error");
+        const errorMessage = (typeof err === "object" && err !== null)
+          ? (err.detail || err.message || JSON.stringify(err))
+          : String(err);
+
+        showToast(errorMessage, "error");
       }
     }
-
+    
     function viewFullImage(dataUrl) {
       if (!dataUrl) return;
       fetch(dataUrl)
