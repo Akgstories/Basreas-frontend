@@ -7,7 +7,7 @@
   
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
   <style>
@@ -74,7 +74,7 @@
   <div id="landingPage" class="space-y-8 md:space-y-12 pb-8">
     <section class="bg-gradient-to-br from-orange-600 to-amber-600 text-white py-12 md:py-16 px-4 text-center">
       <h1 class="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight mb-3 md:mb-4">Find PGs & Manage Mess Subscriptions</h1>
-      <p class="text-orange-100 text-xs md:text-base max-w-2xl mx-auto mb-6">Complete local solution with Google Maps location tracking and automated email alerts.</p>
+      <p class="text-orange-100 text-xs md:text-base max-w-2xl mx-auto mb-6">Complete local student accommodation solution with automatic Razorpay payment splits, dynamic meal cancellation refunds, and GPS tracking.</p>
       <div class="flex justify-center gap-3 md:gap-4">
         <button onclick="scrollToAuth('register')" class="bg-gray-900 hover:bg-black text-white font-bold text-xs md:text-sm px-5 py-3 rounded-xl transition shadow-lg">Get Started Free</button>
         <button onclick="scrollToAuth('login')" class="bg-white hover:bg-gray-100 text-orange-600 font-bold text-xs md:text-sm px-5 py-3 rounded-xl transition shadow-lg">Sign In</button>
@@ -238,7 +238,7 @@
         <div class="bg-white p-5 rounded-3xl border flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shadow-sm">
           <div>
             <h2 class="text-lg md:text-xl font-bold">Explore Student PGs & Available Rooms</h2>
-            <p class="text-xs text-gray-500">Filter accommodations, view photo galleries, and review pricing before payment</p>
+            <p class="text-xs text-gray-500">Filter accommodations, view photo galleries, and review pricing before booking</p>
           </div>
           <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
             <button onclick="filterPGGender('All')" id="genderBtn-All" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white">All PGs</button>
@@ -262,10 +262,12 @@
           <div class="flex justify-between items-center flex-wrap gap-4">
             <div>
               <h2 class="text-lg md:text-xl font-bold">Weekly Mess Menu & Advance Opt-Out</h2>
-              <p class="text-xs text-gray-500">Select any specific date to cancel or restore future meals</p>
+              <p class="text-xs text-gray-500">Select any specific date to cancel or restore future meals with automatic subscription-based refunds</p>
             </div>
-            <button onclick="unsubscribeMess()" class="w-full text-center text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg py-2 transition"> Unsubscribe Mess</button>
-            </div>
+            <button onclick="unsubscribeMess()" class="text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl px-4 py-2 transition">
+              <i class="fa-solid fa-ban"></i> Unsubscribe Mess
+            </button>
+          </div>
 
           <div class="bg-orange-50/70 p-4 rounded-2xl border border-orange-200 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -280,7 +282,7 @@
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-orange-50/30 p-4 rounded-2xl border border-orange-100">
             <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
-              <span class="block text-xs font-bold">Breakfast (₹30 Refund)</span>
+              <span class="block text-xs font-bold">Breakfast (25% Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 07:00 AM</span>
               <div class="flex gap-2">
                 <button onclick="cancelMeal('Breakfast', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
@@ -288,7 +290,7 @@
               </div>
             </div>
             <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
-              <span class="block text-xs font-bold">Lunch (₹50 Refund)</span>
+              <span class="block text-xs font-bold">Lunch (37.5% Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 10:00 AM</span>
               <div class="flex gap-2">
                 <button onclick="cancelMeal('Lunch', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
@@ -296,7 +298,7 @@
               </div>
             </div>
             <div class="p-3.5 bg-white rounded-2xl border text-center space-y-2 hover:shadow-md transition">
-              <span class="block text-xs font-bold">Dinner (₹50 Refund)</span>
+              <span class="block text-xs font-bold">Dinner (37.5% Refund)</span>
               <span class="block text-[10px] text-gray-400">Cutoff: 06:00 PM</span>
               <div class="flex gap-2">
                 <button onclick="cancelMeal('Dinner', this)" class="flex-1 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-bold py-2 rounded-xl text-xs transition-all">Cancel</button>
@@ -311,7 +313,7 @@
       <!-- STUDENT CALENDAR VIEW -->
       <div id="view-student-calendar" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
-          <h2 class="text-lg md:text-xl font-bold">30-Day Attendance & Refund Ledger</h2>
+          <h2 class="text-lg md:text-xl font-bold">30-Day Attendance & Dynamic Refund Ledger</h2>
           <div id="ledgerSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
           <div id="calendarGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"></div>
         </div>
@@ -320,7 +322,7 @@
       <!-- STUDENT BOOKINGS VIEW -->
       <div id="view-student-bookings" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border shadow-sm">
-          <h2 class="text-lg md:text-xl font-bold mb-4">My Bookings</h2>
+          <h2 class="text-lg md:text-xl font-bold mb-4">My Bookings & Subscriptions</h2>
           <div id="bookingsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
       </div>
@@ -338,7 +340,7 @@
                 ⚙️ Rates Editor
               </button>
               <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
-                <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
+                <i class="fa-solid fa-building-columns"></i> Bank & Payout Tenure
               </button>
             </div>
           </div>
@@ -361,7 +363,7 @@
               <h2 class="text-lg md:text-xl font-bold text-gray-900">Subscribers & Delivery Directory</h2>
               <p class="text-xs text-gray-500">Student delivery addresses and Google Maps directions</p>
             </div>
-            <input type="month" id="messOwnerMonthPicker" value="2026-09" onchange="loadOwnerMonthlyBilling()" class="border rounded-xl px-3 py-2 text-base md:text-xs bg-gray-50 font-bold">
+            <input type="month" id="messOwnerMonthPicker" onchange="loadOwnerMonthlyBilling()" class="border rounded-xl px-3 py-2 text-base md:text-xs bg-gray-50 font-bold">
           </div>
           <div id="messSubscribersTable" class="overflow-x-auto no-scrollbar"></div>
         </div>
@@ -376,34 +378,31 @@
       </div>
 
       <!-- OWNER ROOMS & PG VIEW -->
+      <div id="view-owner-rooms" class="hidden space-y-6">
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
+          <div class="flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <h2 class="text-lg md:text-xl font-bold">My PG Listings & Rooms</h2>
+              <p class="text-xs text-gray-500">Manage your registered PGs and add/configure rooms under each property</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="openAddPGModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">
+                + Add PG Listing
+              </button>
+              <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
+                <i class="fa-solid fa-building-columns"></i> Bank & Payout Tenure
+              </button>
+            </div>
+          </div>
 
-<div id="view-owner-rooms" class="hidden space-y-6">
-  <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
-    <div class="flex justify-between items-center flex-wrap gap-2">
-      <div>
-        <h2 class="text-lg md:text-xl font-bold">My PG Listings & Rooms</h2>
-        <p class="text-xs text-gray-500">Manage your registered PGs and add/configure rooms under each property</p>
-      </div>
-      <div class="flex gap-2">
-        <button onclick="openAddPGModal()" class="bg-orange-600 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl hover:bg-orange-700 transition">
-          + Add PG Listing
-        </button>
-        <button onclick="openVendorOnboardModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-3.5 py-2.5 md:py-2 rounded-xl transition shadow flex items-center gap-1.5">
-          <i class="fa-solid fa-building-columns"></i> Bank Payout Setup
-        </button>
-      </div>
-    </div>
+          <!-- PG LIST & NESTED ROOMS CONTAINER -->
+          <div id="ownerPGsContainer" class="space-y-6"></div>
 
-    <!-- PG LIST & NESTED ROOMS CONTAINER -->
-    <div id="ownerPGsContainer" class="space-y-6"></div>
-
-    <div class="pt-4 border-t">
-      <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
-      <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
-    </div>
-  </div>
-
-  
+          <div class="pt-4 border-t">
+            <h3 class="font-bold text-base mb-3">Pending Room Vacate Requests</h3>
+            <div id="ownerVacateRequestsTable" class="overflow-x-auto no-scrollbar"></div>
+          </div>
+        </div>
 
         <!-- Vendor Monthly Credits Container for PG Owner -->
         <div id="ownerVendorCreditContainer"></div>
@@ -412,8 +411,24 @@
       <!-- ADMIN OVERVIEW VIEW -->
       <div id="view-admin-overview" class="hidden space-y-6">
         <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-6 shadow-sm">
-          <h2 class="text-lg md:text-xl font-bold">Admin Analytics</h2>
-          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-6 gap-3"></div>
+          <h2 class="text-lg md:text-xl font-bold">Admin Analytics & Financial GMV</h2>
+          <div id="adminMetricsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+        </div>
+
+        <!-- ADMIN VENDOR SETTLEMENTS APPROVAL CONSOLE -->
+        <div class="bg-white p-5 md:p-6 rounded-3xl border space-y-4 shadow-sm">
+          <div class="flex justify-between items-center flex-wrap gap-2 border-b pb-3">
+            <div>
+              <h3 class="font-bold text-base text-gray-900"><i class="fa-solid fa-money-bill-transfer text-orange-600"></i> Vendor Settlements & Tenure Approvals</h3>
+              <p class="text-xs text-gray-500">Review tenure-held payouts and approve direct fund dispatch to vendor accounts</p>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="loadAdminSettlements('All')" class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 hover:bg-gray-200">All</button>
+              <button onclick="loadAdminSettlements('Pending Approval')" class="px-3 py-1 text-xs font-bold rounded-lg bg-amber-50 text-amber-700 border border-amber-300">Pending Approval</button>
+              <button onclick="loadAdminSettlements('Settled')" class="px-3 py-1 text-xs font-bold rounded-lg bg-green-50 text-green-700 border border-green-300">Settled</button>
+            </div>
+          </div>
+          <div id="adminSettlementsTableContainer" class="overflow-x-auto no-scrollbar"></div>
         </div>
 
         <!-- All Registered Mess Services Card -->
@@ -589,7 +604,7 @@
       </div>
       <div>
         <label class="block text-[10px] font-bold text-gray-500 mb-1">ENTER DELIVERY LOCATION NAME</label>
-        <input type="text" id="editMessLocationSelect" placeholder="e.g. Kandra, BIT Main Gate, Chasnalla" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white">
+        <input type="text" id="editMessLocationSelect" placeholder="e.g. Kandra, BIT Main Gate, Chandankiyari" class="w-full border rounded-xl p-3 md:p-2.5 text-base md:text-xs font-bold bg-white">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
@@ -615,7 +630,7 @@
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <h3 class="text-lg font-black text-gray-900" id="modalMessTitle">Configure Subscription</h3>
-          <p class="text-xs text-gray-500">Prices are calculated based on your specific location</p>
+          <p class="text-xs text-gray-500">Prices are calculated based on your specific delivery location</p>
         </div>
         <button onclick="closeMessPlanModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
       </div>
@@ -658,7 +673,7 @@
           </button>
           <button id="dietBtn-NonVeg" type="button" onclick="selectDietPreference('Non-Veg')" class="p-2.5 border-2 border-gray-200 rounded-2xl text-left transition flex items-center justify-between">
             <span class="font-bold text-xs text-gray-900">🍗 Non-Veg Included</span>
-            <span class="text-xs text-gray-400 font-bold">➕ ₹0</span>
+            <span class="text-xs text-gray-400 font-bold">Included</span>
           </button>
         </div>
       </div>
@@ -695,7 +710,7 @@
       <div class="flex justify-between items-start border-b pb-3">
         <div>
           <h3 class="text-lg font-black text-gray-900" id="paymentSlideTitle">Service Checkout Review</h3>
-          <p class="text-xs text-gray-500">Review details before launching Razorpay payment gateway</p>
+          <p class="text-xs text-gray-500">Review details before launching secure payment gateway</p>
         </div>
         <button onclick="closePaymentSlideModal()" class="text-gray-400 hover:text-gray-600 font-bold text-2xl px-2">&times;</button>
       </div>
@@ -723,8 +738,8 @@
         </div>
 
         <div class="bg-gray-50 border p-3 rounded-xl flex items-center justify-between text-xs">
-          <span class="font-bold text-gray-700"><i class="fa-solid fa-shield-halved text-green-600"></i> Razorpay Gateway</span>
-          <span class="font-bold text-orange-600 text-[10px] bg-orange-100 px-2 py-0.5 rounded">UPI / Cards / NetBanking</span>
+          <span class="font-bold text-gray-700"><i class="fa-solid fa-shield-halved text-green-600"></i> Razorpay Payment Split (95% Direct Vendor / 5% Fee)</span>
+          <span class="font-bold text-orange-600 text-[10px] bg-orange-100 px-2 py-0.5 rounded">UPI / Cards</span>
         </div>
       </div>
 
@@ -847,25 +862,25 @@
   </div>
 
   <!-- ADD ROOM MODAL -->
-<div id="addRoomModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
-  <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
-    <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
-    <h3 class="text-lg font-bold" id="addRoomModalTitle">Add Room to PG</h3>
-    <input type="text" id="addRoomNum" placeholder="Room Number (e.g. 101)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-    <input type="text" id="addRoomType" placeholder="Type (e.g. Double Sharing / Single)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-    <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
-    <div class="flex gap-2 pt-1">
-      <button onclick="closeAddRoomModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
-      <button onclick="submitAddRoom()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Add Room</button>
+  <div id="addRoomModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-end md:items-center justify-center p-0 md:p-4">
+    <div class="bg-white rounded-t-3xl md:rounded-2xl p-6 max-w-md w-full shadow-xl space-y-3">
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto md:hidden mb-1"></div>
+      <h3 class="text-lg font-bold" id="addRoomModalTitle">Add Room to PG</h3>
+      <input type="text" id="addRoomNum" placeholder="Room Number (e.g. 101)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <input type="text" id="addRoomType" placeholder="Type (e.g. Double Sharing / Single AC)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <input type="number" id="addRoomRent" placeholder="Monthly Rent (₹)" class="w-full border rounded-xl p-3 md:p-2 text-base md:text-sm">
+      <div class="flex gap-2 pt-1">
+        <button onclick="closeAddRoomModal()" class="flex-1 py-3 text-xs font-bold bg-gray-100 rounded-xl">Cancel</button>
+        <button onclick="submitAddRoom()" class="flex-1 py-3 text-xs font-bold bg-orange-600 text-white rounded-xl shadow">Add Room</button>
+      </div>
     </div>
   </div>
-</div>
 
-  <!-- Modal: Vendor Direct Bank Settlement Setup -->
+  <!-- VENDOR DIRECT BANK SETTLEMENT & TENURE SETUP MODAL -->
   <div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
       <button onclick="closeVendorOnboardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Bank Settlement</h3>
+      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Settlement & Tenure</h3>
       
       <form onsubmit="submitVendorOnboarding(event)" class="space-y-3">
         <div>
@@ -884,20 +899,30 @@
           <label class="block text-[10px] font-bold text-gray-500 mb-1">PAN CARD NUMBER</label>
           <input type="text" id="onboardPan" required maxlength="10" placeholder="ABCDE1234F" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
         </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">SETTLEMENT PAYOUT TENURE</label>
+          <select id="onboardTenureSelect" class="w-full border rounded-xl p-2.5 text-xs bg-white font-bold outline-none">
+            <option value="instant">Instant Direct Transfer (On Student Payment)</option>
+            <option value="7_days">Weekly Settlement (7-Day Hold)</option>
+            <option value="15_days">Bi-Weekly Settlement (15-Day Hold)</option>
+            <option value="30_days">Monthly Settlement (30-Day Hold)</option>
+            <option value="admin_approval">Hold for Admin Review & Release</option>
+          </select>
+        </div>
 
         <p class="text-[10px] text-gray-500 bg-orange-50 p-2.5 rounded-xl border border-orange-100">
-          <i class="fa-solid fa-shield-halved text-orange-600"></i> Student payments will be transferred directly to this bank account via Razorpay.
+          <i class="fa-solid fa-shield-halved text-orange-600"></i> 95% of student collections will be transferred directly to this account with your chosen tenure schedule.
         </p>
 
         <div class="flex gap-2 pt-2">
           <button type="button" onclick="closeVendorOnboardModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-          <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Activate Direct Payouts</button>
+          <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Save Settlement Setup</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Modal: Add PG Listing -->
+  <!-- ADD PG MODAL -->
   <div id="addPGModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
       <button onclick="closeAddPGModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
@@ -906,7 +931,7 @@
       <form onsubmit="submitAddPG(event)" class="space-y-3">
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">PG NAME</label>
-          <input type="text" id="addPgName" required placeholder="e.g. Royal Boys PG" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+          <input type="text" id="addPgName" required placeholder="e.g. Royal Scholars Boys PG" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -919,17 +944,17 @@
           </div>
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-1">SHARING TYPE</label>
-            <input type="text" id="addPgSharing" required placeholder="e.g. 2 Sharing" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+            <input type="text" id="addPgSharing" required placeholder="e.g. Double Sharing" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-1">PRICE (₹/MO)</label>
-            <input type="number" id="addPgPrice" required placeholder="4500" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+            <input type="number" id="addPgPrice" required placeholder="4200" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
           </div>
           <div>
             <label class="block text-[10px] font-bold text-gray-500 mb-1">DISTANCE (KM)</label>
-            <input type="number" step="0.1" id="addPgDistance" required placeholder="1.2" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
+            <input type="number" step="0.1" id="addPgDistance" required placeholder="0.5" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none">
           </div>
         </div>
         <div>
@@ -939,7 +964,7 @@
 
         <div class="flex gap-2 pt-2">
           <button type="button" onclick="closeAddPGModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-          <button type="submit" id="addPgSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add PG</button>
+          <button type="submit" id="addPgSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Add PG Listing</button>
         </div>
       </form>
     </div>
@@ -947,7 +972,11 @@
 
   <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
-    const API_BASE = "https://basera-backend-bidu.onrender.com/api";
+    // Automatic fallback: Use current host if running locally, or default production URL
+    const API_BASE = window.location.origin.includes("localhost") || window.location.origin.includes("127.0.0.1") 
+      ? `${window.location.origin}/api` 
+      : "https://basera-backend-bidu.onrender.com/api";
+
     let authMode = "login";
     let selectedRole = "student";
     let activeGenderFilter = "All";
@@ -967,12 +996,13 @@
     let selectedMealTier = "3-Time";
     let selectedDurationDays = 30;
     let selectedDiet = "Veg";
+    let activePgIdForRoom = null;
 
     window.onload = init;
 
-    // Helper for structured API Requests with Auth
+    // Standard API client with JWT Authorization
     async function apiCall(endpoint, method = "GET", body = null) {
-      const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
+      const token = localStorage.getItem("basera_token") || "";
       const options = {
         method,
         headers: {
@@ -986,7 +1016,6 @@
         const res = await fetch(`${API_BASE}${endpoint}`, options);
         const data = await res.json();
         if (!res.ok) {
-          // Silent fallback for empty GET endpoints to prevent 404 toast spam
           if (res.status === 404 && method === "GET") {
             return Array.isArray(data) ? [] : {};
           }
@@ -1003,9 +1032,9 @@
 
     async function fetchMessPricingRules() {
       try {
-        const res = await fetch(`${API_BASE}/mess-pricing`);
-        if (res.ok) {
-          messPricingRules = await res.json();
+        const pricing = await apiCall("/mess-pricing");
+        if (Array.isArray(pricing)) {
+          messPricingRules = pricing;
           renderDynamicLocationFilters();
         }
       } catch (err) {
@@ -1036,14 +1065,12 @@
 
     function filterMessLocation(location) {
       activeMessLocationFilter = location;
-      
       document.querySelectorAll(".loc-filter-btn").forEach(btn => {
         const loc = btn.getAttribute("data-loc");
         btn.className = (loc === location)
           ? "loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl bg-orange-600 text-white transition whitespace-nowrap"
           : "loc-filter-btn px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition whitespace-nowrap";
       });
-
       loadExploreMess();
     }
 
@@ -1074,28 +1101,13 @@
       };
 
       try {
-        const res = await fetch(`${API_BASE}/mess/add-listing`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${authToken}`
-          },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message || "Mess listed successfully!", "success");
-          closeAddMessModal();
-          await fetchMessPricingRules();
-          if (typeof loadExploreMess === "function") loadExploreMess();
-          if (currentUser && currentUser.role === 'admin') loadAdminOverview();
-        } else {
-          showToast(data.detail || "Failed to create listing.", "error");
-        }
-      } catch (err) {
-        showToast("Server communication error.", "error");
-      }
+        const data = await apiCall("/mess/add-listing", "POST", payload);
+        showToast(data.message || "Mess listed successfully!", "success");
+        closeAddMessModal();
+        await fetchMessPricingRules();
+        loadExploreMess();
+        if (currentUser && currentUser.role === 'admin') loadAdminOverview();
+      } catch (err) {}
     }
 
     function openEditMessPriceModal() {
@@ -1130,26 +1142,17 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}/mess/update-location-price`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${authToken}`
-          },
-          body: JSON.stringify({ mess_id: messId, location_name: locName, three_time_rate: rate3, two_time_rate: rate2 })
+        const data = await apiCall("/mess/update-location-price", "POST", {
+          mess_id: messId,
+          location_name: locName,
+          three_time_rate: rate3,
+          two_time_rate: rate2
         });
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message, "success");
-          closeEditMessPriceModal();
-          await fetchMessPricingRules();
-          loadExploreMess();
-        } else {
-          showToast(data.detail || "Failed to update location pricing.", "error");
-        }
-      } catch (e) {
-        showToast("Error connecting to server.", "error");
-      }
+        showToast(data.message || "Rates updated successfully!", "success");
+        closeEditMessPriceModal();
+        await fetchMessPricingRules();
+        loadExploreMess();
+      } catch (e) {}
     }
 
     function fetchCurrentLocation(targetInputId, btnElem) {
@@ -1199,64 +1202,64 @@
     }
 
     async function loadExploreMess() {
-      const res = await fetch(`${API_BASE}/mess-listings`);
-      const messes = await res.json();
-      currentFetchedMesses = messes;
+      try {
+        const messes = await apiCall("/mess-listings");
+        currentFetchedMesses = messes || [];
 
-      const filteredMesses = messes.filter(m => {
-        if (activeMessLocationFilter === "All") return true;
+        const filteredMesses = currentFetchedMesses.filter(m => {
+          if (activeMessLocationFilter === "All") return true;
+          const pricingLocs = messPricingRules
+            .filter(p => p.mess_id === m.id || p.mess_id === m.name)
+            .map(p => p.location_name ? p.location_name.toLowerCase() : '');
 
-        const pricingLocs = messPricingRules
-          .filter(p => p.mess_id === m.id || p.mess_id === m.name)
-          .map(p => p.location_name ? p.location_name.toLowerCase() : '');
+          return pricingLocs.includes(activeMessLocationFilter.toLowerCase()) || 
+                 (m.address && m.address.toLowerCase().includes(activeMessLocationFilter.toLowerCase()));
+        });
 
-        return pricingLocs.includes(activeMessLocationFilter.toLowerCase()) || 
-               m.address.toLowerCase().includes(activeMessLocationFilter.toLowerCase());
-      });
+        const listContainer = document.getElementById("messProvidersList");
+        if (!filteredMesses.length) {
+          listContainer.innerHTML = `<p class="col-span-3 text-center text-xs text-gray-400 py-8 bg-gray-50 rounded-2xl border">No mess listings found for location "${activeMessLocationFilter}".</p>`;
+          return;
+        }
 
-      const listContainer = document.getElementById("messProvidersList");
-      if (!filteredMesses.length) {
-        listContainer.innerHTML = `<p class="col-span-3 text-center text-xs text-gray-400 py-8 bg-gray-50 rounded-2xl border">No mess listings found for location "${activeMessLocationFilter}".</p>`;
-        return;
-      }
+        listContainer.innerHTML = filteredMesses.map(m => {
+          const activeLocations = messPricingRules
+            .filter(p => p.mess_id === m.id || p.mess_id === m.name)
+            .map(p => p.location_name ? p.location_name.trim() : '')
+            .filter(Boolean);
 
-      listContainer.innerHTML = filteredMesses.map(m => {
-        const activeLocations = messPricingRules
-          .filter(p => p.mess_id === m.id || p.mess_id === m.name)
-          .map(p => p.location_name ? p.location_name.trim() : '')
-          .filter(Boolean);
+          const locationDisplay = activeLocations.length > 0 
+            ? activeLocations.join(', ') 
+            : m.address;
 
-        const locationDisplay = activeLocations.length > 0 
-          ? activeLocations.join(', ') 
-          : m.address;
-
-        return `
-          <div class="bg-white rounded-3xl border p-5 shadow-sm flex flex-col justify-between space-y-4">
-            <div>
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
-                <span class="bg-green-100 text-green-800 font-bold text-[10px] px-2 py-0.5 rounded">${m.diet_type}</span>
-              </div>
-              <p class="text-xs text-gray-500 mb-2 font-semibold text-orange-600">📍 ${locationDisplay}</p>
-              <p class="text-xs text-gray-600 mb-3">${m.description}</p>
-              <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
-                <i class="fa-solid fa-map-location-dot"></i> View Location
-              </a>
-            </div>
-            <div class="flex justify-between items-center pt-3 border-t">
+          return `
+            <div class="bg-white rounded-3xl border p-5 shadow-sm flex flex-col justify-between space-y-4 hover:shadow-md transition">
               <div>
-                <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
-                  <i class="fa-solid fa-calculator text-orange-600"></i> Dynamic Pricing
-                </span>
-                <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="font-bold text-gray-900 text-base">${m.name}</h3>
+                  <span class="bg-green-100 text-green-800 font-bold text-[10px] px-2 py-0.5 rounded">${m.diet_type}</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-2 font-semibold text-orange-600">📍 ${locationDisplay}</p>
+                <p class="text-xs text-gray-600 mb-3">${m.description}</p>
+                <a href="${m.google_map_url || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1 text-[11px] bg-blue-50 text-blue-700 font-bold px-2.5 py-1 rounded-lg border border-blue-200 hover:bg-blue-100 transition">
+                  <i class="fa-solid fa-map-location-dot"></i> View Location
+                </a>
               </div>
-              <button onclick="openMessPlanModal('${m.id}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
-                Select Plan
-              </button>
+              <div class="flex justify-between items-center pt-3 border-t">
+                <div>
+                  <span class="text-xs font-bold text-gray-600 flex items-center gap-1">
+                    <i class="fa-solid fa-calculator text-orange-600"></i> Dynamic Pricing
+                  </span>
+                  <span class="block text-[10px] text-gray-400">Rating: ⭐ ${m.rating}</span>
+                </div>
+                <button onclick="openMessPlanModal('${m.id}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+                  Select Plan
+                </button>
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      } catch (e) {}
     }
 
     function openMessPlanModal(messIdOrName) {
@@ -1273,7 +1276,7 @@
 
       selectedMessLocation = (availableLocations.length > 0)
         ? (availableLocations.includes(activeMessLocationFilter) ? activeMessLocationFilter : availableLocations[0])
-        : "Main Location";
+        : "Main Campus";
 
       selectedMealTier = "3-Time";
       selectedDurationDays = 30;
@@ -1422,29 +1425,13 @@
       const moveInDate = document.getElementById("paymentSlideDate").value;
       const specialRequests = document.getElementById("paymentSlideRequests").value;
 
-      showToast("Opening Razorpay payment gateway...", "info");
+      showToast("Initializing payment gateway...", "info");
 
       try {
-        const orderRes = await fetch(`${API_BASE}/payments/create-order`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${authToken}`
-          },
-          body: JSON.stringify({
-            amount: Number(activeCheckoutItem.amount),
-            item_name: activeCheckoutItem.itemName
-          })
+        const orderData = await apiCall("/payments/create-order", "POST", {
+          amount: Number(activeCheckoutItem.amount),
+          item_name: activeCheckoutItem.itemName
         });
-
-        const orderData = await orderRes.json();
-        if (!orderRes.ok) {
-          const errMsg = typeof orderData.detail === "object" 
-            ? JSON.stringify(orderData.detail) 
-            : (orderData.detail || orderData.message || "Could not create payment order.");
-          showToast(errMsg, "error");
-          return;
-        }
 
         const options = {
           "key": orderData.key_id,
@@ -1455,44 +1442,29 @@
           "image": "https://cdn-icons-png.flaticon.com/512/6009/6009864.png",
           "order_id": orderData.order_id,
           "handler": async function (response) {
-            showToast("Verifying payment...", "info");
+            showToast("Verifying payment transaction...", "info");
 
             try {
-              const verifyRes = await fetch(`${API_BASE}/payments/verify`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": `Bearer ${authToken}`
-                },
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                  item_name: activeCheckoutItem.itemName,
-                  monthly_amount: activeCheckoutItem.amount,
-                  move_in_date: moveInDate,
-                  special_requests: specialRequests,
-                  duration_days: activeCheckoutItem.durationDays || 30,
-                  diet_preference: activeCheckoutItem.dietPreference || selectedDiet || "Veg"
-                })
+              const verifyData = await apiCall("/payments/verify", "POST", {
+                razorpay_order_id: response.razorpay_order_id || orderData.order_id,
+                razorpay_payment_id: response.razorpay_payment_id || `pay_${Date.now()}`,
+                razorpay_signature: response.razorpay_signature || "simulated_signature",
+                item_name: activeCheckoutItem.itemName,
+                monthly_amount: activeCheckoutItem.amount,
+                move_in_date: moveInDate,
+                special_requests: specialRequests,
+                duration_days: activeCheckoutItem.durationDays || 30,
+                diet_preference: activeCheckoutItem.dietPreference || selectedDiet || "Veg"
               });
 
-              const verifyData = await verifyRes.json();
-              if (verifyRes.ok) {
-                showToast(verifyData.message, "success");
-                closePaymentSlideModal();
-                loadStudentProfile();
-                if (!document.getElementById("view-student-bookings").classList.contains("hidden")) {
-                  loadBookings();
-                }
-              } else {
-                const verifyErrMsg = typeof verifyData.detail === "object"
-                  ? JSON.stringify(verifyData.detail)
-                  : (verifyData.detail || "Payment verification failed.");
-                showToast(verifyErrMsg, "error");
+              showToast(verifyData.message || "Payment verified & service activated!", "success");
+              closePaymentSlideModal();
+              loadStudentProfile();
+              if (!document.getElementById("view-student-bookings").classList.contains("hidden")) {
+                loadBookings();
               }
             } catch (vErr) {
-              showToast("Error verifying payment response.", "error");
+              showToast("Payment verification failed.", "error");
             }
           },
           "prefill": {
@@ -1505,38 +1477,34 @@
           }
         };
 
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-          const failMsg = response.error && response.error.description 
-            ? response.error.description 
-            : "Payment process failed.";
-          showToast(`Payment Failed: ${failMsg}`, "error");
-        });
-        rzp.open();
+        if (typeof Razorpay !== "undefined" && orderData.key_id && !orderData.key_id.includes("YOUR_KEY_ID")) {
+          const rzp = new Razorpay(options);
+          rzp.on('payment.failed', function (response) {
+            showToast(`Payment Failed: ${response.error.description || 'Transaction canceled'}`, "error");
+          });
+          rzp.open();
+        } else {
+          // Simulation mode when test placeholder keys are in use
+          setTimeout(() => {
+            options.handler({
+              razorpay_order_id: orderData.order_id,
+              razorpay_payment_id: `pay_sim_${Date.now()}`,
+              razorpay_signature: "simulated_success"
+            });
+          }, 800);
+        }
 
       } catch (err) {
-        const errorMessage = (typeof err === "object" && err !== null)
-          ? (err.detail || err.message || JSON.stringify(err))
-          : String(err);
-
-        showToast(errorMessage, "error");
+        showToast(err.message || "Could not process order.", "error");
       }
     }
 
     function viewFullImage(dataUrl) {
       if (!dataUrl) return;
-      fetch(dataUrl)
-        .then(res => res.blob())
-        .then(blob => {
-          const blobUrl = URL.createObjectURL(blob);
-          window.open(blobUrl, '_blank');
-        })
-        .catch(() => {
-          const w = window.open("");
-          if (w) {
-            w.document.write(`<body style="margin:0; background:#111; display:flex; justify-content:center; align-items:center; min-height:100vh;"><img src="${dataUrl}" style="max-width:95vw; max-height:95vh; object-fit:contain; border-radius:8px;" /></body>`);
-          }
-        });
+      const w = window.open("");
+      if (w) {
+        w.document.write(`<body style="margin:0; background:#111; display:flex; justify-content:center; align-items:center; min-height:100vh;"><img src="${dataUrl}" style="max-width:95vw; max-height:95vh; object-fit:contain; border-radius:8px;" /></body>`);
+      }
     }
 
     function showToast(message, type = 'success') {
@@ -1595,9 +1563,8 @@
 
       if (authToken) {
         try {
-          const res = await fetch(`${API_BASE}/auth/me`, { headers: { "Authorization": `Bearer ${authToken}` } });
-          const data = await res.json();
-          if (res.ok && data.status === "success") {
+          const data = await apiCall("/auth/me");
+          if (data && data.user) {
             currentUser = data.user;
             showLoggedInUI(data.user);
             return;
@@ -1605,8 +1572,8 @@
             localStorage.removeItem("basera_token");
             authToken = null;
           }
-        } catch (e) { 
-          console.log("Backend connecting..."); 
+        } catch (e) {
+          console.log("Session expired or offline");
         }
       }
       showLandingPage();
@@ -1665,13 +1632,15 @@
 
     async function handleForgotPasswordSubmit(e) {
       e.preventDefault();
-      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: document.getElementById("forgotEmail").value, phone: document.getElementById("forgotPhone").value, new_password: document.getElementById("forgotNewPassword").value })
-      });
-      const data = await res.json();
-      if (res.ok) { showToast(data.message, "success"); toggleForgotPasswordView(); } 
-      else showToast(data.detail || "Reset failed.", "error");
+      try {
+        const data = await apiCall("/auth/forgot-password", "POST", {
+          email: document.getElementById("forgotEmail").value,
+          phone: document.getElementById("forgotPhone").value,
+          new_password: document.getElementById("forgotNewPassword").value
+        });
+        showToast(data.message || "Password updated successfully!", "success");
+        toggleForgotPasswordView();
+      } catch (err) {}
     }
 
     async function handleAuthSubmit(e) {
@@ -1689,19 +1658,15 @@
       };
 
       try {
-        const res = await fetch(`${API_BASE}${endpoint}`, {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-
-        if (res.ok && data.status === "success") {
+        const data = await apiCall(endpoint, "POST", payload);
+        if (data && data.status === "success") {
           localStorage.setItem("basera_token", data.token);
-          authToken = data.token; currentUser = data.user;
+          authToken = data.token;
+          currentUser = data.user;
           showToast(`Welcome back, ${data.user.full_name}!`, "success");
           showLoggedInUI(data.user);
-        } else showToast(data.detail || "Authentication failed.", "error");
-      } catch (err) { showToast("Cannot connect to live backend server.", "error"); }
+        }
+      } catch (err) {}
     }
 
     function showLoggedInUI(user) {
@@ -1815,7 +1780,8 @@
 
     function logout() {
       localStorage.removeItem("basera_token");
-      authToken = null; currentUser = null; 
+      authToken = null;
+      currentUser = null; 
       showToast("Signed out successfully.", "info");
       showLandingPage();
     }
@@ -1827,52 +1793,48 @@
       document.getElementById("profileAddressInput").value = currentUser.address || "";
       document.getElementById("profileMapInput").value = currentUser.google_map_url || "";
 
-      const res = await fetch(`${API_BASE}/student/reminders`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const rem = await res.json();
-
-      document.getElementById("paymentReminderBanners").innerHTML = `
-        ${rem.mess_reminder && rem.mess_reminder.should_alert ? `
-          <div class="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
-            <div>
-              <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION RENEWAL DUE</span>
-              <p class="text-xs text-amber-700 mt-0.5">${rem.mess_reminder.message}</p>
+      try {
+        const rem = await apiCall("/student/reminders");
+        document.getElementById("paymentReminderBanners").innerHTML = `
+          ${rem.mess_reminder && rem.mess_reminder.should_alert ? `
+            <div class="bg-amber-50 border border-amber-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
+              <div>
+                <span class="block font-bold text-xs text-amber-800"><i class="fa-solid fa-utensils"></i> MESS SUBSCRIPTION EXPIRING SOON</span>
+                <p class="text-xs text-amber-700 mt-0.5">${rem.mess_reminder.message}</p>
+              </div>
+              <button onclick="switchNavTab('student-explore-mess')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+                Renew Mess Plan
+              </button>
             </div>
-            <button onclick="openMessPlanModal('Annapurna Homely Mess')" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
-              Renew Mess Plan
-            </button>
-          </div>
-        ` : ''}
-        ${rem.pg_reminder && rem.pg_reminder.should_alert ? `
-          <div class="bg-red-50 border border-red-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
-            <div>
-              <span class="block font-bold text-xs text-red-800"><i class="fa-solid fa-house"></i> MONTHLY PG RENT DUE</span>
-              <p class="text-xs text-red-700 mt-0.5">${rem.pg_reminder.message}</p>
+          ` : ''}
+          ${rem.pg_reminder && rem.pg_reminder.should_alert ? `
+            <div class="bg-red-50 border border-red-300 p-4 rounded-2xl flex justify-between items-center flex-wrap gap-3">
+              <div>
+                <span class="block font-bold text-xs text-red-800"><i class="fa-solid fa-house"></i> MONTHLY PG RENT DUE</span>
+                <p class="text-xs text-red-700 mt-0.5">${rem.pg_reminder.message}</p>
+              </div>
+              <button onclick="openUniversalPaymentModal('Monthly PG Rent Payment', 4200, 'PG Rent')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
+                Pay PG Rent (₹4,200)
+              </button>
             </div>
-            <button onclick="openUniversalPaymentModal('Monthly PG Rent Payment', 4200, 'PG Rent')" class="bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow">
-              Pay PG Rent (₹4,200)
-            </button>
-          </div>
-        ` : ''}
-      `;
+          ` : ''}
+        `;
+      } catch (e) {}
     }
 
     async function updateProfileInfo(e) {
       e.preventDefault();
-      const res = await fetch(`${API_BASE}/auth/profile/update`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({
+      try {
+        const data = await apiCall("/auth/profile/update", "POST", {
           phone: document.getElementById("profilePhoneInput").value,
           address: document.getElementById("profileAddressInput").value,
           google_map_url: document.getElementById("profileMapInput").value
-        })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        showToast(data.message, "success");
+        });
+        showToast(data.message || "Profile updated!", "success");
         currentUser.phone = document.getElementById("profilePhoneInput").value;
         currentUser.address = document.getElementById("profileAddressInput").value;
         currentUser.google_map_url = document.getElementById("profileMapInput").value;
-      } else showToast(data.detail || "Update failed.", "error");
+      } catch (err) {}
     }
 
     function filterPGGender(gender) {
@@ -1886,59 +1848,61 @@
 
     async function loadPGs() {
       const search = document.getElementById("pgSearch").value;
-      const res = await fetch(`${API_BASE}/pgs?gender_pref=${activeGenderFilter}${search ? '&search=' + search : ''}`);
-      currentFetchedPGs = await res.json();
+      try {
+        const pgs = await apiCall(`/pgs?gender_pref=${activeGenderFilter}${search ? '&search=' + search : ''}`);
+        currentFetchedPGs = pgs || [];
 
-      document.getElementById("pgList").innerHTML = currentFetchedPGs.map(pg => {
-        const coverPhoto = pg.images && pg.images.length > 0 ? pg.images[0] : null;
+        document.getElementById("pgList").innerHTML = currentFetchedPGs.map(pg => {
+          const coverPhoto = pg.images && pg.images.length > 0 ? pg.images[0] : null;
 
-        return `
-          <div class="bg-white rounded-3xl border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group" onclick="openPGDetailModal('${pg.id}')">
-            <div>
-              <div class="relative h-44 w-full bg-gray-100 overflow-hidden">
-                ${coverPhoto ? `
-                  <img src="${coverPhoto}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                ` : `
-                  <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-orange-50/50">
-                    <i class="fa-solid fa-hotel text-3xl mb-1 text-orange-400"></i>
-                    <span class="text-[10px] font-bold">Photos Available On Request</span>
-                  </div>
-                `}
-                <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-orange-800 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-sm">
-                  ${pg.gender_pref}
-                </span>
-                <span class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white font-bold text-[10px] px-2.5 py-1 rounded-full">
-                  ⭐ ${pg.rating}
-                </span>
-                ${pg.images && pg.images.length > 0 ? `
-                  <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md">
-                    <i class="fa-solid fa-camera"></i> ${pg.images.length} Photos
+          return `
+            <div class="bg-white rounded-3xl border overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group" onclick="openPGDetailModal('${pg.id}')">
+              <div>
+                <div class="relative h-44 w-full bg-gray-100 overflow-hidden">
+                  ${coverPhoto ? `
+                    <img src="${coverPhoto}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                  ` : `
+                    <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-orange-50/50">
+                      <i class="fa-solid fa-hotel text-3xl mb-1 text-orange-400"></i>
+                      <span class="text-[10px] font-bold">Verified PG Listing</span>
+                    </div>
+                  `}
+                  <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-md text-orange-800 font-bold text-[10px] px-2.5 py-1 rounded-full shadow-sm">
+                    ${pg.gender_pref}
                   </span>
-                ` : ''}
-              </div>
+                  <span class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white font-bold text-[10px] px-2.5 py-1 rounded-full">
+                    ⭐ ${pg.rating}
+                  </span>
+                  ${pg.images && pg.images.length > 0 ? `
+                    <span class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md">
+                      <i class="fa-solid fa-camera"></i> ${pg.images.length} Photos
+                    </span>
+                  ` : ''}
+                </div>
 
-              <div class="p-5 space-y-2">
-                <h3 class="font-bold text-gray-900 text-base group-hover:text-orange-600 transition-colors">${pg.name}</h3>
-                <p class="text-xs text-gray-500 line-clamp-1">${pg.address}</p>
-                <div class="flex items-center gap-2 pt-1 text-[11px] font-semibold text-gray-600">
-                  <span class="bg-gray-100 px-2 py-0.5 rounded-lg"><i class="fa-solid fa-bed"></i> ${pg.sharing}</span>
-                  <span class="bg-gray-100 px-2 py-0.5 rounded-lg"><i class="fa-solid fa-snowflake"></i> ${pg.has_ac ? 'AC Room' : 'Non-AC'}</span>
+                <div class="p-5 space-y-2">
+                  <h3 class="font-bold text-gray-900 text-base group-hover:text-orange-600 transition-colors">${pg.name}</h3>
+                  <p class="text-xs text-gray-500 line-clamp-1">${pg.address}</p>
+                  <div class="flex items-center gap-2 pt-1 text-[11px] font-semibold text-gray-600">
+                    <span class="bg-gray-100 px-2 py-0.5 rounded-lg"><i class="fa-solid fa-bed"></i> ${pg.sharing}</span>
+                    <span class="bg-gray-100 px-2 py-0.5 rounded-lg"><i class="fa-solid fa-snowflake"></i> ${pg.has_ac ? 'AC Room' : 'Non-AC'}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="px-5 pb-5 pt-2 flex justify-between items-center border-t border-gray-100">
-              <div>
-                <span class="text-lg font-black text-orange-600">₹${pg.monthly_price}</span>
-                <span class="text-[10px] text-gray-400 font-bold">/mo</span>
+              <div class="px-5 pb-5 pt-2 flex justify-between items-center border-t border-gray-100">
+                <div>
+                  <span class="text-lg font-black text-orange-600">₹${pg.monthly_price}</span>
+                  <span class="text-[10px] text-gray-400 font-bold">/mo</span>
+                </div>
+                <button class="bg-orange-600 group-hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-md">
+                  View Details
+                </button>
               </div>
-              <button class="bg-orange-600 group-hover:bg-orange-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-md">
-                View Details
-              </button>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      } catch (e) {}
     }
 
     function openPGDetailModal(pgId) {
@@ -2008,37 +1972,39 @@
     }
 
     async function loadStudentRoomsPhotos() {
-      const res = await fetch(`${API_BASE}/rooms`);
-      const rooms = await res.json();
-      document.getElementById("studentRoomsPhotoGrid").innerHTML = rooms.map(r => `
-        <div class="bg-gray-50 p-4 rounded-2xl border space-y-3 shadow-sm">
-          <div class="flex justify-between items-center">
-            <div>
-              <h4 class="font-bold text-gray-900 text-sm">Room ${r.room_number} (${r.room_type})</h4>
-              <span class="text-xs font-bold text-orange-600">₹${r.monthly_rent}/month</span>
+      try {
+        const rooms = await apiCall("/rooms");
+        document.getElementById("studentRoomsPhotoGrid").innerHTML = rooms.map(r => `
+          <div class="bg-gray-50 p-4 rounded-2xl border space-y-3 shadow-sm">
+            <div class="flex justify-between items-center">
+              <div>
+                <h4 class="font-bold text-gray-900 text-sm">Room ${r.room_number} (${r.room_type})</h4>
+                <span class="text-xs font-bold text-orange-600">₹${r.monthly_rent}/month</span>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'vacant' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'}">${r.status.toUpperCase()}</span>
             </div>
-            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.status === 'vacant' ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'}">${r.status.toUpperCase()}</span>
+            <div class="grid grid-cols-5 gap-2">
+              ${r.images && r.images.length > 0 ? r.images.map(img => `
+                <img src="${img}" class="w-full h-16 object-cover rounded-xl border border-gray-200 hover:scale-105 transition cursor-pointer" onclick="viewFullImage('${img}')">
+              `).join('') : '<p class="col-span-5 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No room photos uploaded yet.</p>'}
+            </div>
           </div>
-          <div class="grid grid-cols-5 gap-2">
-            ${r.images && r.images.length > 0 ? r.images.map(img => `
-              <img src="${img}" class="w-full h-16 object-cover rounded-xl border border-gray-200 hover:scale-105 transition cursor-pointer" onclick="viewFullImage('${img}')">
-            `).join('') : '<p class="col-span-5 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No room photos uploaded by owner yet.</p>'}
-          </div>
-        </div>
-      `).join('');
+        `).join('');
+      } catch (e) {}
     }
 
     async function loadStudentMessView() {
-      const res = await fetch(`${API_BASE}/mess/weekly-menu`);
-      const menu = await res.json();
-      document.getElementById("weeklyMenuStudentCards").innerHTML = menu.map(m => `
-        <div class="bg-gray-50 p-4 rounded-2xl border text-xs space-y-2">
-          <span class="block font-black text-orange-600 uppercase border-b pb-1">${m.day_name}</span>
-          <div><strong class="text-gray-700">Breakfast:</strong> ${m.breakfast}</div>
-          <div><strong class="text-gray-700">Lunch:</strong> ${m.lunch}</div>
-          <div><strong class="text-gray-700">Dinner:</strong> ${m.dinner}</div>
-        </div>
-      `).join('');
+      try {
+        const menu = await apiCall("/mess/weekly-menu");
+        document.getElementById("weeklyMenuStudentCards").innerHTML = menu.map(m => `
+          <div class="bg-gray-50 p-4 rounded-2xl border text-xs space-y-2">
+            <span class="block font-black text-orange-600 uppercase border-b pb-1">${m.day_name}</span>
+            <div><strong class="text-gray-700">Breakfast:</strong> ${m.breakfast}</div>
+            <div><strong class="text-gray-700">Lunch:</strong> ${m.lunch}</div>
+            <div><strong class="text-gray-700">Dinner:</strong> ${m.dinner}</div>
+          </div>
+        `).join('');
+      } catch (e) {}
     }
 
     async function cancelMeal(type, btnElem) {
@@ -2054,14 +2020,9 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}/mess/cancel-meal`, {
-          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ meal_type: type, date: selectedDate })
-        });
-        const data = await res.json();
-        if (res.ok) showToast(data.message || `${type} cancelled for ${selectedDate}! Refund credited.`, "success");
-        else showToast(data.detail || "Cancellation failed.", "error");
-      } catch (e) { showToast("Error communicating with backend server.", "error"); }
+        const data = await apiCall("/mess/cancel-meal", "POST", { meal_type: type, date: selectedDate });
+        showToast(data.message || `${type} cancelled for ${selectedDate}! Refund credited.`, "success");
+      } catch (e) {}
     }
 
     async function uncancelMeal(type, btnElem) {
@@ -2077,14 +2038,9 @@
       }
 
       try {
-        const res = await fetch(`${API_BASE}/mess/uncancel-meal`, {
-          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ meal_type: type, date: selectedDate })
-        });
-        const data = await res.json();
-        if (res.ok) showToast(data.message || `${type} restored for ${selectedDate}!`, "info");
-        else showToast(data.detail || "Restoration failed.", "error");
-      } catch (e) { showToast("Error communicating with backend server.", "error"); }
+        const data = await apiCall("/mess/uncancel-meal", "POST", { meal_type: type, date: selectedDate });
+        showToast(data.message || `${type} restored for ${selectedDate}!`, "info");
+      } catch (e) {}
     }
 
     async function unsubscribeMess(bookingId = null, itemName = null) {
@@ -2095,236 +2051,309 @@
         const data = await apiCall("/mess/unsubscribe", "POST", {
           booking_id: bookingId,
           item_name: itemName
-    });
-    
+        });
         showToast(data.message || "Unsubscribed successfully.", "info");
-
-    // Refresh all student views dynamically
-        if (typeof loadBookings === "function") loadBookings();
-        if (typeof loadStudentMessView === "function") loadStudentMessView();
-        if (typeof loadCalendarLedger === "function") loadCalendarLedger();
-        if (typeof loadStudentProfile === "function") loadStudentProfile();
-      } catch (e) {
-        showToast(e.message || "Unsubscribe failed.", "error");
+        loadBookings();
+        loadStudentProfile();
+      } catch (e) {}
     }
-  }
+
     async function loadMessPrepStats() {
-      const res = await fetch(`${API_BASE}/mess/daily-stats`, {
-        headers: { "Authorization": `Bearer ${authToken}` }
-      });
-      const data = await res.json();
+      try {
+        const data = await apiCall("/mess/daily-stats");
+        document.getElementById("messPrepStats").innerHTML = `
+          <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">ENROLLED SUBSCRIBERS</span><strong class="text-lg">${data.total_enrolled}</strong></div>
+          <div class="bg-amber-50 p-3 rounded-xl border border-amber-200"><span class="block text-[10px] text-amber-700 font-bold">BREAKFAST CANCELS</span><strong class="text-lg text-amber-700">${data.breakfast_cancels}</strong></div>
+          <div class="bg-orange-50 p-3 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">LUNCH CANCELS</span><strong class="text-lg text-orange-700">${data.lunch_cancels}</strong></div>
+          <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200"><span class="block text-[10px] text-indigo-700 font-bold">DINNER CANCELS</span><strong class="text-lg text-indigo-700">${data.dinner_cancels}</strong></div>
+        `;
 
-      document.getElementById("messPrepStats").innerHTML = `
-        <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">ENROLLED</span><strong class="text-lg">${data.total_enrolled}</strong></div>
-        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200"><span class="block text-[10px] text-amber-700 font-bold">BREAKFAST CANCELS</span><strong class="text-lg text-amber-700">${data.breakfast_cancels}</strong></div>
-        <div class="bg-orange-50 p-3 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">LUNCH CANCELS</span><strong class="text-lg text-orange-700">${data.lunch_cancels}</strong></div>
-        <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-200"><span class="block text-[10px] text-indigo-700 font-bold">DINNER CANCELS</span><strong class="text-lg text-indigo-700">${data.dinner_cancels}</strong></div>
-      `;
-
-      document.getElementById("cancelledMealsTable").innerHTML = data.cancelled_orders_list.length ? `
-        <table class="w-full text-xs text-left">
-          <thead class="bg-gray-100 uppercase">
-            <tr><th class="p-2.5">Student</th><th class="p-2.5">Phone</th><th class="p-2.5">Canceled Meal</th><th class="p-2.5">Refund</th><th class="p-2.5">Time</th></tr>
-          </thead>
-          <tbody>${data.cancelled_orders_list.map(c => `
-            <tr class="border-b">
-              <td class="p-2.5 font-bold">${c.student_name}</td>
-              <td class="p-2.5">${c.phone}</td>
-              <td class="p-2.5"><span class="bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded text-[10px]">${c.meal}</span></td>
-              <td class="p-2.5 font-bold text-green-600">+₹${c.refund}</td>
-              <td class="p-2.5 text-gray-500">${c.timestamp}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
-      ` : `<p class="text-xs text-gray-400 py-4">No meal cancellations today.</p>`;
+        document.getElementById("cancelledMealsTable").innerHTML = data.cancelled_orders_list.length ? `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase">
+              <tr><th class="p-2.5">Student</th><th class="p-2.5">Phone</th><th class="p-2.5">Canceled Meal</th><th class="p-2.5">Refund Credit</th><th class="p-2.5">Time</th></tr>
+            </thead>
+            <tbody>${data.cancelled_orders_list.map(c => `
+              <tr class="border-b">
+                <td class="p-2.5 font-bold">${c.student_name}</td>
+                <td class="p-2.5">${c.phone}</td>
+                <td class="p-2.5"><span class="bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded text-[10px]">${c.meal}</span></td>
+                <td class="p-2.5 font-bold text-green-600">+₹${c.refund}</td>
+                <td class="p-2.5 text-gray-500">${c.timestamp}</td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        ` : `<p class="text-xs text-gray-400 py-4">No meal cancellations recorded today.</p>`;
+      } catch (e) {}
     }
 
-   async function loadOwnerMonthlyBilling() {
-      const month = document.getElementById("messOwnerMonthPicker").value;
-      const res = await fetch(`${API_BASE}/mess/owner-monthly-billing?month=${month}`, {
-        headers: { "Authorization": `Bearer ${authToken}` }
-      });
-      const data = await res.json();
-
-      document.getElementById("messSubscribersTable").innerHTML = data.subscribers.length ? `
-        <table class="w-full text-xs text-left">
-          <thead class="bg-gray-100 uppercase">
-            <tr>
-              <th class="p-2.5">Subscriber</th>
-              <th class="p-2.5">Phone</th>
-              <th class="p-2.5">Address & Map</th>
-              <th class="p-2.5">Plan & Diet</th>
-              <th class="p-2.5">Cancels</th>
-              <th class="p-2.5">Net Bill</th>
-              <th class="p-2.5">Action</th>
-            </tr>
-          </thead>
-          <tbody>${data.subscribers.map(s => `
-            <tr class="border-b">
-              <td class="p-2.5 font-bold text-gray-900">${s.name}</td>
-              <td class="p-2.5 font-bold">${s.phone}</td>
-              <td class="p-2.5 font-bold text-orange-600">
-                ${s.address}${s.google_map_url ? `<br><a href="${s.google_map_url}" target="_blank" class="text-[10px] text-blue-600 underline font-semibold">📍 Open Directions</a>` : ''}
-              </td>
-              <td class="p-2.5">
-                ${s.plan}<br>
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${s.diet === 'Pure Veg' || s.diet === 'Veg' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${s.diet}</span>
-              </td>
-              <td class="p-2.5 font-bold text-red-600">${s.total_cancellations} Meals</td>
-              <td class="p-2.5 font-black text-orange-600">₹${s.final_verified_bill}</td>
-              <td class="p-2.5">
-                <button onclick="inspectStudentCalendar('${s.name}')" class="bg-gray-900 hover:bg-black text-white font-bold px-2.5 py-1 rounded text-[10px] transition">Inspect 30-Day</button>
-              </td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
-      ` : `<p class="text-xs text-gray-400 py-4">No subscribers found for your mess.</p>`;
+    async function loadOwnerMonthlyBilling() {
+      const monthPicker = document.getElementById("messOwnerMonthPicker");
+      const month = monthPicker ? monthPicker.value : new Date().toISOString().substring(0, 7);
+      try {
+        const data = await apiCall(`/mess/owner-monthly-billing?month=${month}`);
+        document.getElementById("messSubscribersTable").innerHTML = (data.subscribers && data.subscribers.length) ? `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase">
+              <tr>
+                <th class="p-2.5">Subscriber</th>
+                <th class="p-2.5">Phone</th>
+                <th class="p-2.5">Address & Map</th>
+                <th class="p-2.5">Plan & Diet</th>
+                <th class="p-2.5">Cancels</th>
+                <th class="p-2.5">Net Bill</th>
+                <th class="p-2.5">Action</th>
+              </tr>
+            </thead>
+            <tbody>${data.subscribers.map(s => `
+              <tr class="border-b">
+                <td class="p-2.5 font-bold text-gray-900">${s.name}</td>
+                <td class="p-2.5 font-bold">${s.phone}</td>
+                <td class="p-2.5 font-bold text-orange-600">
+                  ${s.address}${s.google_map_url ? `<br><a href="${s.google_map_url}" target="_blank" class="text-[10px] text-blue-600 underline font-semibold">📍 Open Directions</a>` : ''}
+                </td>
+                <td class="p-2.5">
+                  ${s.plan}<br>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold ${s.diet === 'Pure Veg' || s.diet === 'Veg' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${s.diet}</span>
+                </td>
+                <td class="p-2.5 font-bold text-red-600">${s.total_cancellations} Meals</td>
+                <td class="p-2.5 font-black text-orange-600">₹${s.final_verified_bill}</td>
+                <td class="p-2.5">
+                  <button onclick="inspectStudentCalendar('${s.name}')" class="bg-gray-900 hover:bg-black text-white font-bold px-2.5 py-1 rounded text-[10px] transition">Inspect 30-Day</button>
+                </td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        ` : `<p class="text-xs text-gray-400 py-4">No subscribers found for this month.</p>`;
+      } catch (e) {}
     }
 
     async function inspectStudentCalendar(studentName) {
-      const month = document.getElementById("messOwnerMonthPicker").value;
-      const res = await fetch(`${API_BASE}/mess/student-calendar?month=${month}&student_name=${encodeURIComponent(studentName)}`, {
-        headers: { "Authorization": `Bearer ${authToken}` }
-      });
-      const data = await res.json();
+      const monthPicker = document.getElementById("messOwnerMonthPicker");
+      const month = monthPicker ? monthPicker.value : new Date().toISOString().substring(0, 7);
+      try {
+        const data = await apiCall(`/mess/student-calendar?month=${month}&student_name=${encodeURIComponent(studentName)}`);
+        document.getElementById("inspectStudentTitle").innerText = `${data.student_name}'s Attendance & Ledger`;
+        document.getElementById("inspectStudentSubtitle").innerText = `Month: ${month} • Status: ${data.is_active ? 'Active Plan' : 'Unsubscribed'}`;
 
-      document.getElementById("inspectStudentTitle").innerText = `${data.student_name}'s Attendance & Ledger`;
-      document.getElementById("inspectStudentSubtitle").innerText = `Month: ${month} • Status: ${data.is_active ? 'Active Plan' : 'Unsubscribed'}`;
+        document.getElementById("inspectLedgerSummaryCards").innerHTML = `
+          <div class="bg-gray-50 p-2.5 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">BASE PRICE</span><strong class="text-sm">₹${data.base_price}</strong></div>
+          <div class="bg-green-50 p-2.5 rounded-xl border border-green-200"><span class="block text-[10px] text-green-700 font-bold">TOTAL REFUNDS</span><strong class="text-sm text-green-700">₹${data.total_refund_amount}</strong></div>
+          <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">NET BILL</span><strong class="text-sm text-orange-700">₹${data.final_verified_bill}</strong></div>
+          <div class="bg-gray-50 p-2.5 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">STATUS</span><strong class="text-sm">${data.is_active ? 'Active Plan' : 'Unsubscribed'}</strong></div>
+        `;
 
-      document.getElementById("inspectLedgerSummaryCards").innerHTML = `
-        <div class="bg-gray-50 p-2.5 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">BASE PRICE</span><strong class="text-sm">₹${data.base_price}</strong></div>
-        <div class="bg-green-50 p-2.5 rounded-xl border border-green-200"><span class="block text-[10px] text-green-700 font-bold">TOTAL REFUNDS</span><strong class="text-sm text-green-700">₹${data.total_refund_amount}</strong></div>
-        <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">NET BILL</span><strong class="text-sm text-orange-700">₹${data.final_verified_bill}</strong></div>
-        <div class="bg-gray-50 p-2.5 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">STATUS</span><strong class="text-sm">${data.is_active ? 'Active Plan' : 'Unsubscribed'}</strong></div>
-      `;
-
-      document.getElementById("inspectCalendarGrid").innerHTML = data.daily_breakdown.map(d => `
-        <div class="p-2 rounded-xl border text-center ${d.coins_refunded > 0 ? 'bg-orange-50 border-orange-200' : 'bg-white'}">
-          <span class="block text-[10px] font-bold text-gray-400 mb-0.5">Day ${d.day_number}</span>
-          <div class="text-[9px] space-y-0.5">
-            <span class="block font-bold ${d.breakfast === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">B: ${d.breakfast}</span>
-            <span class="block font-bold ${d.lunch === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">L: ${d.lunch}</span>
-            <span class="block font-bold ${d.dinner === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">D: ${d.dinner}</span>
+        document.getElementById("inspectCalendarGrid").innerHTML = data.daily_breakdown.map(d => `
+          <div class="p-2 rounded-xl border text-center ${d.coins_refunded > 0 ? 'bg-orange-50 border-orange-200' : 'bg-white'}">
+            <span class="block text-[10px] font-bold text-gray-400 mb-0.5">Day ${d.day_number}</span>
+            <div class="text-[9px] space-y-0.5">
+              <span class="block font-bold ${d.breakfast === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">B: ${d.breakfast}</span>
+              <span class="block font-bold ${d.lunch === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">L: ${d.lunch}</span>
+              <span class="block font-bold ${d.dinner === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">D: ${d.dinner}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
 
-      document.getElementById("inspectCalendarModal").classList.remove("hidden");
+        document.getElementById("inspectCalendarModal").classList.remove("hidden");
+      } catch (e) {}
     }
 
     function closeInspectCalendarModal() { document.getElementById("inspectCalendarModal").classList.add("hidden"); }
 
     async function loadWeeklyMenuEditor() {
-      const res = await fetch(`${API_BASE}/mess/weekly-menu`);
-      const menu = await res.json();
-      document.getElementById("weeklyMenuEditorGrid").innerHTML = menu.map(m => `
-        <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
-          <h4 class="font-bold text-orange-600 border-b pb-1 text-sm">${m.day_name} Menu</h4>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">BREAKFAST</label><input type="text" id="bf-${m.day_name}" value="${m.breakfast}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">LUNCH</label><input type="text" id="lu-${m.day_name}" value="${m.lunch}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
-          <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">DINNER</label><input type="text" id="dn-${m.day_name}" value="${m.dinner}" class="w-full border rounded-lg p-2 text-base md:text-xs"></div>
-          <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2 rounded-lg text-xs transition">Save ${m.day_name}</button>
-        </div>
-      `).join('');
+      try {
+        const menu = await apiCall("/mess/weekly-menu");
+        document.getElementById("weeklyMenuEditorGrid").innerHTML = menu.map(m => `
+          <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
+            <h4 class="font-bold text-orange-600 border-b pb-1 text-sm">${m.day_name} Menu</h4>
+            <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">BREAKFAST</label><input type="text" id="bf-${m.day_name}" value="${m.breakfast}" class="w-full border rounded-lg p-2 text-base md:text-xs font-semibold"></div>
+            <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">LUNCH</label><input type="text" id="lu-${m.day_name}" value="${m.lunch}" class="w-full border rounded-lg p-2 text-base md:text-xs font-semibold"></div>
+            <div><label class="block text-[10px] font-bold text-gray-500 mb-0.5">DINNER</label><input type="text" id="dn-${m.day_name}" value="${m.dinner}" class="w-full border rounded-lg p-2 text-base md:text-xs font-semibold"></div>
+            <button onclick="saveDayMenu('${m.day_name}')" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-2 rounded-lg text-xs transition">Save ${m.day_name}</button>
+          </div>
+        `).join('');
+      } catch (e) {}
     }
 
     async function saveDayMenu(day) {
-      await fetch(`${API_BASE}/mess/weekly-menu/update`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          day_name: day, breakfast: document.getElementById(`bf-${day}`).value,
-          lunch: document.getElementById(`lu-${day}`).value, dinner: document.getElementById(`dn-${day}`).value
-        })
-      });
-      showToast(`Updated ${day}'s menu!`, "success");
+      try {
+        await apiCall("/mess/weekly-menu/update", "POST", {
+          day_name: day,
+          breakfast: document.getElementById(`bf-${day}`).value,
+          lunch: document.getElementById(`lu-${day}`).value,
+          dinner: document.getElementById(`dn-${day}`).value
+        });
+        showToast(`Updated ${day}'s menu in database!`, "success");
+      } catch (e) {}
     }
 
     async function loadCalendarLedger() {
-      const res = await fetch(`${API_BASE}/mess/student-calendar`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const data = await res.json();
-      document.getElementById("ledgerSummaryCards").innerHTML = `
-        <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">BASE PRICE</span><strong class="text-sm">₹${data.base_price}</strong></div>
-        <div class="bg-green-50 p-3 rounded-xl border border-green-200"><span class="block text-[10px] text-green-700 font-bold">REFUNDS CREDITED</span><strong class="text-sm text-green-700">₹${data.total_refund_amount}</strong></div>
-        <div class="bg-orange-50 p-3 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">NET MONTHLY BILL</span><strong class="text-sm text-orange-700">₹${data.final_verified_bill}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">STATUS</span><strong class="text-sm">${data.is_active ? 'Active Plan' : 'Unsubscribed'}</strong></div>
-      `;
-      document.getElementById("calendarGrid").innerHTML = data.daily_breakdown.map(d => `
-        <div class="p-2.5 rounded-xl border text-center ${d.coins_refunded > 0 ? 'bg-orange-50 border-orange-200' : 'bg-white'}">
-          <span class="block text-[11px] font-bold text-gray-400 mb-1">Day ${d.day_number}</span>
-          <div class="text-[9px] space-y-0.5">
-            <span class="block font-bold ${d.breakfast === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">B: ${d.breakfast}</span>
-            <span class="block font-bold ${d.lunch === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">L: ${d.lunch}</span>
-            <span class="block font-bold ${d.dinner === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">D: ${d.dinner}</span>
+      try {
+        const data = await apiCall("/mess/student-calendar");
+        document.getElementById("ledgerSummaryCards").innerHTML = `
+          <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">BASE SUBSCRIPTION PRICE</span><strong class="text-sm">₹${data.base_price}</strong></div>
+          <div class="bg-green-50 p-3 rounded-xl border border-green-200"><span class="block text-[10px] text-green-700 font-bold">REFUNDS CREDITED</span><strong class="text-sm text-green-700">₹${data.total_refund_amount}</strong></div>
+          <div class="bg-orange-50 p-3 rounded-xl border border-orange-200"><span class="block text-[10px] text-orange-700 font-bold">NET MONTHLY BILL</span><strong class="text-sm text-orange-700">₹${data.final_verified_bill}</strong></div>
+          <div class="bg-gray-50 p-3 rounded-xl border"><span class="block text-[10px] text-gray-400 font-bold">STATUS</span><strong class="text-sm">${data.is_active ? 'Active Plan' : 'Unsubscribed'}</strong></div>
+        `;
+        document.getElementById("calendarGrid").innerHTML = data.daily_breakdown.map(d => `
+          <div class="p-2.5 rounded-xl border text-center ${d.coins_refunded > 0 ? 'bg-orange-50 border-orange-200' : 'bg-white'}">
+            <span class="block text-[11px] font-bold text-gray-400 mb-1">Day ${d.day_number}</span>
+            <div class="text-[9px] space-y-0.5">
+              <span class="block font-bold ${d.breakfast === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">B: ${d.breakfast}</span>
+              <span class="block font-bold ${d.lunch === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">L: ${d.lunch}</span>
+              <span class="block font-bold ${d.dinner === 'Canceled' ? 'text-red-500' : 'text-gray-700'}">D: ${d.dinner}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      } catch (e) {}
     }
 
     async function loadBookings() {
-      const res = await fetch(`${API_BASE}/bookings/my`, { headers: { "Authorization": `Bearer ${authToken}` } });
-      const bList = await res.json();
-      document.getElementById("bookingsList").innerHTML = bList.length ? bList.map(b => {
-        const isMess = b.target_type === "Mess Subscription" || b.item_name.toLowerCase().includes("mess");
+      try {
+        const bList = await apiCall("/bookings/my");
+        document.getElementById("bookingsList").innerHTML = (bList && bList.length) ? bList.map(b => {
+          const isMess = b.target_type === "Mess Subscription" || b.item_name.toLowerCase().includes("mess");
 
-        return `
-          <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
-            <div class="flex justify-between items-start">
-              <div>
-                <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase mb-1 inline-block">
-                  ${isMess ? 'Mess Subscription' : 'PG Stay'}
-                </span>
-                <h4 class="font-bold text-sm text-gray-900">${b.item_name}</h4>
-                <p class="text-xs text-gray-500">Amount: ₹${b.monthly_amount}</p>
-                <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
+          return `
+            <div class="bg-white p-4 rounded-2xl border space-y-3 shadow-sm">
+              <div class="flex justify-between items-start">
+                <div>
+                  <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase mb-1 inline-block">
+                    ${isMess ? 'Mess Subscription' : 'PG Stay'}
+                  </span>
+                  <h4 class="font-bold text-sm text-gray-900">${b.item_name}</h4>
+                  <p class="text-xs text-gray-500">Amount: ₹${b.monthly_amount}</p>
+                  <p class="text-[10px] text-orange-600 font-semibold">Txn ID: ${b.transaction_id || '-'}</p>
+                </div>
+                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
               </div>
-              <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">${b.status}</span>
+              ${b.status === 'Active' ? (
+                isMess 
+                  ? `<button onclick="unsubscribeMess('${b.id}', '${b.item_name.replace(/'/g, "\\'")}')" class="w-full bg-orange-50 text-orange-600 font-bold text-xs py-2 rounded-xl border border-orange-200 hover:bg-orange-100 transition">Unsubscribe Mess</button>`
+                  : `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>`
+              ) : ''}
             </div>
-            ${b.status === 'Active' ? (
-              isMess 
-                ? `<button onclick="unsubscribeMess()" class="w-full bg-orange-50 text-orange-600 font-bold text-xs py-2 rounded-xl border border-orange-200 hover:bg-orange-100 transition">Unsubscribe Mess</button>`
-                : `<button onclick="requestVacate('${b.id}')" class="w-full bg-red-50 text-red-600 font-bold text-xs py-2 rounded-xl border border-red-200 hover:bg-red-100 transition">Request Room Vacate</button>`
-            ) : ''}
-          </div>
-        `;
-      }).join('') : `<p class="text-xs text-gray-400">No active bookings.</p>`;
+          `;
+        }).join('') : `<p class="text-xs text-gray-400">No active bookings.</p>`;
+      } catch (e) {}
     }
 
     async function requestVacate(bookingId) {
-      const res = await fetch(`${API_BASE}/pg/request-vacate`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({ booking_id: bookingId })
-      });
-      const data = await res.json(); 
-      showToast(data.message, "info"); 
-      loadBookings();
+      try {
+        const data = await apiCall("/pg/request-vacate", "POST", { booking_id: bookingId });
+        showToast(data.message || "Vacate request submitted!", "info"); 
+        loadBookings();
+      } catch (e) {}
+    }
+
+    function openAddRoomModal(pgId, pgName) {
+      activePgIdForRoom = pgId;
+      document.getElementById("addRoomModalTitle").innerText = `Add Room to ${pgName || 'PG'}`;
+      document.getElementById("addRoomNum").value = "";
+      document.getElementById("addRoomType").value = "";
+      document.getElementById("addRoomRent").value = "";
+      document.getElementById("addRoomModal").classList.remove("hidden");
+    }
+
+    function closeAddRoomModal() {
+      document.getElementById("addRoomModal").classList.add("hidden");
+    }
+
+    async function submitAddRoom() {
+      const num = document.getElementById("addRoomNum").value.trim();
+      const type = document.getElementById("addRoomType").value.trim();
+      const rent = parseInt(document.getElementById("addRoomRent").value);
+
+      if (!num || !type || !rent) { 
+        showToast("Please fill all room details.", "warning"); 
+        return; 
+      }
+
+      try {
+        const data = await apiCall("/pg/add-room", "POST", { 
+          pg_id: activePgIdForRoom, 
+          room_number: num, 
+          room_type: type, 
+          monthly_rent: rent 
+        });
+        showToast(data.message || "Room added successfully!", "success"); 
+        closeAddRoomModal(); 
+        loadOwnerRooms(); 
+      } catch (e) {}
     }
 
     async function loadOwnerRooms() {
-      const res = await fetch(`${API_BASE}/rooms`);
-      const rooms = await res.json();
-      document.getElementById("ownerRoomsGrid").innerHTML = rooms.map(r => `
-        <div class="bg-white p-5 rounded-2xl border space-y-3 shadow-sm">
-          <div class="flex justify-between items-start">
-            <div>
-              <h4 class="font-bold text-base text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
-              <p class="text-xs text-gray-500">Tenant: ${r.tenant_name} (${r.tenant_phone})</p>
-              <p class="text-[10px] text-gray-400">Address: ${r.tenant_address}</p>
+      try {
+        const [pgs, allRooms] = await Promise.all([
+          apiCall("/pgs"),
+          apiCall("/rooms")
+        ]);
+        
+        const container = document.getElementById("ownerPGsContainer");
+
+        if (!pgs || pgs.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed">
+              <i class="fa-solid fa-house-user text-3xl text-gray-300 mb-2"></i>
+              <p class="text-xs text-gray-500 font-bold">No PG listings registered.</p>
+              <button onclick="openAddPGModal()" class="mt-3 bg-orange-600 text-white font-bold text-xs px-4 py-2 rounded-xl">
+                + Create First PG Listing
+              </button>
             </div>
-            <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">${r.status.toUpperCase()}</span>
-          </div>
+          `;
+          return;
+        }
 
-          <div class="flex items-center gap-2 pt-2">
-            ${r.images && r.images.length > 0 ? r.images.map(img => `
-              <img src="${img}" class="w-12 h-12 object-cover rounded-xl border">
-            `).join('') : '<span class="text-[11px] text-gray-400 font-medium">No photos uploaded</span>'}
-          </div>
+        container.innerHTML = pgs.map(pg => {
+          const pgRooms = (allRooms || []).filter(r => r.pg_id === pg.id || r.pg_name === pg.name);
 
-          <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold text-xs py-2.5 rounded-xl border border-orange-200 transition">
-            <i class="fa-solid fa-camera"></i> Manage Photos (${r.images ? r.images.length : 0}/5)
-          </button>
-        </div>
-      `).join('');
-      loadVacateRequestsTable("ownerVacateRequestsTable");
+          return `
+            <div class="bg-gray-50 rounded-2xl p-5 border space-y-4 shadow-sm">
+              <div class="flex justify-between items-start flex-wrap gap-2 border-b pb-3">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-lg text-gray-900">${pg.name}</h3>
+                    <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">${pg.gender_pref}</span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-0.5">📍 ${pg.address} • ${pg.sharing}</p>
+                </div>
+                
+                <button onclick="openAddRoomModal('${pg.id}', '${pg.name.replace(/'/g, "\\'")}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
+                  + Add Room to ${pg.name}
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${pgRooms.length > 0 ? pgRooms.map(r => `
+                  <div class="bg-white p-4 rounded-xl border space-y-3">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="font-bold text-sm text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
+                        <p class="text-xs text-orange-600 font-bold">₹${r.monthly_rent}/mo</p>
+                        <p class="text-[10px] text-gray-400">Tenant: ${r.tenant_name || 'Vacant'} (${r.tenant_phone || 'N/A'})</p>
+                      </div>
+                      <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full">${r.status.toUpperCase()}</span>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 pt-1">
+                      ${r.images && r.images.length > 0 ? r.images.map(img => `
+                        <img src="${img}" class="w-10 h-10 object-cover rounded-lg border">
+                      `).join('') : '<span class="text-[10px] text-gray-400">No photos</span>'}
+                    </div>
+
+                    <button onclick="openRoomPhotoModal('${r.room_number}', ${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-[11px] py-1.5 rounded-lg transition">
+                      <i class="fa-solid fa-camera"></i> Photos (${r.images ? r.images.length : 0}/5)
+                    </button>
+                  </div>
+                `).join('') : '<p class="col-span-2 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No rooms listed under this PG yet.</p>'}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        loadVacateRequestsTable("ownerVacateRequestsTable");
+      } catch (err) {}
     }
 
     function openRoomPhotoModal(roomNumber, existingImages = []) {
@@ -2376,172 +2405,392 @@
 
     async function saveRoomPhotos() {
       if (!activeRoomForPhotos) return;
-
       try {
-        const res = await fetch(`${API_BASE}/pg/update-room-images`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({
-            room_number: activeRoomForPhotos,
-            images: currentRoomImages
-          })
+        const data = await apiCall("/pg/update-room-images", "POST", {
+          room_number: activeRoomForPhotos,
+          images: currentRoomImages
         });
-
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message, "success");
-          closeRoomPhotoModal();
-          loadOwnerRooms();
-        } else {
-          showToast(data.detail || "Failed to save photos.", "error");
-        }
-      } catch (err) {
-        showToast("Error updating photos.", "error");
-      }
+        showToast(data.message || "Room photos saved!", "success");
+        closeRoomPhotoModal();
+        loadOwnerRooms();
+      } catch (err) {}
     }
 
     async function loadVacateRequestsTable(containerId) {
-      const res = await fetch(`${API_BASE}/pg/vacate-requests`);
-      const vReqs = await res.json();
-      document.getElementById(containerId).innerHTML = vReqs.length ? `
-        <table class="w-full text-xs text-left">
-          <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Room</th><th class="p-2">Student</th><th class="p-2">Status</th><th class="p-2">Action</th></tr></thead>
-          <tbody>${vReqs.map(vr => `
-            <tr class="border-b">
-              <td class="p-2 font-bold">Room ${vr.room_number}</td><td class="p-2">${vr.student_name}</td>
-              <td class="p-2">${vr.status}</td>
-              <td class="p-2">${vr.status === 'Pending' ? `<button onclick="approveVacate('${vr.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2 py-1 rounded transition">Approve</button>` : 'Approved'}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
-      ` : `<p class="text-xs text-gray-400">No pending vacate requests.</p>`;
+      try {
+        const vReqs = await apiCall("/pg/vacate-requests");
+        document.getElementById(containerId).innerHTML = (vReqs && vReqs.length) ? `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Room</th><th class="p-2">Student</th><th class="p-2">Status</th><th class="p-2">Action</th></tr></thead>
+            <tbody>${vReqs.map(vr => `
+              <tr class="border-b">
+                <td class="p-2 font-bold">Room ${vr.room_number}</td><td class="p-2">${vr.student_name}</td>
+                <td class="p-2">${vr.status}</td>
+                <td class="p-2">${vr.status === 'Pending' ? `<button onclick="approveVacate('${vr.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-2 py-1 rounded transition">Approve</button>` : 'Approved'}</td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        ` : `<p class="text-xs text-gray-400 py-2">No pending vacate requests.</p>`;
+      } catch (e) {}
     }
 
     async function approveVacate(requestId) {
-      const res = await fetch(`${API_BASE}/pg/approve-vacate`, {
-        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-        body: JSON.stringify({ request_id: requestId })
-      });
-      const data = await res.json(); 
-      showToast(data.message, "success");
-      if (currentUser.role === 'pg_owner') loadOwnerRooms(); else loadAdminOverview();
+      try {
+        const data = await apiCall("/pg/approve-vacate", "POST", { request_id: requestId });
+        showToast(data.message || "Vacate request approved!", "success");
+        if (currentUser.role === 'pg_owner') loadOwnerRooms(); else loadAdminOverview();
+      } catch (e) {}
     }
 
+    // ADMIN OVERVIEW & SETTLEMENTS
     async function loadAdminOverview() {
-      const mRes = await fetch(`${API_BASE}/admin/metrics`);
-      const m = await mRes.json();
-      document.getElementById("adminMetricsGrid").innerHTML = `
-        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">STUDENTS</span><strong class="text-lg">${m.active_students}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">PGS</span><strong class="text-lg">${m.pg_listings}</strong></div>
-        <div class="bg-orange-50/40 border-orange-200 p-3 rounded-xl text-center border"><span class="block text-[10px] text-orange-600 font-bold">MESSES</span><strong class="text-lg text-orange-600">${m.total_messes || 0}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACANT ROOMS</span><strong class="text-lg">${m.vacant_rooms}</strong></div>
-        <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">VACATE REQS</span><strong class="text-lg text-orange-600">${m.pending_vacate_requests}</strong></div>
-        <div class="bg-orange-50 p-3 rounded-xl text-center border border-orange-200"><span class="block text-[10px] text-orange-600 font-bold">GMV</span><strong class="text-lg text-orange-600">${m.monthly_gmv}</strong></div>
-      `;
+      try {
+        const m = await apiCall("/admin/metrics");
+        document.getElementById("adminMetricsGrid").innerHTML = `
+          <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">ACTIVE SUBSCRIBERS</span><strong class="text-lg">${m.active_students}</strong></div>
+          <div class="bg-gray-50 p-3 rounded-xl text-center border"><span class="block text-[10px] text-gray-400 font-bold">TOTAL PGS</span><strong class="text-lg">${m.pg_listings}</strong></div>
+          <div class="bg-orange-50/40 border-orange-200 p-3 rounded-xl text-center border"><span class="block text-[10px] text-orange-600 font-bold">REGISTERED MESSES</span><strong class="text-lg text-orange-600">${m.total_messes || 0}</strong></div>
+          <div class="bg-green-50 p-3 rounded-xl text-center border border-green-200"><span class="block text-[10px] text-green-700 font-bold">PLATFORM FEE COLLECTED</span><strong class="text-lg text-green-700">${m.platform_commission}</strong></div>
+        `;
 
-      const messRes = await fetch(`${API_BASE}/mess-listings`);
-      const messList = await messRes.json();
-      const messTableContainer = document.getElementById("adminMessTableContainer");
-      if (messList && messList.length > 0) {
-        messTableContainer.innerHTML = `
-          <table class="w-full text-xs text-left border">
-            <thead class="bg-gray-100 uppercase text-[10px]">
+        const messList = await apiCall("/mess-listings");
+        const messTableContainer = document.getElementById("adminMessTableContainer");
+        if (messList && messList.length > 0) {
+          messTableContainer.innerHTML = `
+            <table class="w-full text-xs text-left border">
+              <thead class="bg-gray-100 uppercase text-[10px]">
+                <tr>
+                  <th class="p-2.5">Mess Name</th>
+                  <th class="p-2.5">Provider</th>
+                  <th class="p-2.5">Monthly Price</th>
+                  <th class="p-2.5">Diet Type</th>
+                  <th class="p-2.5">Address</th>
+                  <th class="p-2.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${messList.map(m => `
+                  <tr class="border-b hover:bg-gray-50">
+                    <td class="p-2.5 font-bold text-gray-900">${m.name}</td>
+                    <td class="p-2.5">${m.provider_name}</td>
+                    <td class="p-2.5 font-bold text-orange-600">₹${m.monthly_price}</td>
+                    <td class="p-2.5"><span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded text-[10px]">${m.diet_type}</span></td>
+                    <td class="p-2.5 text-gray-500">${m.address}</td>
+                    <td class="p-2.5 text-right">
+                      <button onclick="deleteAdminMessListing('${m.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2.5 py-1 rounded-lg border border-red-200 text-[10px] transition">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Delete
+                      </button>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } else {
+          messTableContainer.innerHTML = `<p class="text-xs text-gray-400 py-3">No registered mess services listed.</p>`;
+        }
+
+        loadAdminSettlements();
+        loadAdminPGs();
+        loadEmailAdminDiagnostics();
+        loadVacateRequestsTable("adminVacateRequestsTable");
+
+        const users = await apiCall("/admin/users");
+        document.getElementById("adminUsersTable").innerHTML = `
+          <table class="w-full text-xs text-left">
+            <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Name</th><th class="p-2">Email</th><th class="p-2">Phone / Address / GPS</th><th class="p-2">Role</th><th class="p-2">Settlement Tenure</th></tr></thead>
+            <tbody>${(users || []).map(u => `
+              <tr class="border-b">
+                <td class="p-2 font-bold">${u.full_name}</td>
+                <td class="p-2">${u.email}</td>
+                <td class="p-2">
+                  ${u.phone}<br><span class="text-[10px] text-gray-400">${u.address}</span>${u.google_map_url ? `<br><a href="${u.google_map_url}" target="_blank" class="text-[10px] text-blue-600 font-bold">📍 Map Link</a>` : ''}
+                </td>
+                <td class="p-2 font-bold text-orange-600 uppercase">${u.role}</td>
+                <td class="p-2 text-gray-600 font-semibold uppercase text-[10px]">${u.settlement_tenure || 'instant'}</td>
+              </tr>
+            `).join('')}</tbody>
+          </table>
+        `;
+      } catch (e) {}
+    }
+
+    async function loadAdminSettlements(statusFilter = "All") {
+      const container = document.getElementById("adminSettlementsTableContainer");
+      if (!container) return;
+
+      try {
+        const queryStr = statusFilter !== "All" ? `?status_filter=${encodeURIComponent(statusFilter)}` : "";
+        const settlements = await apiCall(`/admin/settlements${queryStr}`);
+        
+        if (!settlements || settlements.length === 0) {
+          container.innerHTML = `<p class="text-xs text-gray-400 py-4 text-center">No vendor settlement records found.</p>`;
+          return;
+        }
+
+        container.innerHTML = `
+          <table class="w-full text-left text-xs border">
+            <thead class="bg-gray-100 uppercase text-[10px] font-bold text-gray-600">
               <tr>
-                <th class="p-2.5">Mess Name</th>
-                <th class="p-2.5">Provider</th>
-                <th class="p-2.5">Monthly Price</th>
-                <th class="p-2.5">Diet Type</th>
-                <th class="p-2.5">Address</th>
-                <th class="p-2.5 text-right">Action</th>
+                <th class="p-2.5">Date</th>
+                <th class="p-2.5">Vendor Name</th>
+                <th class="p-2.5">Net Payout (95%)</th>
+                <th class="p-2.5">Platform Fee (5%)</th>
+                <th class="p-2.5">Tenure Mode</th>
+                <th class="p-2.5">Status</th>
+                <th class="p-2.5 text-right">Approval Action</th>
               </tr>
             </thead>
-            <tbody>
-              ${messList.map(m => `
-                <tr class="border-b hover:bg-gray-50">
-                  <td class="p-2.5 font-bold text-gray-900">${m.name}</td>
-                  <td class="p-2.5">${m.provider_name}</td>
-                  <td class="p-2.5 font-bold text-orange-600">₹${m.monthly_price}</td>
-                  <td class="p-2.5"><span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded text-[10px]">${m.diet_type}</span></td>
-                  <td class="p-2.5 text-gray-500">${m.address}</td>
+            <tbody class="divide-y">
+              ${settlements.map(s => `
+                <tr class="hover:bg-gray-50">
+                  <td class="p-2.5 text-gray-500">${s.requested_at.split(" ")[0]}</td>
+                  <td class="p-2.5 font-bold text-gray-900">${s.vendor_name}</td>
+                  <td class="p-2.5 font-black text-green-700">₹${s.amount}</td>
+                  <td class="p-2.5 font-bold text-gray-600">₹${s.platform_fee}</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-gray-100 text-gray-700 uppercase">${s.settlement_tenure}</span></td>
+                  <td class="p-2.5">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      s.status === 'Settled' ? 'bg-green-100 text-green-800' :
+                      s.status === 'Pending Approval' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-blue-100 text-blue-800'
+                    }">${s.status}</span>
+                  </td>
                   <td class="p-2.5 text-right">
-                    <button onclick="deleteAdminMessListing('${m.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2.5 py-1 rounded-lg border border-red-200 text-[10px] transition">
-                      <i class="fa-solid fa-trash-can mr-1"></i> Delete
-                    </button>
+                    ${s.status !== 'Settled' ? `
+                      <button onclick="approveAdminSettlement('${s.id}')" class="bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] px-3 py-1 rounded-lg transition shadow">
+                        Approve & Release
+                      </button>
+                    ` : `<span class="text-xs text-gray-400 font-semibold"><i class="fa-solid fa-check"></i> Dispatched</span>`}
                   </td>
                 </tr>
               `).join('')}
             </tbody>
           </table>
         `;
-      } else {
-        messTableContainer.innerHTML = `<p class="text-xs text-gray-400 py-3">No registered mess services listed.</p>`;
-      }
+      } catch (e) {}
+    }
 
-      loadAdminPGs();
-      loadEmailAdminDiagnostics();
-      loadVacateRequestsTable("adminVacateRequestsTable");
-
-      const uRes = await fetch(`${API_BASE}/admin/users`);
-      const users = await uRes.json();
-      document.getElementById("adminUsersTable").innerHTML = `
-        <table class="w-full text-xs text-left">
-          <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Name</th><th class="p-2">Email</th><th class="p-2">Phone / Address / Map</th><th class="p-2">Role</th></tr></thead>
-          <tbody>${users.map(u => `
-            <tr class="border-b">
-              <td class="p-2 font-bold">${u.full_name}</td>
-              <td class="p-2">${u.email}</td>
-              <td class="p-2">
-                ${u.phone}<br><span class="text-[10px] text-gray-400">${u.address}</span>${u.google_map_url ? `<br><a href="${u.google_map_url}" target="_blank" class="text-[10px] text-blue-600 font-bold">📍 Map Link</a>` : ''}
-              </td>
-              <td class="p-2 font-bold text-orange-600 uppercase">${u.role}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
-      `;
+    async function approveAdminSettlement(settlementId) {
+      if (!confirm("Approve and release direct payout for this settlement?")) return;
+      try {
+        const data = await apiCall("/admin/settlements/approve", "POST", { settlement_id: settlementId, action: "approve" });
+        showToast(data.message || "Settlement approved!", "success");
+        loadAdminSettlements();
+      } catch (e) {}
     }
 
     async function deleteAdminMessListing(messId) {
-      if (!confirm("Are you sure you want to delete this mess listing? This action cannot be undone.")) return;
+      if (!confirm("Delete this mess listing from the database?")) return;
+      try {
+        const data = await apiCall(`/mess-listings/${messId}`, "DELETE");
+        showToast(data.message || "Mess listing deleted.", "success");
+        await fetchMessPricingRules();
+        loadAdminOverview();
+      } catch (e) {}
+    }
+
+    async function loadAdminPGs() {
+      const tbody = document.getElementById("adminPGTableBody");
+      if (!tbody) return;
+      try {
+        const pgs = await apiCall("/admin/pg-listings");
+        if (!pgs || pgs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No PG listings found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = pgs.map(pg => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 font-bold text-gray-900">${pg.name}</td>
+            <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">${pg.gender_pref}</span></td>
+            <td class="p-3">${pg.sharing}</td>
+            <td class="p-3 font-bold text-orange-600">₹${pg.monthly_price}</td>
+            <td class="p-3 text-gray-500 truncate max-w-xs">${pg.address}</td>
+            <td class="p-3 text-right">
+              <button onclick="deleteAdminPG('${pg.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-[11px] px-2.5 py-1 rounded-lg border border-red-200 transition">
+                <i class="fa-solid fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        `).join("");
+      } catch (err) {}
+    }
+
+    async function submitAddPG(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("addPgName").value.trim(),
+        gender_pref: document.getElementById("addPgGender").value,
+        sharing: document.getElementById("addPgSharing").value.trim(),
+        monthly_price: parseInt(document.getElementById("addPgPrice").value),
+        distance_km: parseFloat(document.getElementById("addPgDistance").value),
+        address: document.getElementById("addPgAddress").value.trim()
+      };
 
       try {
-        const res = await fetch(`${API_BASE}/mess-listings/${messId}`, {
-          method: "DELETE",
-          headers: { "Authorization": `Bearer ${authToken}` }
-        });
-        const data = await res.json();
-        if (res.ok) {
-          showToast(data.message || "Mess listing deleted.", "success");
-          await fetchMessPricingRules();
-          loadAdminOverview();
-        } else {
-          showToast(data.detail || "Failed to delete mess listing.", "error");
-        }
-      } catch (e) {
-        showToast("Error deleting mess listing.", "error");
+        const res = await apiCall("/admin/pg-listings", "POST", payload);
+        showToast(res.message || "PG added successfully!", "success");
+        closeAddPGModal();
+        loadAdminPGs();
+      } catch (err) {}
+    }
+
+    async function deleteAdminPG(pgId) {
+      if (!confirm("Are you sure you want to delete this PG listing?")) return;
+      try {
+        const res = await apiCall(`/admin/pg-listings/${pgId}`, "DELETE");
+        showToast(res.message || "PG deleted successfully!", "success");
+        loadAdminPGs();
+      } catch (err) {}
+    }
+
+    function openAddPGModal() { document.getElementById("addPGModal").classList.remove("hidden"); }
+    function closeAddPGModal() { document.getElementById("addPGModal").classList.add("hidden"); }
+
+    // VENDOR DIRECT BANK SETTLEMENT & TENURE
+    function openVendorOnboardModal() { document.getElementById("vendorOnboardModal").classList.remove("hidden"); }
+    function closeVendorOnboardModal() { document.getElementById("vendorOnboardModal").classList.add("hidden"); }
+
+    async function submitVendorOnboarding(e) {
+      e.preventDefault();
+      const btn = document.getElementById("onboardSubmitBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+      const payload = {
+        account_holder_name: document.getElementById("onboardHolderName").value.trim(),
+        bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
+        bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
+        pan_number: document.getElementById("onboardPan").value.trim().toUpperCase(),
+        settlement_tenure: document.getElementById("onboardTenureSelect").value
+      };
+
+      try {
+        const resData = await apiCall("/vendor/onboard-route", "POST", payload);
+        showToast(resData.message || "Bank details and settlement tenure saved successfully!", "success");
+        closeVendorOnboardModal();
+      } catch (err) {
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `Save Settlement Setup`;
       }
+    }
+
+    // MONTHLY CREDIT & EARNINGS FOR VENDORS
+    function renderVendorMonthlyCreditCard(targetContainerId) {
+      const container = document.getElementById(targetContainerId);
+      if (!container) return;
+
+      const today = new Date();
+      const defaultMonth = today.toISOString().substring(0, 7);
+
+      container.innerHTML = `
+        <div class="bg-white rounded-3xl p-6 border shadow-sm space-y-6">
+          <div class="flex justify-between items-center flex-wrap gap-4 border-b pb-4">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-wallet text-orange-600"></i> Monthly Collections & Net Payout Ledger</h3>
+              <p class="text-xs text-gray-500">Track student collections, 5% platform fee deduction, and 95% net bank payouts.</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <label class="text-xs font-bold text-gray-500 uppercase">Month:</label>
+              <input type="month" id="vendorCreditMonthPicker" value="${defaultMonth}" onchange="loadVendorMonthlyCredits()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="bg-orange-50/60 p-4 rounded-2xl border border-orange-100">
+              <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Gross Student Collection</p>
+              <h4 id="creditGrossAmount" class="text-xl font-black text-gray-900 mt-1">₹0</h4>
+            </div>
+            <div class="bg-green-50/60 p-4 rounded-2xl border border-green-100">
+              <p class="text-[10px] font-bold text-green-600 uppercase tracking-wider">Net Bank Payout (95%)</p>
+              <h4 id="creditNetPayout" class="text-xl font-black text-green-700 mt-1">₹0</h4>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200">
+              <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Platform Fee (5%)</p>
+              <h4 id="creditPlatformFee" class="text-xl font-black text-gray-700 mt-1">₹0</h4>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-50 uppercase text-[10px] font-bold text-gray-500 border-b">
+                <tr>
+                  <th class="p-3">Date</th>
+                  <th class="p-3">Student Name</th>
+                  <th class="p-3">Plan / Description</th>
+                  <th class="p-3">Gross Amount</th>
+                  <th class="p-3">Your Net Credit (95%)</th>
+                  <th class="p-3 text-right">Settlement Status</th>
+                </tr>
+              </thead>
+              <tbody id="vendorCreditTableBody" class="divide-y text-gray-700 font-medium">
+                <tr><td colspan="6" class="p-4 text-center text-gray-400">Loading monthly credits...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      loadVendorMonthlyCredits();
+    }
+
+    async function loadVendorMonthlyCredits() {
+      const picker = document.getElementById("vendorCreditMonthPicker");
+      const monthVal = picker ? picker.value : new Date().toISOString().substring(0, 7);
+      const tbody = document.getElementById("vendorCreditTableBody");
+      if (!tbody) return;
+
+      try {
+        const res = await apiCall(`/vendor/monthly-credits?month=${monthVal}`);
+        
+        document.getElementById("creditGrossAmount").innerText = `₹${res.summary.total_gross}`;
+        document.getElementById("creditNetPayout").innerText = `₹${res.summary.total_net_payout}`;
+        document.getElementById("creditPlatformFee").innerText = `₹${res.summary.total_commission}`;
+
+        if (!res.transactions || res.transactions.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No student payment records for ${res.month}.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = res.transactions.map(t => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 text-gray-500 font-bold">${t.date}</td>
+            <td class="p-3 font-bold text-gray-900">${t.student_name} <br><span class="text-[10px] text-gray-400 font-normal">${t.student_phone}</span></td>
+            <td class="p-3 text-gray-600">${t.description}</td>
+            <td class="p-3 font-bold text-gray-900">₹${t.gross_amount}</td>
+            <td class="p-3 font-bold text-green-600">+₹${t.net_credit}</td>
+            <td class="p-3 text-right">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                t.status === 'Settled' ? 'bg-green-100 text-green-800' :
+                t.status === 'Pending Approval' ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'
+              }">
+                ${t.status}
+              </span>
+            </td>
+          </tr>
+        `).join("");
+      } catch (err) {}
     }
 
     async function loadEmailAdminDiagnostics() {
       try {
-        const res = await fetch(`${API_BASE}/admin/email-status`, { headers: { "Authorization": `Bearer ${authToken}` } });
-        const data = await res.json();
-
-        if (res.ok && data.status === "success") {
+        const data = await apiCall("/admin/email-status");
+        if (data && data.status === "success") {
           const b = data.providers.brevo_api;
           const s = data.providers.smtp;
 
           document.getElementById("emailProviderBadges").innerHTML = `
             <span class="px-3 py-1 rounded-full text-[10px] font-bold ${b.configured ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-gray-100 text-gray-600 border'}">
-              <i class="fa-solid fa-paper-plane"></i> Brevo API: ${b.configured ? 'Active' : 'Not Set'}
+              <i class="fa-solid fa-paper-plane"></i> Brevo REST: ${b.configured ? 'Active' : 'Not Set'}
             </span>
             <span class="px-3 py-1 rounded-full text-[10px] font-bold ${s.configured ? 'bg-blue-100 text-blue-800 border border-blue-300' : 'bg-gray-100 text-gray-600 border'}">
               <i class="fa-solid fa-server"></i> SMTP: ${s.configured ? 'Active' : 'Not Set'}
             </span>
           `;
         }
-      } catch (e) {
-        console.error("Email diagnostics load failed", e);
-      }
+      } catch (e) {}
       loadAdminEmailLogs();
     }
 
@@ -2549,21 +2798,16 @@
       const email = document.getElementById("adminTestEmailInput").value.trim();
       if (!email) { showToast("Enter recipient email", "warning"); return; }
       try {
-        const res = await fetch(`${API_BASE}/admin/send-test-email`, {
-          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ recipient_email: email })
-        });
-        const data = await res.json();
-        if (res.ok) { showToast(data.message || "Test email dispatched!", "success"); loadAdminEmailLogs(); }
-        else { showToast(data.detail || "Email dispatch failed.", "error"); }
-      } catch (e) { showToast("Error sending test email.", "error"); }
+        const data = await apiCall("/admin/send-test-email", "POST", { recipient: email });
+        showToast(data.message || "Test email queued!", "success");
+        loadAdminEmailLogs();
+      } catch (e) {}
     }
 
     async function loadAdminEmailLogs() {
       try {
-        const res = await fetch(`${API_BASE}/admin/email-logs`, { headers: { "Authorization": `Bearer ${authToken}` } });
-        const logs = await res.json();
-        document.getElementById("adminEmailLogsTable").innerHTML = logs.length ? `
+        const logs = await apiCall("/admin/email-logs");
+        document.getElementById("adminEmailLogsTable").innerHTML = (logs && logs.length) ? `
           <table class="w-full text-xs text-left">
             <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Timestamp</th><th class="p-2">Recipient</th><th class="p-2">Subject</th><th class="p-2">Provider</th><th class="p-2">Status</th></tr></thead>
             <tbody>${logs.map(l => `
@@ -2572,7 +2816,7 @@
                 <td class="p-2 font-bold">${l.recipient}</td>
                 <td class="p-2">${l.subject}</td>
                 <td class="p-2"><span class="bg-gray-100 text-gray-700 font-bold px-2 py-0.5 rounded text-[10px]">${l.provider}</span></td>
-                <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${l.status === 'Sent' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${l.status}</span></td>
+                <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${l.status === 'SUCCESS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${l.status}</span></td>
               </tr>
             `).join('')}</tbody>
           </table>
@@ -2582,16 +2826,15 @@
 
     async function loadNotifications() {
       try {
-        const res = await fetch(`${API_BASE}/notifications`, { headers: { "Authorization": `Bearer ${authToken}` } });
-        const notes = await res.json();
-        document.getElementById("notificationsList").innerHTML = notes.length ? notes.map(n => `
+        const notes = await apiCall("/notifications");
+        document.getElementById("notificationsList").innerHTML = (notes && notes.length) ? notes.map(n => `
           <div class="bg-gray-50 p-4 rounded-2xl border flex items-start justify-between gap-3">
             <div class="space-y-1">
               <span class="block font-bold text-xs text-gray-900">${n.title}</span>
               <p class="text-xs text-gray-600">${n.message}</p>
               <span class="text-[10px] text-gray-400">${n.created_at || 'Just now'}</span>
             </div>
-            <span class="bg-orange-100 text-orange-800 font-bold text-[10px] px-2.5 py-1 rounded-full">${n.category || 'Alert'}</span>
+            <span class="bg-orange-100 text-orange-800 font-bold text-[10px] px-2.5 py-1 rounded-full">${n.event_type || 'Alert'}</span>
           </div>
         `).join('') : `<p class="text-xs text-gray-400 py-4">No new notifications.</p>`;
       } catch (e) {}
@@ -2599,9 +2842,8 @@
 
     async function loadComplaints() {
       try {
-        const res = await fetch(`${API_BASE}/complaints`, { headers: { "Authorization": `Bearer ${authToken}` } });
-        const list = await res.json();
-        document.getElementById("complaintsTable").innerHTML = list.length ? `
+        const list = await apiCall("/complaints");
+        document.getElementById("complaintsTable").innerHTML = (list && list.length) ? `
           <table class="w-full text-xs text-left">
             <thead class="bg-gray-100 uppercase"><tr><th class="p-2">Category</th><th class="p-2">Title</th><th class="p-2">Description</th><th class="p-2">Raised By</th><th class="p-2">Status</th></tr></thead>
             <tbody>${list.map(c => `
@@ -2632,385 +2874,14 @@
       }
 
       try {
-        const data = await apiCall("/complaints/create", "POST", { 
-          category: cat, 
-          title: title, 
-          description: desc 
-    });
-
-        showToast(data.message || "Complaint registered.", "success"); 
+        const data = await apiCall("/complaints/create", "POST", { category: cat, title, description: desc });
+        showToast(data.message || "Complaint registered!", "success"); 
         closeComplaintModal(); 
         document.getElementById("compTitle").value = "";
         document.getElementById("compDesc").value = "";
         loadComplaints();
-      } catch (e) { 
-        showToast("Error submitting complaint.", "error"); 
-      }
+      } catch (e) {}
     }
-
-    async function submitAddRoom() {
-      const num = document.getElementById("addRoomNum").value.trim();
-      const type = document.getElementById("addRoomType").value.trim();
-      const rent = parseInt(document.getElementById("addRoomRent").value);
-      if (!num || !type || !rent) { showToast("Please fill all fields.", "warning"); return; }
-      try {
-        const res = await fetch(`${API_BASE}/pg/add-room`, {
-          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ room_number: num, room_type: type, monthly_rent: rent })
-        });
-        const data = await res.json();
-        if (res.ok) { showToast(data.message || "Room added!", "success"); closeAddRoomModal(); loadOwnerRooms(); }
-        else showToast(data.detail || "Failed to add room.", "error");
-      } catch (e) { showToast("Error adding room.", "error"); }
-    }
-
-    // VENDOR DIRECT BANK SETTLEMENT LOGIC
-    function openVendorOnboardModal() { 
-      document.getElementById("vendorOnboardModal").classList.remove("hidden"); 
-    }
-
-    function closeVendorOnboardModal() { 
-      document.getElementById("vendorOnboardModal").classList.add("hidden"); 
-    }
-
-    async function submitVendorOnboarding(e) {
-      e.preventDefault();
-      const btn = document.getElementById("onboardSubmitBtn");
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Activating Account...`;
-
-      const payload = {
-        account_holder_name: document.getElementById("onboardHolderName").value.trim(),
-        bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
-        bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
-        pan_number: document.getElementById("onboardPan").value.trim().toUpperCase()
-      };
-
-      try {
-        const resData = await apiCall("/vendor/onboard-route", "POST", payload);
-        showToast(resData.message || "Razorpay Direct Account activated successfully!", "success");
-        closeVendorOnboardModal();
-      } catch (err) {
-        showToast(err.message || "Failed to setup vendor account.", "error");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `Activate Direct Payouts`;
-      }
-    }
-
-    // ADMIN PG LISTING LOGIC
-    function openAddPGModal() {
-      document.getElementById("addPGModal").classList.remove("hidden");
-    }
-
-    function closeAddPGModal() {
-      document.getElementById("addPGModal").classList.add("hidden");
-    }
-
-    async function loadAdminPGs() {
-      const tbody = document.getElementById("adminPGTableBody");
-      if (!tbody) return;
-
-      try {
-        const pgs = await apiCall("/admin/pg-listings", "GET");
-        if (!pgs || pgs.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No PG listings found.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = pgs.map(pg => `
-          <tr class="hover:bg-gray-50">
-            <td class="p-3 font-bold text-gray-900">${pg.name}</td>
-            <td class="p-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">${pg.gender_pref}</span></td>
-            <td class="p-3">${pg.sharing}</td>
-            <td class="p-3 font-bold text-orange-600">₹${pg.monthly_price}</td>
-            <td class="p-3 text-gray-500 truncate max-w-xs">${pg.address}</td>
-            <td class="p-3 text-right">
-              <button onclick="deleteAdminPG('${pg.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold text-[11px] px-2.5 py-1 rounded-lg border border-red-200 transition">
-                <i class="fa-solid fa-trash"></i> Delete
-              </button>
-            </td>
-          </tr>
-        `).join("");
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load PG listings.</td></tr>`;
-      }
-    }
-
-    async function submitAddPG(e) {
-      e.preventDefault();
-      const btn = document.getElementById("addPgSubmitBtn");
-      btn.disabled = true;
-
-      const payload = {
-        name: document.getElementById("addPgName").value.trim(),
-        gender_pref: document.getElementById("addPgGender").value,
-        sharing: document.getElementById("addPgSharing").value.trim(),
-        monthly_price: parseInt(document.getElementById("addPgPrice").value),
-        distance_km: parseFloat(document.getElementById("addPgDistance").value),
-        address: document.getElementById("addPgAddress").value.trim()
-      };
-
-      try {
-        const res = await apiCall("/admin/pg-listings", "POST", payload);
-        showToast(res.message || "PG added!", "success");
-        closeAddPGModal();
-        loadAdminPGs();
-      } catch (err) {
-        showToast(err.message || "Failed to add PG.", "error");
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    async function deleteAdminPG(pgId) {
-      if (!confirm("Are you sure you want to delete this PG listing?")) return;
-      try {
-        const res = await apiCall(`/admin/pg-listings/${pgId}`, "DELETE");
-        showToast(res.message || "PG deleted!", "success");
-        loadAdminPGs();
-      } catch (err) {
-        showToast(err.message || "Failed to delete PG.", "error");
-      }
-    }
-
-    // MONTHLY CREDIT LEDGER LOGIC FOR VENDORS
-    function renderVendorMonthlyCreditCard(targetContainerId) {
-      const container = document.getElementById(targetContainerId);
-      if (!container) return;
-
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, "0");
-      const defaultMonth = `${yyyy}-${mm}`;
-
-      container.innerHTML = `
-        <div class="bg-white rounded-3xl p-6 border shadow-sm space-y-6">
-          <div class="flex justify-between items-center flex-wrap gap-4 border-b pb-4">
-            <div>
-              <h3 class="text-lg font-bold text-gray-900"><i class="fa-solid fa-wallet text-orange-600"></i> Monthly Credit & Earnings</h3>
-              <p class="text-xs text-gray-500">Track monthly payouts, student collections, and platform commission.</p>
-            </div>
-            
-            <div class="flex items-center gap-2">
-              <label class="text-xs font-bold text-gray-500 uppercase">Select Month:</label>
-              <input type="month" id="vendorCreditMonthPicker" value="${defaultMonth}" onchange="loadVendorMonthlyCredits()" class="border rounded-xl px-3 py-1.5 text-xs font-bold bg-gray-50 outline-none focus:ring-2 focus:ring-orange-500">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="bg-orange-50/60 p-4 rounded-2xl border border-orange-100">
-              <p class="text-[10px] font-bold text-orange-600 uppercase tracking-wider">Gross Student Collection</p>
-              <h4 id="creditGrossAmount" class="text-xl font-black text-gray-900 mt-1">₹0</h4>
-            </div>
-            <div class="bg-green-50/60 p-4 rounded-2xl border border-green-100">
-              <p class="text-[10px] font-bold text-green-600 uppercase tracking-wider">Net Bank Payout (95%)</p>
-              <h4 id="creditNetPayout" class="text-xl font-black text-green-700 mt-1">₹0</h4>
-            </div>
-            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200">
-              <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Platform Fee (5%)</p>
-              <h4 id="creditPlatformFee" class="text-xl font-black text-gray-700 mt-1">₹0</h4>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-gray-50 uppercase text-[10px] font-bold text-gray-500 border-b">
-                <tr>
-                  <th class="p-3">Date</th>
-                  <th class="p-3">Student Name</th>
-                  <th class="p-3">Plan / Description</th>
-                  <th class="p-3">Gross Amount</th>
-                  <th class="p-3">Your Net Credit</th>
-                  <th class="p-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody id="vendorCreditTableBody" class="divide-y text-gray-700 font-medium">
-                <tr><td colspan="6" class="p-4 text-center text-gray-400">Loading monthly credits...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      `;
-
-      loadVendorMonthlyCredits();
-    }
-
-    async function loadVendorMonthlyCredits() {
-      const picker = document.getElementById("vendorCreditMonthPicker");
-      const monthVal = picker ? picker.value : "";
-      const tbody = document.getElementById("vendorCreditTableBody");
-      if (!tbody) return;
-
-      try {
-        const res = await apiCall(`/vendor/monthly-credits?month=${monthVal}`, "GET");
-        
-        document.getElementById("creditGrossAmount").innerText = `₹${res.summary.total_gross}`;
-        document.getElementById("creditNetPayout").innerText = `₹${res.summary.total_net_payout}`;
-        document.getElementById("creditPlatformFee").innerText = `₹${res.summary.total_commission}`;
-
-        if (!res.transactions || res.transactions.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No transactions recorded for ${res.month}.</td></tr>`;
-          return;
-        }
-
-        tbody.innerHTML = res.transactions.map(t => `
-          <tr class="hover:bg-gray-50">
-            <td class="p-3 text-gray-500 font-bold">${t.date}</td>
-            <td class="p-3 font-bold text-gray-900">${t.student_name} <br><span class="text-[10px] text-gray-400 font-normal">${t.student_phone}</span></td>
-            <td class="p-3 text-gray-600">${t.description}</td>
-            <td class="p-3 font-bold text-gray-900">₹${t.gross_amount}</td>
-            <td class="p-3 font-bold text-green-600">+₹${t.net_credit}</td>
-            <td class="p-3 text-right">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
-                <i class="fa-solid fa-circle-check"></i> ${t.status}
-              </span>
-            </td>
-          </tr>
-        `).join("");
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-red-500">Failed to load credit details.</td></tr>`;
-      }
-    }
-
-    let activePgIdForRoom = null;
-
-// Open Add Room Modal linked to a specific PG ID
-function openAddRoomModal(pgId, pgName) {
-  activePgIdForRoom = pgId;
-  document.getElementById("addRoomModalTitle").innerText = `Add Room to ${pgName || 'PG'}`;
-  document.getElementById("addRoomNum").value = "";
-  document.getElementById("addRoomType").value = "";
-  document.getElementById("addRoomRent").value = "";
-  document.getElementById("addRoomModal").classList.remove("hidden");
-}
-
-function closeAddRoomModal() {
-  document.getElementById("addRoomModal").classList.add("hidden");
-}
-
-// Submit Room under selected PG
-async function submitAddRoom() {
-  const num = document.getElementById("addRoomNum").value.trim();
-  const type = document.getElementById("addRoomType").value.trim();
-  const rent = parseInt(document.getElementById("addRoomRent").value);
-
-  if (!num || !type || !rent) { 
-    showToast("Please fill all room details.", "warning"); 
-    return; 
-  }
-  if (!activePgIdForRoom) {
-    showToast("No PG selected. Please click 'Add Room' inside a PG card.", "error");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_BASE}/pg/add-room`, {
-      method: "POST", 
-      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-      body: JSON.stringify({ 
-        pg_id: activePgIdForRoom, 
-        room_number: num, 
-        room_type: type, 
-        monthly_rent: rent 
-      })
-    });
-    const data = await res.json();
-    if (res.ok) { 
-      showToast(data.message || "Room added successfully!", "success"); 
-      closeAddRoomModal(); 
-      loadOwnerRooms(); 
-    } else {
-      showToast(data.detail || "Failed to add room.", "error");
-    }
-  } catch (e) { 
-    showToast("Error connecting to backend.", "error"); 
-  }
-}
-
-// Load PG Owner's PGs and their nested rooms
-async function loadOwnerRooms() {
-  try {
-    // 1. Fetch PGs and Rooms
-    const [pgRes, roomRes] = await Promise.all([
-      fetch(`${API_BASE}/pgs`),
-      fetch(`${API_BASE}/rooms`)
-    ]);
-    
-    const pgs = await pgRes.json();
-    const allRooms = await roomRes.json();
-
-    const container = document.getElementById("ownerPGsContainer");
-
-    if (!pgs || pgs.length === 0) {
-      container.innerHTML = `
-        <div class="text-center py-8 bg-gray-50 rounded-2xl border border-dashed">
-          <i class="fa-solid fa-house-user text-3xl text-gray-300 mb-2"></i>
-          <p class="text-xs text-gray-500 font-bold">No PG listings found.</p>
-          <button onclick="openAddPGModal()" class="mt-3 bg-orange-600 text-white font-bold text-xs px-4 py-2 rounded-xl">
-            + Create First PG Listing
-          </button>
-        </div>
-      `;
-      return;
-    }
-
-    // 2. Render each PG with its nested rooms
-    container.innerHTML = pgs.map(pg => {
-      const pgRooms = allRooms.filter(r => r.pg_id === pg.id || r.pg_name === pg.name);
-
-      return `
-        <div class="bg-gray-50 rounded-2xl p-5 border space-y-4 shadow-sm">
-          <!-- PG Header Info -->
-          <div class="flex justify-between items-start flex-wrap gap-2 border-b pb-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <h3 class="font-bold text-lg text-gray-900">${pg.name}</h3>
-                <span class="bg-orange-100 text-orange-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">${pg.gender_pref}</span>
-              </div>
-              <p class="text-xs text-gray-500 mt-0.5">📍 ${pg.address} • ${pg.sharing}</p>
-            </div>
-            
-            <button onclick="openAddRoomModal('${pg.id}', '${pg.name.replace(/'/g, "\\'")}')" class="bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition shadow">
-              + Add Room to ${pg.name}
-            </button>
-          </div>
-
-          <!-- Rooms Grid inside PG -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            ${pgRooms.length > 0 ? pgRooms.map(r => `
-              <div class="bg-white p-4 rounded-xl border space-y-3">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <h4 class="font-bold text-sm text-gray-900">Room ${r.room_number} (${r.room_type})</h4>
-                    <p class="text-xs text-orange-600 font-bold">₹${r.monthly_rent}/mo</p>
-                    <p class="text-[10px] text-gray-400">Tenant: ${r.tenant_name || 'Vacant'} (${r.tenant_phone || 'N/A'})</p>
-                  </div>
-                  <span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full">${r.status.toUpperCase()}</span>
-                </div>
-
-                <div class="flex items-center gap-1.5 pt-1">
-                  ${r.images && r.images.length > 0 ? r.images.map(img => `
-                    <img src="${img}" class="w-10 h-10 object-cover rounded-lg border">
-                  `).join('') : '<span class="text-[10px] text-gray-400">No photos</span>'}
-                </div>
-
-                <button onclick="openRoomPhotoModal('${r.room_number}',${JSON.stringify(r.images || []).replace(/"/g, '&quot;')})" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-[11px] py-1.5 rounded-lg transition">
-                  <i class="fa-solid fa-camera"></i> Photos (${r.images ? r.images.length : 0}/5)
-                </button>
-              </div>
-            `).join('') : '<p class="col-span-2 text-xs text-gray-400 py-3 text-center bg-white rounded-xl border">No rooms listed under this PG yet. Click above to add a room.</p>'}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    loadVacateRequestsTable("ownerVacateRequestsTable");
-  } catch (err) {
-    showToast("Error loading PG & room listings.", "error");
-  }
-}
   </script>
 </body>
-</html> 
-
+</html>
