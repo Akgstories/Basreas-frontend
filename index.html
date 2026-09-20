@@ -2088,17 +2088,21 @@
     }
 
     async function unsubscribeMess() {
-      if (!confirm("Are you sure you want to unsubscribe from your current mess plan?")) return;
-      try {
-        const res = await fetch(`${API_BASE}/mess/unsubscribe`, {
-          method: "POST", headers: { "Authorization": `Bearer ${authToken}` }
-        });
-        const data = await res.json();
-        if (res.ok) { showToast(data.message || "Unsubscribed from mess plan.", "info"); loadStudentMessView(); loadCalendarLedger(); loadBookings(); }
-        else showToast(data.detail || "Unsubscribe failed.", "error");
-      } catch (e) { showToast("Error connecting to server.", "error"); }
-    }
+  if (!confirm("Are you sure you want to unsubscribe from your current mess plan?")) return;
 
+  try {
+    const data = await apiCall("/mess/unsubscribe", "POST");
+    showToast(data.message || "Unsubscribed from mess plan.", "info");
+    
+    // Refresh active views
+    if (typeof loadStudentMessView === "function") loadStudentMessView();
+    if (typeof loadCalendarLedger === "function") loadCalendarLedger();
+    if (typeof loadBookings === "function") loadBookings();
+    if (typeof loadStudentProfile === "function") loadStudentProfile();
+  } catch (e) {
+    showToast(e.message || "Unsubscribe failed.", "error");
+  }
+}
     async function loadMessPrepStats() {
       const res = await fetch(`${API_BASE}/mess/daily-stats`, {
         headers: { "Authorization": `Bearer ${authToken}` }
