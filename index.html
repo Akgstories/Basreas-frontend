@@ -2611,25 +2611,33 @@
 
     function openComplaintModal() { document.getElementById("complaintModal").classList.remove("hidden"); }
     function closeComplaintModal() { document.getElementById("complaintModal").classList.add("hidden"); }
-
+    
     async function submitComplaint() {
       const cat = document.getElementById("compCategory").value;
       const title = document.getElementById("compTitle").value.trim();
       const desc = document.getElementById("compDesc").value.trim();
-      if (!title || !desc) { showToast("Please fill out all fields.", "warning"); return; }
-      try {
-        const res = await fetch(`${API_BASE}/complaints/create`, {
-          method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
-          body: JSON.stringify({ category: cat, title, description: desc })
-        });
-        const data = await res.json();
-        if (res.ok) { showToast(data.message || "Complaint registered.", "success"); closeComplaintModal(); loadComplaints(); }
-        else showToast(data.detail || "Submission failed.", "error");
-      } catch (e) { showToast("Error submitting complaint.", "error"); }
-    }
 
-    function openAddRoomModal() { document.getElementById("addRoomModal").classList.remove("hidden"); }
-    function closeAddRoomModal() { document.getElementById("addRoomModal").classList.add("hidden"); }
+      if (!title || !desc) { 
+        showToast("Please fill out all fields.", "warning"); 
+        return; 
+      }
+
+      try {
+        const data = await apiCall("/complaints/create", "POST", { 
+          category: cat, 
+          title: title, 
+          description: desc 
+    });
+
+        showToast(data.message || "Complaint registered.", "success"); 
+        closeComplaintModal(); 
+        document.getElementById("compTitle").value = "";
+        document.getElementById("compDesc").value = "";
+        loadComplaints();
+      } catch (e) { 
+        showToast("Error submitting complaint.", "error"); 
+      }
+    }
 
     async function submitAddRoom() {
       const num = document.getElementById("addRoomNum").value.trim();
