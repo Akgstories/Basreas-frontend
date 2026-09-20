@@ -264,8 +264,8 @@
               <h2 class="text-lg md:text-xl font-bold">Weekly Mess Menu & Advance Opt-Out</h2>
               <p class="text-xs text-gray-500">Select any specific date to cancel or restore future meals</p>
             </div>
-            <button onclick="unsubscribeMess()" class="bg-red-50 text-red-600 font-bold text-xs px-3 py-1.5 rounded-xl border border-red-200 hover:bg-red-100 transition">Unsubscribe Mess</button>
-          </div>
+            <button onclick="unsubscribeMess()" class="w-full text-center text-sm font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-lg py-2 transition"> Unsubscribe Mess</button>
+            </div>
 
           <div class="bg-orange-50/70 p-4 rounded-2xl border border-orange-200 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3 w-full sm:w-auto">
@@ -2087,22 +2087,27 @@
       } catch (e) { showToast("Error communicating with backend server.", "error"); }
     }
 
-    async function unsubscribeMess() {
-  if (!confirm("Are you sure you want to unsubscribe from your current mess plan?")) return;
+    async function unsubscribeMess(bookingId = null, itemName = null) {
+      const messDisplayName = itemName || "your active mess subscription";
+      if (!confirm(`Are you sure you want to unsubscribe from ${messDisplayName}?`)) return;
 
-  try {
-    const data = await apiCall("/mess/unsubscribe", "POST");
-    showToast(data.message || "Unsubscribed from mess plan.", "info");
+      try {
+        const data = await apiCall("/mess/unsubscribe", "POST", {
+          booking_id: bookingId,
+          item_name: itemName
+    });
     
-    // Refresh active views
-    if (typeof loadStudentMessView === "function") loadStudentMessView();
-    if (typeof loadCalendarLedger === "function") loadCalendarLedger();
-    if (typeof loadBookings === "function") loadBookings();
-    if (typeof loadStudentProfile === "function") loadStudentProfile();
-  } catch (e) {
-    showToast(e.message || "Unsubscribe failed.", "error");
+        showToast(data.message || "Unsubscribed successfully.", "info");
+
+    // Refresh all student views dynamically
+        if (typeof loadBookings === "function") loadBookings();
+        if (typeof loadStudentMessView === "function") loadStudentMessView();
+        if (typeof loadCalendarLedger === "function") loadCalendarLedger();
+        if (typeof loadStudentProfile === "function") loadStudentProfile();
+      } catch (e) {
+        showToast(e.message || "Unsubscribe failed.", "error");
+    }
   }
-}
     async function loadMessPrepStats() {
       const res = await fetch(`${API_BASE}/mess/daily-stats`, {
         headers: { "Authorization": `Bearer ${authToken}` }
