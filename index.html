@@ -971,6 +971,7 @@
     window.onload = init;
 
     // Helper for structured API Requests with Auth
+    // Helper for structured API Requests with Auth
     async function apiCall(endpoint, method = "GET", body = null) {
       const token = localStorage.getItem("basera_token") || localStorage.getItem("token") || "";
       const options = {
@@ -982,10 +983,23 @@
       };
       if (body) options.body = JSON.stringify(body);
 
-      const res = await fetch(`${API_BASE}${endpoint}`, options);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || data.message || "API request failed");
-      return data;
+      try {
+        const res = await fetch(`${API_BASE}${endpoint}`, options);
+        const data = await res.json();
+        if (!res.ok) {
+          // Silent fallback for empty GET endpoints to prevent 404 toast spam
+          if (res.status === 404 && method === "GET") {
+            return Array.isArray(data) ? [] : {};
+          }
+          throw new Error(data.detail || data.message || "API request failed");
+        }
+        return data;
+      } catch (err) {
+        if (method !== "GET") {
+          showToast(err.message, "error");
+        }
+        throw err;
+      }
     }
 
     async function fetchMessPricingRules() {
