@@ -3096,16 +3096,29 @@ function proceedMessSubscription() {
     }
 
     // Delete location pricing rule
-    async function deleteLocationPricing(messId, locationName) {
+   async function deleteLocationPricing(messId, locationName) {
       if (!confirm(`Are you sure you want to delete pricing rates for "${locationName}"?`)) return;
 
       try {
-        const res = await apiCall(`/mess/pricing/delete?mess_id=${messId}&location_name=${encodeURIComponent(locationName)}`, "DELETE");
+        // Attempt standard DELETE call
+        const res = await apiCall(`/mess/pricing/delete?mess_id=${encodeURIComponent(messId)}&location_name=${encodeURIComponent(locationName)}`, "DELETE");
         showToast(res.message || "Location rates deleted successfully!", "success");
         await loadSavedLocationPricingTable();
         if (typeof fetchMessPricingRules === "function") fetchMessPricingRules();
       } catch (err) {
-        showToast(err.detail || "Failed to delete location pricing.", "error");
+        console.warn("Query DELETE failed, trying POST body fallback...", err);
+        try {
+          // Fallback POST endpoint if your backend route uses POST for deletion
+          const fallbackRes = await apiCall("/mess/pricing/delete", "POST", {
+            mess_id: messId,
+            location_name: locationName
+          });
+          showToast(fallbackRes.message || "Location rates deleted!", "success");
+          await loadSavedLocationPricingTable();
+          if (typeof fetchMessPricingRules === "function") fetchMessPricingRules();
+        } catch (fbErr) {
+          showToast(fbErr.detail || fbErr.message || "Failed to delete location pricing.", "error");
+        }
       }
     }
   </script>
