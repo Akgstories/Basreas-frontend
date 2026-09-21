@@ -3024,6 +3024,49 @@ function proceedMessSubscription() {
         loadComplaints();
       } catch (e) {}
     }
+
+
+    async function openEditMessPriceModal() {
+  const select = document.getElementById("editMessSelect");
+  if (!select) return;
+
+  // 1. Fetch fresh mess listings from API if array is empty
+  if (!allMessListings || allMessListings.length === 0) {
+    try {
+      allMessListings = await apiCall("/mess/explore", "GET");
+    } catch (e) {
+      console.error("Failed to load mess listings:", e);
+    }
+  }
+
+  // 2. Filter mess listings for the current vendor (or allow all if admin)
+  let vendorListings = allMessListings || [];
+  if (currentUser && currentUser.role === 'mess_partner') {
+    const matched = vendorListings.filter(m => 
+      m.owner_id === currentUser.id || 
+      (m.provider_name && m.provider_name.toLowerCase().includes(currentUser.full_name.toLowerCase()))
+    );
+    if (matched.length > 0) vendorListings = matched;
+  }
+
+  if (vendorListings.length === 0) {
+    showToast("No mess listings loaded to update.", "warning");
+    return;
+  }
+
+  // 3. Populate dropdown options
+  select.innerHTML = vendorListings.map(m => 
+    `<option value="${m.id}">${m.name} (${m.provider_name || 'Mess'})</option>`
+  ).join("");
+
+  // 4. Show modal
+  const modal = document.getElementById("editMessPriceModal");
+  if (modal) modal.classList.remove("hidden");
+  
+  if (typeof loadSavedLocationPricingTable === "function") {
+    loadSavedLocationPricingTable();
+  }
+}
   </script>
 </body>
 </html>
