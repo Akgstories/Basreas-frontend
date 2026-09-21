@@ -1483,67 +1483,77 @@
       });
       updateMessPlanModalUI();
     }
-
     function updateMessPlanModalUI() {
   if (!selectedMessData) return;
 
   const locPricing = messPricingRules.find(
     p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
-         p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+         p.location_name && p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
   );
 
   let dailyRate = 100;
+
   if (locPricing) {
-    const b = locPricing.breakfast_rate || 30;
-    const l = locPricing.lunch_rate || 40;
-    const d = locPricing.dinner_rate || 40;
+    const b = Number(locPricing.breakfast_rate) || 30;
+    const l = Number(locPricing.lunch_rate) || 40;
+    const d = Number(locPricing.dinner_rate) || 40;
     
-    // 3-Time gets Breakfast + Lunch + Dinner; 2-Time gets Lunch + Dinner
     dailyRate = selectedMealTier === "3-Time" ? (b + l + d) : (l + d);
   } else {
-    const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
+    const baseMonthlyPrice = Number(selectedMessData.monthly_price) || 3000;
     const baseDailyRate = baseMonthlyPrice / 30;
     let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
     dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
   }
 
-  const totalPrice = dailyRate * selectedDurationDays;
+  // Ensure dailyRate is a valid number
+  if (isNaN(dailyRate) || dailyRate <= 0) dailyRate = 100;
 
-  document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDiet}) • ${selectedDurationDays} Days`;
+  const duration = Number(selectedDurationDays) || 30;
+  const totalPrice = dailyRate * duration;
+
+  document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDiet}) • ${duration} Days`;
   document.getElementById("summaryRateLabel").innerText = `₹${dailyRate} / day rate`;
   document.getElementById("summaryTotalPrice").innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
 }
-    function proceedMessSubscription() {
-      if (!selectedMessData) return;
 
-      const isMessChecked = document.getElementById("confirmMessCheckbox")?.checked;
-      if (!isMessChecked) {
-        showToast("Please check the box to confirm your Mess selection before proceeding.", "error");
-        return;
-      }
+function proceedMessSubscription() {
+  if (!selectedMessData) return;
 
-      const locPricing = messPricingRules.find(
-        p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
-             p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
-      );
+  const isMessChecked = document.getElementById("confirmMessCheckbox")?.checked;
+  if (!isMessChecked) {
+    showToast("Please check the box to confirm your Mess selection before proceeding.", "error");
+    return;
+  }
 
-      let dailyRate = 100;
-      if (locPricing) {
-        dailyRate = selectedMealTier === "3-Time" ? locPricing.three_time_rate : locPricing.two_time_rate;
-      } else {
-        const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
-        const baseDailyRate = baseMonthlyPrice / 30;
-        let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-        dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
-      }
+  const locPricing = messPricingRules.find(
+    p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
+         p.location_name && p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+  );
 
-      const finalAmount = dailyRate * selectedDurationDays;
-      const planTitle = `${selectedMessData.name} (${selectedMessLocation}) - ${selectedMealTier} [${selectedDiet}] Plan (${selectedDurationDays} Days)`;
+  let dailyRate = 100;
+  if (locPricing) {
+    const b = Number(locPricing.breakfast_rate) || 30;
+    const l = Number(locPricing.lunch_rate) || 40;
+    const d = Number(locPricing.dinner_rate) || 40;
+    dailyRate = selectedMealTier === "3-Time" ? (b + l + d) : (l + d);
+  } else {
+    const baseMonthlyPrice = Number(selectedMessData.monthly_price) || 3000;
+    const baseDailyRate = baseMonthlyPrice / 30;
+    let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
+    dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
+  }
 
-      closeMessPlanModal();
-      openUniversalPaymentModal(planTitle, finalAmount, 'Mess Subscription', selectedDurationDays, selectedDiet);
-    }
+  if (isNaN(dailyRate) || dailyRate <= 0) dailyRate = 100;
 
+  const duration = Number(selectedDurationDays) || 30;
+  const finalAmount = dailyRate * duration;
+  const planTitle = `${selectedMessData.name} (${selectedMessLocation}) - ${selectedMealTier} [${selectedDiet}] Plan (${duration} Days)`;
+
+  closeMessPlanModal();
+  openUniversalPaymentModal(planTitle, finalAmount, 'Mess Subscription', duration, selectedDiet);
+}
+    
     function openUniversalPaymentModal(itemName, amount, serviceType = 'Service', durationDays = 30, dietPreference = "Veg") {
       activeCheckoutItem = { itemName, amount, serviceType, durationDays, dietPreference };
 
