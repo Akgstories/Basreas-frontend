@@ -1265,33 +1265,34 @@
     }
 
     async function submitMessPriceUpdate() {
-      const messId = document.getElementById("editMessSelect").value;
-      const locName = document.getElementById("editMessLocationSelect").value.trim();
-      const bRate = parseInt(document.getElementById("editBreakfastRateInput").value, 10);
-      const lRate = parseInt(document.getElementById("editLunchRateInput").value, 10);
-      const dRate = parseInt(document.getElementById("editDinnerRateInput").value, 10);
+  const messId = document.getElementById("editMessSelect").value;
+  const locName = document.getElementById("editMessLocationSelect").value.trim();
+  const bRate = parseInt(document.getElementById("editBreakfastRateInput").value, 10);
+  const lRate = parseInt(document.getElementById("editLunchRateInput").value, 10);
+  const dRate = parseInt(document.getElementById("editDinnerRateInput").value, 10);
 
-      if (!locName || isNaN(bRate) || isNaN(lRate) || isNaN(dRate) || bRate < 0 || lRate < 0 || dRate < 0) {
-        showToast("Please enter a valid location name and positive rates.", "warning");
-        return;
-      }
+  if (!locName || isNaN(bRate) || isNaN(lRate) || isNaN(dRate) || bRate < 0 || lRate < 0 || dRate < 0) {
+    showToast("Please enter a valid location name and positive rates for all meals.", "warning");
+    return;
+  }
 
-      try {
-        const data = await apiCall("/mess/update-location-price", "POST", {
-          mess_id: messId,
-          location_name: locName,
-          breakfast_rate: bRate,
-          lunch_rate: lRate,
-          dinner_rate: dRate
-        });
-        showToast(data.message || "Location rates saved successfully!", "success");
-        closeEditMessPriceModal();
-        await fetchMessPricingRules();
-        loadSavedLocationPricingTable();
-      } catch (e) {
-        showToast("Failed to save location pricing.", "error");
-      }
-    }
+  try {
+    const data = await apiCall("/mess/update-location-price", "POST", {
+      mess_id: messId,
+      location_name: locName,
+      breakfast_rate: bRate,
+      lunch_rate: lRate,
+      dinner_rate: dRate
+    });
+
+    showToast(data.message || "Location rates saved successfully!", "success");
+    closeEditMessPriceModal();
+    await fetchMessPricingRules();
+    loadSavedLocationPricingTable();
+  } catch (e) {
+    showToast("Failed to save location pricing.", "error");
+  }
+}
     function fetchCurrentLocation(targetInputId, btnElem) {
       if (!navigator.geolocation) {
         showToast("Geolocation is not supported by your browser.", "error");
@@ -1484,30 +1485,34 @@
     }
 
     function updateMessPlanModalUI() {
-      if (!selectedMessData) return;
+  if (!selectedMessData) return;
 
-      const locPricing = messPricingRules.find(
-        p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
-             p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
-      );
+  const locPricing = messPricingRules.find(
+    p => (p.mess_id === selectedMessData.id || p.mess_id === selectedMessData.name) &&
+         p.location_name.toLowerCase().trim() === selectedMessLocation.toLowerCase().trim()
+  );
 
-      let dailyRate = 100;
-      if (locPricing) {
-        dailyRate = selectedMealTier === "3-Time" ? locPricing.three_time_rate : locPricing.two_time_rate;
-      } else {
-        const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
-        const baseDailyRate = baseMonthlyPrice / 30;
-        let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
-        dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
-      }
+  let dailyRate = 100;
+  if (locPricing) {
+    const b = locPricing.breakfast_rate || 30;
+    const l = locPricing.lunch_rate || 40;
+    const d = locPricing.dinner_rate || 40;
+    
+    // 3-Time gets Breakfast + Lunch + Dinner; 2-Time gets Lunch + Dinner
+    dailyRate = selectedMealTier === "3-Time" ? (b + l + d) : (l + d);
+  } else {
+    const baseMonthlyPrice = selectedMessData.monthly_price || 3000;
+    const baseDailyRate = baseMonthlyPrice / 30;
+    let tierMultiplier = selectedMealTier === "2-Time" ? 0.8 : 1.0;
+    dailyRate = Math.max(1, Math.round(baseDailyRate * tierMultiplier));
+  }
 
-      const totalPrice = dailyRate * selectedDurationDays;
+  const totalPrice = dailyRate * selectedDurationDays;
 
-      document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDiet}) • ${selectedDurationDays} Days`;
-      document.getElementById("summaryRateLabel").innerText = `₹${dailyRate} / day rate`;
-      document.getElementById("summaryTotalPrice").innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
-    }
-
+  document.getElementById("summaryPlanLabel").innerText = `${selectedMessLocation} • ${selectedMealTier} (${selectedDiet}) • ${selectedDurationDays} Days`;
+  document.getElementById("summaryRateLabel").innerText = `₹${dailyRate} / day rate`;
+  document.getElementById("summaryTotalPrice").innerText = `₹${totalPrice.toLocaleString('en-IN')}`;
+}
     function proceedMessSubscription() {
       if (!selectedMessData) return;
 
