@@ -1021,53 +1021,76 @@
   </div>
 
     <!-- MESS RATES & LOCATION PRICING EDITOR MODAL -->
-    <div id="editMessPriceModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div class="bg-white p-6 rounded-3xl max-w-lg w-full space-y-4 border shadow-2xl relative">
-        <button onclick="closeEditMessPriceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-        <h3 class="text-lg font-bold text-gray-900 border-b pb-2">
-          <i class="fa-solid fa-sliders text-orange-600"></i> Location & Meal Pricing Editor
-        </h3>
+<div id="editMessPriceModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+  <div class="bg-white p-6 rounded-3xl max-w-lg w-full space-y-4 border shadow-2xl relative">
+    <button onclick="closeEditMessPriceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    <h3 class="text-lg font-bold text-gray-900 border-b pb-2">
+      <i class="fa-solid fa-sliders text-orange-600"></i> Location & Meal Pricing Editor
+    </h3>
 
-        <div class="space-y-3">
-          <div>
-            <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT MESS LISTING</label>
-            <select id="editMessSelect" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500"></select>
-          </div>
+    <div class="space-y-3">
+      <!-- SELECT MESS LISTING (FILTERED TO VENDOR ONLY) -->
+      <div>
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">YOUR MESS LISTING</label>
+        <select id="editMessSelect" onchange="onMessListingSelected()" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500"></select>
+      </div>
 
-          <div>
-            <label class="block text-[10px] font-bold text-gray-500 mb-1">SELECT LOCATION</label>
-            <select id="editMessLocationSelect" class="w-full border rounded-xl p-2.5 text-xs bg-white font-bold outline-none">
-              <option value="GEC Main Gate">GEC Main Gate</option>
-              <option value="Chandankiyari">Chandankiyari</option>
-              <option value="Ghoragara">Ghoragara</option>
-            </select>
-          </div>
+      <!-- SELECT OR ADD NEW LOCATION -->
+      <div>
+        <div class="flex justify-between items-center mb-1">
+          <label class="block text-[10px] font-bold text-gray-500">LOCATION / BRANCH</label>
+          <button type="button" onclick="toggleCustomLocationInput()" class="text-[10px] font-bold text-orange-600 hover:underline">
+            <i class="fa-solid fa-plus"></i> Add New Location
+          </button>
+        </div>
+        
+        <select id="editMessLocationSelect" class="w-full border rounded-xl p-2.5 text-xs bg-white font-bold outline-none">
+          <option value="GEC Main Gate">GEC Main Gate</option>
+          <option value="Chandankiyari">Chandankiyari</option>
+          <option value="Ghoragara">Ghoragara</option>
+          <option value="Hostel Area">Hostel Area</option>
+        </select>
 
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="block text-[10px] font-bold text-gray-500 mb-1">BREAKFAST (₹)</label>
-              <input type="number" id="editBreakfastRateInput" value="30" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-gray-500 mb-1">LUNCH (₹)</label>
-              <input type="number" id="editLunchRateInput" value="40" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-gray-500 mb-1">DINNER (₹)</label>
-              <input type="number" id="editDinnerRateInput" value="40" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
-            </div>
-          </div>
-
-          <div class="flex gap-2 pt-2">
-            <button type="button" onclick="closeEditMessPriceModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-            <button type="button" onclick="submitMessPriceUpdate()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Save Rates</button>
-          </div>
+        <!-- Custom Location Input (Hidden by default) -->
+        <div id="customLocationContainer" class="hidden mt-2">
+          <input type="text" id="customLocationInput" placeholder="Enter custom location (e.g. Sector 4, Chas)" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none border-orange-300 focus:ring-2 focus:ring-orange-500">
         </div>
       </div>
-    </div>
 
+      <!-- MEAL RATES -->
+      <div class="grid grid-cols-3 gap-2">
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">BREAKFAST (₹)</label>
+          <input type="number" id="editBreakfastRateInput" value="30" min="0" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">LUNCH (₹)</label>
+          <input type="number" id="editLunchRateInput" value="40" min="0" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">DINNER (₹)</label>
+          <input type="number" id="editDinnerRateInput" value="40" min="0" class="w-full border rounded-xl p-2.5 text-xs font-bold outline-none">
+        </div>
+      </div>
+
+      <!-- EXISTING PRICING RULES PREVIEW TABLE -->
+      <div class="pt-2">
+        <label class="block text-[10px] font-bold text-gray-500 mb-1">CONFIGURED LOCATION RATES</label>
+        <div id="configuredLocationRatesList" class="max-h-28 overflow-y-auto border rounded-xl p-2 bg-gray-50 space-y-1 text-xs">
+          <p class="text-gray-400 text-[11px] italic">Loading location rules...</p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button type="button" onclick="closeEditMessPriceModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
+        <button type="button" id="saveMessRatesBtn" onclick="submitMessPriceUpdate()" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Save Rates</button>
+      </div>
+    </div>
+  </div>
+</div>
   <!-- JAVASCRIPT APPLICATION LOGIC -->
   <script>
     // Automatic fallback: Use current host if running locally, or default production URL
@@ -1208,92 +1231,11 @@
       } catch (err) {}
     }
 
-    function openEditMessPriceModal() {
-      if (!currentFetchedMesses.length) {
-        showToast("No mess listings loaded to update.", "warning");
-        return;
-      }
-
-      const selectElem = document.getElementById("editMessSelect");
-      selectElem.innerHTML = currentFetchedMesses.map(m => `
-        <option value="${m.id}">${m.name}</option>
-      `).join('');
-
-      document.getElementById("editMessLocationSelect").value = "";
-      document.getElementById("editBreakfastRateInput").value = 30;
-      document.getElementById("editLunchRateInput").value = 40;
-      document.getElementById("editDinnerRateInput").value = 40;
-
-      loadSavedLocationPricingTable();
-      document.getElementById("editMessModal").classList.remove("hidden");
-    }
-
+    
     function closeEditMessPriceModal() {
       document.getElementById("editMessModal").classList.add("hidden");
     }
 
-    async function loadSavedLocationPricingTable() {
-      const selectElem = document.getElementById("editMessSelect");
-      const messId = selectElem ? selectElem.value : null;
-
-      try {
-        const pricing = await apiCall(messId ? `/mess-pricing?mess_id=${messId}` : "/mess-pricing");
-        
-        // Modal Table Preview
-        const modalBody = document.getElementById("modalPricingPreviewTableBody");
-        if (modalBody) {
-          if (!pricing || pricing.length === 0) {
-            modalBody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-gray-400">No custom location rates added yet.</td></tr>`;
-          } else {
-            modalBody.innerHTML = pricing.map(p => {
-              const b = p.breakfast_rate || 30;
-              const l = p.lunch_rate || 40;
-              const d = p.dinner_rate || 40;
-              return `
-                <tr class="hover:bg-gray-50">
-                  <td class="p-2 font-bold">${p.location_name}</td>
-                  <td class="p-2">₹${b}</td>
-                  <td class="p-2">₹${l}</td>
-                  <td class="p-2">₹${d}</td>
-                  <td class="p-2 font-bold text-orange-600">₹${b + l + d}</td>
-                </tr>
-              `;
-            }).join('');
-          }
-        }
-
-        // Persistent Dashboard Table
-        const dashBody = document.getElementById("dashboardLocationPricingTableBody");
-        if (dashBody) {
-          if (!pricing || pricing.length === 0) {
-            dashBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No location pricing added yet. Click "+ Add / Edit Location Rates" to create one.</td></tr>`;
-          } else {
-            dashBody.innerHTML = pricing.map(p => {
-              const b = p.breakfast_rate || 30;
-              const l = p.lunch_rate || 40;
-              const d = p.dinner_rate || 40;
-              const monthlyFull = (b + l + d) * 30;
-              return `
-                <tr class="hover:bg-gray-50">
-                  <td class="p-3 font-bold text-gray-900">${p.location_name}</td>
-                  <td class="p-3 font-semibold">₹${b} / day</td>
-                  <td class="p-3 font-semibold">₹${l} / day</td>
-                  <td class="p-3 font-semibold">₹${d} / day</td>
-                  <td class="p-3 font-black text-green-700">₹${monthlyFull.toLocaleString('en-IN')}</td>
-                  <td class="p-3 text-right">
-                    <button onclick="populateRateEditForm('${p.location_name}', ${b}, ${l}, ${d})" class="bg-gray-100 hover:bg-gray-200 text-orange-600 font-bold text-[11px] px-3 py-1 rounded-lg transition">
-                      <i class="fa-solid fa-pen-to-square"></i> Edit Rates
-                    </button>
-                  </td>
-                </tr>
-              `;
-            }).join('');
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load location rates:", err);
-      }
-    }
 
     function populateRateEditForm(locName, b, l, d) {
       openEditMessPriceModal();
@@ -1303,35 +1245,7 @@
       document.getElementById("editDinnerRateInput").value = d;
     }
 
-    async function submitMessPriceUpdate() {
-  const messId = document.getElementById("editMessSelect").value;
-  const locName = document.getElementById("editMessLocationSelect").value.trim();
-  const bRate = parseInt(document.getElementById("editBreakfastRateInput").value, 10);
-  const lRate = parseInt(document.getElementById("editLunchRateInput").value, 10);
-  const dRate = parseInt(document.getElementById("editDinnerRateInput").value, 10);
-
-  if (!locName || isNaN(bRate) || isNaN(lRate) || isNaN(dRate) || bRate < 0 || lRate < 0 || dRate < 0) {
-    showToast("Please enter a valid location name and positive rates for all meals.", "warning");
-    return;
-  }
-
-  try {
-    const data = await apiCall("/mess/update-location-price", "POST", {
-      mess_id: messId,
-      location_name: locName,
-      breakfast_rate: bRate,
-      lunch_rate: lRate,
-      dinner_rate: dRate
-    });
-
-    showToast(data.message || "Location rates saved successfully!", "success");
-    closeEditMessPriceModal();
-    await fetchMessPricingRules();
-    loadSavedLocationPricingTable();
-  } catch (e) {
-    showToast("Failed to save location pricing.", "error");
-  }
-}
+  
     function fetchCurrentLocation(targetInputId, btnElem) {
       if (!navigator.geolocation) {
         showToast("Geolocation is not supported by your browser.", "error");
@@ -3073,61 +2987,150 @@ function proceedMessSubscription() {
       } catch (e) {}
     }
 
-    async function openEditMessPriceModal() {
-      try {
-        const modal = document.getElementById("editMessPriceModal");
-        if (!modal) {
-          showToast("Edit modal element missing in page layout.", "error");
-          return;
-        }
+    // Toggle between Dropdown and Custom Location Input
+function toggleCustomLocationInput() {
+  const customContainer = document.getElementById("customLocationContainer");
+  const locationSelect = document.getElementById("editMessLocationSelect");
+  
+  if (customContainer.classList.contains("hidden")) {
+    customContainer.classList.remove("hidden");
+    locationSelect.classList.add("hidden");
+    document.getElementById("customLocationInput").focus();
+  } else {
+    customContainer.classList.add("hidden");
+    locationSelect.classList.remove("hidden");
+    document.getElementById("customLocationInput").value = "";
+  }
+}
 
-        const select = document.getElementById("editMessSelect");
-    
-        // 1. Force fresh fetch of mess listings from API if array is undefined/empty
-        if (typeof allMessListings === "undefined" || !Array.isArray(allMessListings) || allMessListings.length === 0) {
-          try {
-            const fetched = await apiCall("/mess/explore", "GET");
-            allMessListings = Array.isArray(fetched) ? fetched : [];
-          } catch (err) {
-            console.error("Error fetching mess listings:", err);
-            allMessListings = [];
-          }
-        }
+async function openEditMessPriceModal() {
+  try {
+    const modal = document.getElementById("editMessPriceModal");
+    if (!modal) return;
 
-        // 2. Fallback: If still empty, create default entry from currentUser
-        let availableListings = [...allMessListings];
-        if (availableListings.length === 0) {
-          availableListings = [{
-            id: "mess-default",
-            name: currentUser ? `${currentUser.full_name}'s Kitchen` : "My Mess Listing",
-            provider_name: currentUser ? currentUser.full_name : "Vendor"
-          }];
-        }
+    const select = document.getElementById("editMessSelect");
 
-        // 3. Populate dropdown options
-        if (select) {
-          select.innerHTML = availableListings.map(m => 
-            `<option value="${m.id}">${m.name || 'Mess'} (${m.provider_name || 'Vendor'})</option>`
-          ).join("");
-        }
+    // 1. Fetch fresh mess listings
+    try {
+      const fetched = await apiCall("/mess/explore", "GET");
+      allMessListings = Array.isArray(fetched) ? fetched : [];
+    } catch (e) {
+      console.warn("Using cached mess listings:", e);
+    }
 
-        // 4. Reveal Modal
-        modal.classList.remove("hidden");
-    
-        // 5. Load existing pricing table if helper exists
-        if (typeof loadSavedLocationPricingTable === "function") {
-          loadSavedLocationPricingTable();
-        }
-      } catch (error) {
-        console.error("Rates Editor Error:", error);
-        showToast("Unable to open Rates Editor. Check console for details.", "error");
+    // 2. STRICT VENDOR ISOLATION: Only show listings owned by current vendor (or all if admin)
+    let myListings = [];
+    if (currentUser) {
+      if (currentUser.role === 'admin') {
+        myListings = allMessListings;
+      } else {
+        myListings = allMessListings.filter(m => 
+          m.owner_id === currentUser.id || 
+          (m.provider_name && currentUser.full_name && m.provider_name.toLowerCase().includes(currentUser.full_name.toLowerCase()))
+        );
       }
     }
 
-    function closeEditMessPriceModal() {
-      const modal = document.getElementById("editMessPriceModal");
-      if (modal) modal.classList.add("hidden");
+    // Fallback: If no match found, generate vendor's primary listing placeholder
+    if (myListings.length === 0) {
+      const vendorName = currentUser ? currentUser.full_name : "My Vendor Mess";
+      myListings = [{
+        id: `mess-v-${currentUser ? currentUser.id : 'default'}`,
+        name: `${vendorName} Mess`,
+        provider_name: vendorName,
+        owner_id: currentUser ? currentUser.id : null
+      }];
     }
+
+    // 3. Populate Mess Dropdown
+    select.innerHTML = myListings.map(m => 
+      `<option value="${m.id}">${m.name} (${m.provider_name || 'Vendor'})</option>`
+    ).join("");
+
+    modal.classList.remove("hidden");
+    onMessListingSelected();
+  } catch (err) {
+    console.error("Rates Editor Error:", err);
+    showToast("Unable to load Rates Editor.", "error");
+  }
+}
+
+function onMessListingSelected() {
+  loadSavedLocationPricingTable();
+}
+
+// Fetch and render configured rates for the selected mess
+async function loadSavedLocationPricingTable() {
+  const container = document.getElementById("configuredLocationRatesList");
+  const selectedMessId = document.getElementById("editMessSelect")?.value;
+  if (!container || !selectedMessId) return;
+
+  try {
+    const pricingRules = await apiCall(`/mess/${selectedMessId}/pricing`, "GET").catch(() => []);
+    
+    if (!pricingRules || pricingRules.length === 0) {
+      container.innerHTML = `<p class="text-gray-400 text-[11px] italic p-1">No custom location rates configured yet. Default base rate applies.</p>`;
+      return;
+    }
+
+    container.innerHTML = pricingRules.map(p => `
+      <div class="flex justify-between items-center bg-white p-2 rounded-lg border border-gray-100 shadow-sm">
+        <span class="font-bold text-gray-800 text-xs"><i class="fa-solid fa-location-dot text-orange-500 mr-1"></i>${p.location_name}</span>
+        <span class="font-bold text-gray-600 text-[11px]">B: ₹${p.breakfast_rate} | L: ₹${p.lunch_rate} | D: ₹${p.dinner_rate}</span>
+      </div>
+    `).join("");
+  } catch (err) {
+    container.innerHTML = `<p class="text-gray-400 text-[11px] italic p-1">Standard rates active.</p>`;
+  }
+}
+
+async function submitMessPriceUpdate() {
+  const messId = document.getElementById("editMessSelect")?.value;
+  const customContainer = document.getElementById("customLocationContainer");
+  const isCustom = !customContainer.classList.contains("hidden");
+
+  let locationName = isCustom 
+    ? document.getElementById("customLocationInput").value.trim()
+    : document.getElementById("editMessLocationSelect").value;
+
+  if (!locationName) {
+    showToast("Please select or enter a valid location.", "error");
+    return;
+  }
+
+  const breakfast = Number(document.getElementById("editBreakfastRateInput").value) || 0;
+  const lunch = Number(document.getElementById("editLunchRateInput").value) || 0;
+  const dinner = Number(document.getElementById("editDinnerRateInput").value) || 0;
+
+  const btn = document.getElementById("saveMessRatesBtn");
+  btn.disabled = true;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+  const payload = {
+    mess_id: messId,
+    location_name: locationName,
+    breakfast_rate: breakfast,
+    lunch_rate: lunch,
+    dinner_rate: dinner
+  };
+
+  try {
+    const res = await apiCall("/mess/pricing/update", "POST", payload);
+    showToast(res.message || `Rates updated for ${locationName}!`, "success");
+    
+    // Reset custom input state if used
+    if (isCustom) {
+      toggleCustomLocationInput();
+    }
+    
+    loadSavedLocationPricingTable();
+  } catch (err) {
+    showToast(err.message || "Failed to update pricing.", "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `Save Rates`;
+  }
+}
   </script>
 </body>
 </html>
