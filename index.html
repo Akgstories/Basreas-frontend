@@ -3059,39 +3059,61 @@ function proceedMessSubscription() {
     }
 
     // Submit / Save location rates
+    // Submit / Save location rates with proper custom location handling and complete refresh
     async function submitMessPriceUpdate() {
       const selectElem = document.getElementById("editMessSelect");
       const messId = selectElem ? selectElem.value : null;
 
       const locSelect = document.getElementById("editMessLocationSelect");
       let locName = locSelect ? locSelect.value : "";
+      
+      // Pull value from custom location input if "__custom__" is selected
       if (locName === "__custom__") {
-        locName = document.getElementById("customLocationInput").value.trim();
+        const customInput = document.getElementById("customLocationInput");
+        locName = customInput ? customInput.value.trim() : "";
       }
 
       const bRate = parseInt(document.getElementById("editBreakfastRateInput").value, 10);
       const lRate = parseInt(document.getElementById("editLunchRateInput").value, 10);
       const dRate = parseInt(document.getElementById("editDinnerRateInput").value, 10);
 
-      if (!messId || !locName || isNaN(bRate) || isNaN(lRate) || isNaN(dRate)) {
-        showToast("Please select a mess, valid location name, and valid meal rates.", "warning");
+      if (!messId || !locName) {
+        showToast("Please select a mess and enter a location name.", "warning");
+        return;
+      }
+
+      if (isNaN(bRate) || isNaN(lRate) || isNaN(dRate)) {
+        showToast("Please enter valid numeric meal rates.", "warning");
         return;
       }
 
       try {
         const data = await apiCall("/mess/pricing/update", "POST", {
-          mess_id: messId,
-          location_name: locName,
+          mess_id: String(messId),
+          location_name: String(locName),
           breakfast_rate: bRate,
           lunch_rate: lRate,
           dinner_rate: dRate
         });
 
-        showToast(data.message || "Location rates saved successfully!", "success");
+        showToast(data.message || `Location rates for "${locName}" saved!`, "success");
+
+        // Clear custom input if used
+        const customInput = document.getElementById("customLocationInput");
+        if (customInput) customInput.value = "";
+
+        // Reset dropdown back to default location
+        if (locSelect) locSelect.value = "Chandankiyari";
+        toggleCustomLocationInput();
+
+        // Force refresh global rules and update UI tables
+        if (typeof fetchMessPricingRules === "function") {
+          await fetchMessPricingRules();
+        }
         await loadSavedLocationPricingTable();
-        if (typeof fetchMessPricingRules === "function") fetchMessPricingRules();
+
       } catch (e) {
-        showToast(e.detail || "Failed to save location pricing.", "error");
+        showToast(e.detail || e.message || "Failed to save location pricing.", "error");
       }
     }
 
