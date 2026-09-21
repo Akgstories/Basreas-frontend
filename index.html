@@ -935,47 +935,38 @@
     </div>
   </div>
 
-  <!-- VENDOR DIRECT BANK SETTLEMENT & TENURE SETUP MODAL -->
+  <!-- VENDOR AUTOMATED UPI SETTLEMENT & TENURE SETUP MODAL -->
   <div id="vendorOnboardModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white p-6 rounded-3xl max-w-md w-full space-y-4 border shadow-2xl relative">
       <button onclick="closeVendorOnboardModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-building-columns text-orange-600"></i> Setup Direct Settlement & Tenure</h3>
+      <h3 class="text-lg font-bold text-gray-900 border-b pb-2"><i class="fa-solid fa-mobile-screen-button text-orange-600"></i> Setup Instant UPI Payouts</h3>
       
       <form onsubmit="submitVendorOnboarding(event)" class="space-y-3">
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">ACCOUNT HOLDER NAME</label>
-          <input type="text" id="onboardHolderName" required placeholder="Name on Bank Account" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
+          <input type="text" id="onboardHolderName" required placeholder="Name on Bank / UPI App" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
         </div>
         <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">BANK ACCOUNT NUMBER</label>
-          <input type="text" id="onboardAccountNo" required placeholder="392810102938" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">IFSC CODE</label>
-          <input type="text" id="onboardIfsc" required placeholder="SBIN0001234" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-500 mb-1">PAN CARD NUMBER</label>
-          <input type="text" id="onboardPan" required maxlength="10" placeholder="ABCDE1234F" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500 uppercase">
+          <label class="block text-[10px] font-bold text-gray-500 mb-1">UPI ID (VPA) FOR INSTANT SETTLEMENTS</label>
+          <input type="text" id="onboardUpiId" required placeholder="e.g. 9155118661@upi / name@okicici" class="w-full border rounded-xl p-2.5 text-xs bg-gray-50 font-bold outline-none focus:ring-2 focus:ring-orange-500">
         </div>
         <div>
           <label class="block text-[10px] font-bold text-gray-500 mb-1">SETTLEMENT PAYOUT TENURE</label>
           <select id="onboardTenureSelect" class="w-full border rounded-xl p-2.5 text-xs bg-white font-bold outline-none">
-            <option value="instant">Instant Direct Transfer (On Student Payment)</option>
+            <option value="instant">Instant Automated UPI Transfer (Zero Delay)</option>
             <option value="7_days">Weekly Settlement (7-Day Hold)</option>
             <option value="15_days">Bi-Weekly Settlement (15-Day Hold)</option>
-            <option value="30_days">Monthly Settlement (30-Day Hold)</option>
             <option value="admin_approval">Hold for Admin Review & Release</option>
           </select>
         </div>
 
         <p class="text-[10px] text-gray-500 bg-orange-50 p-2.5 rounded-xl border border-orange-100">
-          <i class="fa-solid fa-shield-halved text-orange-600"></i> 95% of student collections will be transferred directly to this account with your chosen tenure schedule.
+          <i class="fa-solid fa-bolt text-orange-600"></i> 95% of student collections will be automatically transferred directly to your UPI ID upon payment verification.
         </p>
 
         <div class="flex gap-2 pt-2">
           <button type="button" onclick="closeVendorOnboardModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-2.5 rounded-xl text-xs">Cancel</button>
-          <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Save Settlement Setup</button>
+          <button type="submit" id="onboardSubmitBtn" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-md">Save UPI Setup</button>
         </div>
       </form>
     </div>
@@ -2807,24 +2798,23 @@ function proceedMessSubscription() {
       e.preventDefault();
       const btn = document.getElementById("onboardSubmitBtn");
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Activating UPI...`;
 
       const payload = {
         account_holder_name: document.getElementById("onboardHolderName").value.trim(),
-        bank_account_no: document.getElementById("onboardAccountNo").value.trim(),
-        bank_ifsc: document.getElementById("onboardIfsc").value.trim().toUpperCase(),
-        pan_number: document.getElementById("onboardPan").value.trim().toUpperCase(),
+        upi_id: document.getElementById("onboardUpiId").value.trim(),
         settlement_tenure: document.getElementById("onboardTenureSelect").value
       };
 
       try {
         const resData = await apiCall("/vendor/onboard-route", "POST", payload);
-        showToast(resData.message || "Bank details and settlement tenure saved successfully!", "success");
+        showToast(resData.message || "Automated UPI Payouts activated!", "success");
         closeVendorOnboardModal();
       } catch (err) {
+        showToast(err.message || "Failed to onboard UPI ID.", "error");
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `Save Settlement Setup`;
+        btn.innerHTML = `Save UPI Setup`;
       }
     }
 
